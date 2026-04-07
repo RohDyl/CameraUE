@@ -1158,16 +1158,16 @@ function renderPin(pin) {
 
     // ── 12-metre coverage / area ring ─────────────────────
     const circle = L.circle([pin.lat, pin.lng], {
-        radius:      30,                          // metres
-        color:       col,
-        fillColor:   col,
-        fillOpacity: isHost ? 0.13 : 0.07,
-        weight:      isHost ? 2.5 : 1.5,
-        dashArray:   isHost ? '6 4' : '3 8',     // solid dash for host, sparse for contributor
-        interactive: true
-    }).addTo(map);
+radius:      30,
+color:       col,
+fillColor:   col,
+fillOpacity: isHost ? 0.13 : 0.07,
+weight:      isHost ? 2.5 : 1.5,
+dashArray:   isHost ? '6 4' : '3 8',
+interactive: false  // ← clicks pass through to the map
+}).addTo(map);
 
-    circle.bindPopup(popup, { maxWidth: 270 });
+// circle.bindPopup removed — use the marker pin to open popup instead
     circles[pin.id] = circle;
 
     // ── Marker pin ────────────────────────────────────────
