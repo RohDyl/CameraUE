@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Estate CCTV Initiative</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --navy: #0d1b2a;
+            --navy-light: #1b2d42;
+            --green: #00c853;
+            --green-dark: #009624;
+            --gold: #ffd600;
+            --blue: #2196f3;
+            --red: #f44336;
+            --text: #ffffff;
+            --muted: #8899aa;
+            --border: rgba(255,255,255,0.1);
+            --card: rgba(255,255,255,0.05);
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html, body { height:100%; font-family:'Inter',sans-serif; background:var(--navy); color:var(--text); display:flex; flex-direction:column; overflow:hidden; }
+
+        /* ── HEADER ── */
+        .header {
+            background:var(--navy-light); border-bottom:1px solid var(--border);
+            padding:10px 18px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; z-index:500;
+        }
+        .header-left { display:flex; align-items:center; gap:12px; }
+        .logo { width:38px; height:38px; background:var(--green); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+        .header h1 { font-size:17px; font-weight:700; }
+        .header h1 span { color:var(--green); }
+        .header p { font-size:11px; color:var(--muted); }
+        .btn-add-header {
+            display:flex; align-items:center; gap:7px; padding:9px 16px;
+            background:var(--green); color:#000; border:none; border-radius:8px;
+            font-weight:700; font-size:13px; cursor:pointer; transition:background 0.2s; white-space:nowrap;
+        }
+        .btn-add-header:hover { background:var(--green-dark); color:#fff; }
+
+        /* ── STATS BAR ── */
+        .stats-bar {
+            background:var(--navy-light); border-bottom:1px solid var(--border);
+            padding:7px 18px; display:flex; gap:18px; overflow-x:auto; flex-shrink:0;
+        }
+        .stat { display:flex; align-items:center; gap:8px; white-space:nowrap; }
+        .stat-icon { width:28px; height:28px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:12px; flex-shrink:0; }
+        .si-green { background:rgba(0,200,83,0.15); color:var(--green); }
+        .si-blue  { background:rgba(33,150,243,0.15); color:var(--blue); }
+        .si-gold  { background:rgba(255,214,0,0.15); color:var(--gold); }
+        .si-red   { background:rgba(244,67,54,0.15); color:var(--red); }
+        .stat-info label { display:block; font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:0.4px; }
+        .stat-info strong { font-size:15px; font-weight:700; }
+
+        /* ── MAIN LAYOUT ── */
+        .main { display:flex; flex:1; overflow:hidden; min-height:0; }
+
+        /* ── SIDEBAR ── */
+        .sidebar { width:290px; background:var(--navy-light); border-right:1px solid var(--border); display:flex; flex-direction:column; flex-shrink:0; overflow:hidden; }
+        .sidebar-top { padding:14px; border-bottom:1px solid var(--border); flex-shrink:0; }
+        .sidebar-top h3 { font-size:13px; font-weight:600; }
+        .sidebar-top p { font-size:11px; color:var(--muted); margin-top:2px; }
+        .tabs { display:flex; border-bottom:1px solid var(--border); flex-shrink:0; }
+        .tab { flex:1; padding:9px; text-align:center; font-size:11px; font-weight:500; cursor:pointer; border-bottom:2px solid transparent; color:var(--muted); transition:all 0.2s; }
+        .tab.active { color:var(--text); border-bottom-color:var(--green); }
+        .tab-content { flex:1; overflow-y:auto; }
+
+        /* ── ENTRY CARDS ── */
+        .entries-wrap, .priority-wrap { padding:8px; }
+        .entry-card {
+            background:var(--card); border:1px solid var(--border); border-radius:8px;
+            padding:9px 10px; margin-bottom:5px; cursor:pointer; transition:border-color 0.2s;
+        }
+        .entry-card:hover { border-color:var(--green); }
+        .ec-header { display:flex; align-items:center; gap:8px; margin-bottom:5px; }
+        .avatar { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0; }
+        .av-host { background:rgba(0,200,83,0.25); color:var(--green); }
+        .av-contrib { background:rgba(33,150,243,0.25); color:var(--blue); }
+        .ec-name { font-size:12px; font-weight:600; }
+        .ec-street { font-size:10px; color:var(--muted); }
+        .badges { display:flex; gap:3px; flex-wrap:wrap; }
+        .badge { padding:2px 6px; border-radius:4px; font-size:10px; font-weight:500; }
+        .bg-green { background:rgba(0,200,83,0.2); color:var(--green); }
+        .bg-blue  { background:rgba(33,150,243,0.2); color:var(--blue); }
+        .bg-gold  { background:rgba(255,214,0,0.2); color:var(--gold); }
+        .bg-red   { background:rgba(244,67,54,0.2); color:#ff7961; }
+
+        /* ── PRIORITY LIST ── */
+        .priority-note { font-size:10px; color:var(--muted); padding:6px 0 10px; }
+        .priority-item { display:flex; align-items:center; gap:9px; padding:8px 9px; border-radius:8px; margin-bottom:4px; background:var(--card); border:1px solid var(--border); }
+        .p-rank { width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; flex-shrink:0; }
+        .r1 { background:var(--gold); color:#000; }
+        .r2 { background:#9e9e9e; color:#fff; }
+        .r3 { background:#ff8f00; color:#fff; }
+        .rx { background:rgba(255,255,255,0.1); color:var(--muted); }
+        .p-info { flex:1; min-width:0; }
+        .p-street { font-size:11px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .p-meta { font-size:10px; color:var(--muted); }
+        .p-bar { height:3px; background:rgba(255,255,255,0.1); border-radius:2px; margin-top:3px; }
+        .p-fill { height:100%; background:var(--gold); border-radius:2px; transition:width 0.5s; }
+        .p-amount { font-size:12px; font-weight:700; color:var(--gold); }
+        .empty-state { text-align:center; padding:30px 10px; color:var(--muted); font-size:12px; }
+        .empty-state i { font-size:22px; margin-bottom:8px; display:block; }
+
+        /* ── MAP ── */
+        .map-wrap { flex:1; position:relative; overflow:hidden; }
+        #map { width:100%; height:100%; }
+
+        /* ── MAP OVERLAYS ── */
+        .map-legend {
+            position:absolute; top:10px; right:10px; z-index:400;
+            background:rgba(13,27,42,0.92); border:1px solid var(--border);
+            border-radius:10px; padding:11px 13px; font-size:12px; backdrop-filter:blur(8px);
+        }
+        .map-legend h4 { font-size:10px; text-transform:uppercase; letter-spacing:0.5px; color:var(--muted); margin-bottom:7px; }
+        .leg-item { display:flex; align-items:center; gap:7px; margin-bottom:4px; }
+        .leg-dot { width:11px; height:11px; border-radius:50%; flex-shrink:0; }
+        .map-hint {
+            position:absolute; bottom:18px; left:50%; transform:translateX(-50%); z-index:400;
+            background:rgba(13,27,42,0.88); border:1px solid var(--border);
+            border-radius:20px; padding:7px 15px; font-size:11px; pointer-events:none;
+            white-space:nowrap; backdrop-filter:blur(8px);
+        }
+        .map-hint i { color:var(--green); margin-right:5px; }
+
+        /* ── MODALS ── */
+        .overlay {
+            position:fixed; inset:0; background:rgba(0,0,0,0.72); z-index:2000;
+            display:none; align-items:center; justify-content:center; padding:16px;
+        }
+        .overlay.active { display:flex; }
+        .modal {
+            background:var(--navy-light); border:1px solid var(--border); border-radius:16px;
+            width:100%; max-width:490px; max-height:92vh; overflow-y:auto;
+        }
+        .modal-head {
+            padding:18px 18px 0; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; background:var(--navy-light); z-index:10; padding-bottom:14px; border-bottom:1px solid var(--border);
+        }
+        .modal-head h2 { font-size:16px; font-weight:700; }
+        .btn-close { width:30px; height:30px; border-radius:7px; background:var(--card); border:1px solid var(--border); color:var(--text); cursor:pointer; font-size:14px; }
+        .modal-body { padding:18px; }
+
+        /* ── TYPE SELECTOR ── */
+        .type-grid { display:grid; grid-template-columns:1fr 1fr; gap:11px; margin-bottom:18px; }
+        .type-opt {
+            border:2px solid var(--border); border-radius:12px; padding:16px 12px;
+            text-align:center; cursor:pointer; transition:all 0.2s;
+        }
+        .type-opt:hover { border-color:rgba(255,255,255,0.3); }
+        .type-opt.sel-host { border-color:var(--green); background:rgba(0,200,83,0.08); }
+        .type-opt.sel-contrib { border-color:var(--blue); background:rgba(33,150,243,0.08); }
+        .type-opt i { font-size:26px; margin-bottom:7px; display:block; }
+        .type-opt.type-host i { color:var(--green); }
+        .type-opt.type-contrib i { color:var(--blue); }
+        .type-opt h3 { font-size:13px; font-weight:600; margin-bottom:3px; }
+        .type-opt p { font-size:11px; color:var(--muted); }
+
+        /* ── FORM ── */
+        .fg { margin-bottom:12px; }
+        .frow { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+        label { display:block; font-size:11px; font-weight:500; color:var(--muted); margin-bottom:4px; text-transform:uppercase; letter-spacing:0.4px; }
+        input, select, textarea {
+            width:100%; padding:9px 11px; background:rgba(255,255,255,0.06);
+            border:1px solid var(--border); border-radius:7px; color:var(--text);
+            font-size:13px; font-family:'Inter',sans-serif; transition:border-color 0.2s;
+        }
+        input:focus, select:focus, textarea:focus { outline:none; border-color:var(--green); }
+        select option { background:var(--navy); }
+        .hint { font-size:10px; color:var(--muted); margin-top:3px; }
+        .loc-box {
+            display:flex; align-items:center; gap:8px; padding:9px 11px;
+            background:rgba(0,200,83,0.08); border:1px solid rgba(0,200,83,0.25);
+            border-radius:7px; font-size:12px; margin-bottom:12px;
+        }
+        .loc-box i { color:var(--green); }
+        .loc-box.blue-loc { background:rgba(33,150,243,0.08); border-color:rgba(33,150,243,0.25); }
+        .loc-box.blue-loc i { color:var(--blue); }
+        .loc-text { font-size:11px; color:var(--muted); }
+        .btn-sub {
+            width:100%; padding:11px; border:none; border-radius:9px;
+            font-size:13px; font-weight:700; cursor:pointer; transition:all 0.2s; margin-top:6px;
+        }
+        .btn-sub:hover { opacity:0.88; transform:translateY(-1px); }
+        .btn-sub.green { background:var(--green); color:#000; }
+        .btn-sub.blue  { background:var(--blue); color:#fff; }
+        .btn-sub:disabled { opacity:0.4; cursor:not-allowed; transform:none; }
+        .btn-back {
+            flex-shrink:0; padding:11px 14px; background:transparent;
+            border:1px solid var(--border); border-radius:9px; color:var(--text);
+            cursor:pointer; font-size:13px; font-family:'Inter',sans-serif;
+        }
+        .btn-back:hover { border-color:rgba(255,255,255,0.4); }
+        .form-title { display:flex; align-items:center; gap:8px; margin-bottom:14px; font-size:14px; font-weight:600; }
+
+        /* ── POPUPS ── */
+        .leaflet-popup-content-wrapper {
+            background:#182d42 !important; border:1px solid rgba(255,255,255,0.12) !important;
+            border-radius:10px !important; color:white !important; box-shadow:0 4px 20px rgba(0,0,0,0.5) !important;
+        }
+        .leaflet-popup-tip { background:#182d42 !important; }
+        .leaflet-popup-content { margin:12px 14px !important; }
+        .pu-badge { display:inline-block; padding:2px 8px; border-radius:4px; font-size:10px; font-weight:600; margin-bottom:7px; }
+        .pu-name { font-size:14px; font-weight:700; margin-bottom:8px; }
+        .pu-row { display:flex; align-items:flex-start; gap:6px; font-size:11px; margin-bottom:4px; color:#aabbcc; }
+        .pu-row i { font-size:10px; margin-top:2px; flex-shrink:0; }
+        .pu-row strong { color:white; }
+        .pu-date { font-size:10px; color:#556677; margin-top:7px; }
+
+        /* ── TOAST ── */
+        .toast {
+            position:fixed; bottom:70px; left:50%; transform:translateX(-50%);
+            background:var(--green); color:#000; padding:9px 20px; border-radius:20px;
+            font-size:12px; font-weight:700; z-index:3000; opacity:0; transition:opacity 0.3s;
+            pointer-events:none; white-space:nowrap;
+        }
+        .toast.show { opacity:1; }
+
+        /* ── SCROLLBAR ── */
+        ::-webkit-scrollbar { width:4px; }
+        ::-webkit-scrollbar-track { background:transparent; }
+        ::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.15); border-radius:2px; }
+        .hidden { display:none !important; }
+
+        @media (max-width:700px) {
+            .sidebar { display:none; }
+            .header h1 { font-size:14px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     HEADER
+══════════════════════════════════════ -->
+<div class="header">
+    <div class="header-left">
+        <div class="logo">📹</div>
+        <div>
+            <h1>University Estate <span>CCTV</span> Initiative</h1>
+            <p>Cape Town Community Security · Sign up to host a camera or contribute funds</p>
+        </div>
+    </div>
+    <button class="btn-add-header" onclick="openAddModal()">
+        <i class="fas fa-plus"></i> Add Your Pin
+    </button>
+</div>
+
+<!-- ══════════════════════════════════════
+     STATS BAR
+══════════════════════════════════════ -->
+<div class="stats-bar">
+    <div class="stat">
+        <div class="stat-icon si-green"><i class="fas fa-camera"></i></div>
+        <div class="stat-info"><label>Camera Hosts</label><strong id="s-hosts">0</strong></div>
+    </div>
+    <div class="stat">
+        <div class="stat-icon si-blue"><i class="fas fa-hand-holding-heart"></i></div>
+        <div class="stat-info"><label>Contributors</label><strong id="s-contribs">0</strong></div>
+    </div>
+    <div class="stat">
+        <div class="stat-icon si-gold"><i class="fas fa-coins"></i></div>
+        <div class="stat-info"><label>Total Pledged</label><strong id="s-funds">R0</strong></div>
+    </div>
+    <div class="stat">
+        <div class="stat-icon si-gold"><i class="fas fa-bolt"></i></div>
+        <div class="stat-info"><label>Backup Power</label><strong id="s-backup">0</strong></div>
+    </div>
+    <div class="stat">
+        <div class="stat-icon si-blue"><i class="fas fa-wifi"></i></div>
+        <div class="stat-info"><label>Fast Internet (10+)</label><strong id="s-fast">0</strong></div>
+    </div>
+    <div class="stat">
+        <div class="stat-icon si-green"><i class="fas fa-road"></i></div>
+        <div class="stat-info"><label>Streets Covered</label><strong id="s-streets">0</strong></div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     MAIN
+══════════════════════════════════════ -->
+<div class="main">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-top">
+            <h3>Community Signups</h3>
+            <p>Click any card to locate on map</p>
+        </div>
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('entries',this)"><i class="fas fa-list"></i> Entries</div>
+            <div class="tab" onclick="switchTab('priority',this)"><i class="fas fa-trophy"></i> Priority Streets</div>
+        </div>
+        <div class="tab-content">
+            <div id="tab-entries" class="entries-wrap">
+                <div class="empty-state" id="entries-empty">
+                    <i class="fas fa-map-marker-alt"></i>
+                    No entries yet.<br>Click the map to add a pin.
+                </div>
+                <div id="entries-list"></div>
+            </div>
+            <div id="tab-priority" class="priority-wrap hidden">
+                <p class="priority-note">Streets ranked by total contributions pledged — used to prioritise camera placement</p>
+                <div id="priority-list">
+                    <div class="empty-state">
+                        <i class="fas fa-trophy"></i>No data yet
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAP -->
+    <div class="map-wrap">
+        <div id="map"></div>
+
+        <div class="map-legend">
+            <h4>Legend</h4>
+            <div class="leg-item"><div class="leg-dot" style="background:var(--green)"></div><span>Camera Host</span></div>
+            <div class="leg-item"><div class="leg-dot" style="background:var(--blue)"></div><span>Contributor</span></div>
+            <div class="leg-item" style="margin-top:5px;font-size:10px;color:var(--muted);">
+                <i class="fas fa-mouse-pointer" style="color:var(--green);margin-right:4px;"></i>Click map to pin
+            </div>
+        </div>
+
+        <div class="map-hint">
+            <i class="fas fa-hand-pointer"></i>Click anywhere on the map to register your location
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     ADD PIN MODAL
+══════════════════════════════════════ -->
+<div class="overlay" id="modal-add">
+    <div class="modal">
+        <div class="modal-head">
+            <h2 id="modal-title">📍 Add Your Pin</h2>
+            <button class="btn-close" onclick="closeModal()">✕</button>
+        </div>
+        <div class="modal-body">
+
+            <!-- STEP 1: Type Selection -->
+            <div id="step-type">
+                <p style="font-size:12px;color:var(--muted);margin-bottom:14px;">
+                    How would you like to support University Estate's security?
+                </p>
+                <div class="type-grid">
+                    <div class="type-opt type-host" id="opt-host" onclick="selectType('host')">
+                        <i class="fas fa-camera"></i>
+                        <h3>Camera Host</h3>
+                        <p>I can install &amp; host a camera at my property</p>
+                    </div>
+                    <div class="type-opt type-contrib" id="opt-contrib" onclick="selectType('contributor')">
+                        <i class="fas fa-hand-holding-usd"></i>
+                        <h3>Contributor</h3>
+                        <p>I want to help fund cameras in my street</p>
+                    </div>
+                </div>
+                <button class="btn-sub green" id="btn-next" onclick="goToForm()" disabled="">
+                    Continue <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+
+            <!-- STEP 2A: Host Form -->
+            <div id="step-host" class="hidden">
+                <div class="form-title"><i class="fas fa-camera" style="color:var(--green)"></i> Camera Host Registration</div>
+                <div class="loc-box" id="loc-host">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span class="loc-text" id="loc-host-txt">Location pinned on map ✓</span>
+                </div>
+                <div class="frow">
+                    <div class="fg"><label>First Name *</label><input id="h-fn" placeholder="John"></div>
+                    <div class="fg"><label>Last Name *</label><input id="h-ln" placeholder="Smith"></div>
+                </div>
+                <div class="frow">
+                    <div class="fg"><label>Phone *</label><input id="h-ph" type="tel" placeholder="071 234 5678"></div>
+                    <div class="fg"><label>Email *</label><input id="h-em" type="email" placeholder="john@mail.com"></div>
+                </div>
+                <div class="fg">
+                    <label>Street Address *</label>
+                    <input id="h-addr" placeholder="e.g. 12 University Road, University Estate">
+                </div>
+                <div class="fg">
+                    <label>Internet Upload Speed *</label>
+                    <select id="h-net">
+                        <option value="">Select speed…</option>
+                        <option value="under5">Under 5 Mbps ⚠️ (too slow)</option>
+                        <option value="5-10">5 – 10 Mbps (borderline)</option>
+                        <option value="10-25">10 – 25 Mbps ✓ Good</option>
+                        <option value="25-50">25 – 50 Mbps ✓✓ Very Good</option>
+                        <option value="50+">50+ Mbps ✓✓✓ Excellent</option>
+                    </select>
+                    <p class="hint">💡 Test yours at speedtest.net — we need at least 10 Mbps upload</p>
+                </div>
+                <div class="fg">
+                    <label>Backup Power (for Loadshedding) *</label>
+                    <select id="h-bak">
+                        <option value="">Select option…</option>
+                        <option value="none">None — grid power only ⚠️</option>
+                        <option value="ups">UPS / Small battery backup</option>
+                        <option value="inverter">Inverter + Battery ✓</option>
+                        <option value="solar">Solar + Battery ✓✓</option>
+                        <option value="generator">Generator</option>
+                    </select>
+                </div>
+                <div class="frow">
+                    <div class="fg">
+                        <label>Camera Placement *</label>
+                        <select id="h-place">
+                            <option value="">Select…</option>
+                            <option value="street-facing">Street-facing (front)</option>
+                            <option value="entrance">Gate / Entrance</option>
+                            <option value="corner">Corner plot — dual view ⭐</option>
+                            <option value="elevated">Elevated (2nd floor+)</option>
+                            <option value="perimeter">Perimeter wall / fence</option>
+                        </select>
+                    </div>
+                    <div class="fg">
+                        <label>WiFi at Location?</label>
+                        <select id="h-wifi">
+                            <option value="">Select…</option>
+                            <option value="yes">Yes — good signal ✓</option>
+                            <option value="partial">Partial — may need booster</option>
+                            <option value="no">No — needs cable/extender</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="fg">
+                    <label>Notes (optional)</label>
+                    <textarea id="h-notes" rows="2" placeholder="Anything else we should know about your property or location…"></textarea>
+                </div>
+                <div style="display:flex;gap:8px;">
+                    <button class="btn-back" onclick="backToType()">← Back</button>
+                    <button class="btn-sub green" onclick="submitPin('host')" style="flex:1;">
+                        <i class="fas fa-camera"></i> Register as Camera Host
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 2B: Contributor Form -->
+            <div id="step-contributor" class="hidden">
+                <div class="form-title"><i class="fas fa-hand-holding-usd" style="color:var(--blue)"></i> Financial Contributor Registration</div>
+                <div class="loc-box blue-loc" id="loc-contrib">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span class="loc-text" id="loc-contrib-txt">Location pinned on map ✓</span>
+                </div>
+                <div class="frow">
+                    <div class="fg"><label>First Name *</label><input id="c-fn" placeholder="Jane"></div>
+                    <div class="fg"><label>Last Name *</label><input id="c-ln" placeholder="Doe"></div>
+                </div>
+                <div class="frow">
+                    <div class="fg"><label>Phone *</label><input id="c-ph" type="tel" placeholder="071 234 5678"></div>
+                    <div class="fg"><label>Email *</label><input id="c-em" type="email" placeholder="jane@mail.com"></div>
+                </div>
+                <div class="fg">
+                    <label>Street Address *</label>
+                    <input id="c-addr" placeholder="e.g. 15 Liesbeeck Road">
+                    <p class="hint">📍 Helps us prioritise camera placement on your street</p>
+                </div>
+                <div class="frow">
+                    <div class="fg">
+                        <label>Amount (R) *</label>
+                        <input id="c-amt" type="number" placeholder="500" min="10">
+                    </div>
+                    <div class="fg">
+                        <label>Frequency *</label>
+                        <select id="c-freq">
+                            <option value="">Select…</option>
+                            <option value="once">Once-off</option>
+                            <option value="monthly">Monthly</option>
+                            <option value="annual">Annual</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="fg">
+                    <label>Preferred Payment Method</label>
+                    <select id="c-pay">
+                        <option value="">Select…</option>
+                        <option value="eft">EFT / Bank Transfer</option>
+                        <option value="snapscan">SnapScan</option>
+                        <option value="payfast">PayFast</option>
+                        <option value="cash">Cash</option>
+                    </select>
+                </div>
+                <div class="fg">
+                    <label>Message (optional)</label>
+                    <textarea id="c-notes" rows="2" placeholder="Any message for the organising committee…"></textarea>
+                </div>
+                <div style="display:flex;gap:8px;">
+                    <button class="btn-back" onclick="backToType()">← Back</button>
+                    <button class="btn-sub blue" onclick="submitPin('contributor')" style="flex:1;">
+                        <i class="fas fa-coins"></i> Submit Contribution Pledge
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- ══════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════ -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- ╔══════════════════════════════════════════════════════════╗
+     ║  FIREBASE SETUP (optional — for real multi-user sharing) ║
+     ║  1. Go to https://console.firebase.google.com            ║
+     ║  2. Create a project → Realtime Database → Start in     ║
+     ║     test mode                                            ║
+     ║  3. Replace the config below                             ║
+     ║  4. Set USE_FIREBASE = true                              ║
+     ╚══════════════════════════════════════════════════════════╝ -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+<script>
+// ============================================================
+//  CONFIG
+// ============================================================
+const USE_FIREBASE = false; // ← Set to true after adding your config below
+
+const FIREBASE_CONFIG = {
+    apiKey:            "YOUR_API_KEY",
+    authDomain:        "YOUR_PROJECT.firebaseapp.com",
+    databaseURL:       "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
+    projectId:         "YOUR_PROJECT_ID",
+    storageBucket:     "YOUR_PROJECT.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId:             "YOUR_APP_ID"
+};
+
+// ============================================================
+//  MAP — centred on University Estate, Cape Town
+// ============================================================
+const map = L.map('map', {
+    center: [-33.9505, 18.4715],
+    zoom: 15,
+    zoomControl: true
+});
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors',
+    maxZoom: 19
+}).addTo(map);
+
+// ============================================================
+//  CUSTOM ICONS
+// ============================================================
+function makeIcon(type) {
+    const col  = type === 'host' ? '#00c853' : '#2196f3';
+    const icon = type === 'host' ? '📹' : '💰';
+    return L.divIcon({
+        className: '',
+        html: `<div style="
+            background:${col};width:34px;height:34px;
+            border-radius:50% 50% 50% 0;transform:rotate(-45deg);
+            border:3px solid white;box-shadow:0 3px 10px rgba(0,0,0,0.4);
+            display:flex;align-items:center;justify-content:center;">
+            <span style="transform:rotate(45deg);font-size:13px;">${icon}</span>
+        </div>`,
+        iconSize:    [34, 34],
+        iconAnchor:  [17, 34],
+        popupAnchor: [0, -37]
+    });
+}
+
+// ============================================================
+//  STATE
+// ============================================================
+let pins        = JSON.parse(localStorage.getItem('ue_cctv_pins') || '[]');
+let markers     = {};
+let pendingLoc  = null;
+let chosenType  = null;
+let db          = null;
+
+// ============================================================
+//  FIREBASE INIT
+// ============================================================
+if (USE_FIREBASE) {
+    try {
+        firebase.initializeApp(FIREBASE_CONFIG);
+        db = firebase.database();
+    } catch(e) {
+        console.warn('Firebase init failed — falling back to localStorage', e);
+    }
+}
+
+// ============================================================
+//  MAP CLICK
+// ============================================================
+map.on('click', e => {
+    pendingLoc = e.latlng;
+    const txt = `${e.latlng.lat.toFixed(5)}, ${e.latlng.lng.toFixed(5)}`;
+    document.getElementById('loc-host-txt').textContent   = `📍 Pinned: ${txt}`;
+    document.getElementById('loc-contrib-txt').textContent = `📍 Pinned: ${txt}`;
+    openAddModal();
+});
+
+// ============================================================
+//  MODAL CONTROLS
+// ============================================================
+function openAddModal() {
+    resetModal();
+    document.getElementById('modal-add').classList.add('active');
+}
+
+function closeModal() {
+    document.getElementById('modal-add').classList.remove('active');
+    pendingLoc  = null;
+    chosenType  = null;
+}
+
+function resetModal() {
+    showStep('type');
+    chosenType = null;
+    document.querySelectorAll('.type-opt').forEach(el => el.className = el.className.replace(/ sel-\w+/,''));
+    const btn = document.getElementById('btn-next');
+    btn.disabled = true;
+}
+
+function showStep(s) {
+    ['type','host','contributor'].forEach(id => {
+        document.getElementById('step-' + id).classList.toggle('hidden', id !== s);
+    });
+}
+
+function selectType(t) {
+    chosenType = t;
+    document.getElementById('opt-host').classList.remove('sel-host','sel-contrib');
+    document.getElementById('opt-contrib').classList.remove('sel-host','sel-contrib');
+    document.getElementById('opt-' + (t === 'host' ? 'host' : 'contrib')).classList.add('sel-' + (t === 'host' ? 'host' : 'contrib'));
+    const btn = document.getElementById('btn-next');
+    btn.disabled = false;
+    btn.className = 'btn-sub ' + (t === 'host' ? 'green' : 'blue');
+}
+
+function goToForm() {
+    if (!chosenType) return;
+    if (!pendingLoc) {
+        closeModal();
+        toast('⚠️ Click your location on the map first, then fill in the form');
+        return;
+    }
+    showStep(chosenType);
+}
+
+function backToType() { showStep('type'); }
+
+function switchTab(name, el) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('tab-entries').classList.toggle('hidden', name !== 'entries');
+    document.getElementById('tab-priority').classList.toggle('hidden', name !== 'priority');
+}
+
+// ============================================================
+//  FORM SUBMIT
+// ============================================================
+function submitPin(type) {
+    if (!pendingLoc) { toast('⚠️ No location selected. Click on the map first.'); return; }
+
+    let pin = {
+        id:        Date.now().toString(),
+        type:      type,
+        lat:       pendingLoc.lat,
+        lng:       pendingLoc.lng,
+        timestamp: new Date().toISOString()
+    };
+
+    if (type === 'host') {
+        const fn    = v('h-fn'), ln = v('h-ln'),
+              addr  = v('h-addr'), net = v('h-net'),
+              bak   = v('h-bak'), place = v('h-place');
+        if (!fn || !ln)    { toast('⚠️ Please enter your name');          return; }
+        if (!addr)         { toast('⚠️ Please enter your street address'); return; }
+        if (!net)          { toast('⚠️ Please select your internet speed'); return; }
+        if (!bak)          { toast('⚠️ Please select backup power option'); return; }
+        if (!place)        { toast('⚠️ Please select camera placement');   return; }
+        pin = { ...pin, fn, ln, phone: v('h-ph'), email: v('h-em'),
+                address: addr, street: streetFrom(addr), internet: net,
+                backup: bak, placement: place, wifi: v('h-wifi'), notes: v('h-notes') };
+    } else {
+        const fn    = v('c-fn'), addr = v('c-addr'),
+              amt   = parseFloat(v('c-amt')), freq = v('c-freq');
+        if (!fn)           { toast('⚠️ Please enter your name');           return; }
+        if (!addr)         { toast('⚠️ Please enter your street address');  return; }
+        if (!amt || amt<1) { toast('⚠️ Please enter a contribution amount'); return; }
+        if (!freq)         { toast('⚠️ Please select payment frequency');   return; }
+        pin = { ...pin, fn, ln: v('c-ln'), phone: v('c-ph'), email: v('c-em'),
+                address: addr, street: streetFrom(addr), amount: amt,
+                frequency: freq, payment: v('c-pay'), notes: v('c-notes') };
+    }
+
+    savePin(pin);
+    closeModal();
+    clearForm(type);
+    toast(type === 'host' ? '✅ Camera host registered! Thank you.' : '✅ Contribution pledge submitted! Thank you.');
+}
+
+const v = id => document.getElementById(id)?.value?.trim() || '';
+
+function streetFrom(addr) {
+    const p = addr.replace(/^\d+\s*/, '').split(',')[0].trim();
+    return p.split(' ').slice(0,4).join(' ');
+}
+
+function clearForm(t) {
+    const ids = t === 'host'
+        ? ['h-fn','h-ln','h-ph','h-em','h-addr','h-notes','h-net','h-bak','h-place','h-wifi']
+        : ['c-fn','c-ln','c-ph','c-em','c-addr','c-amt','c-notes','c-freq','c-pay'];
+    ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+    });
+}
+
+// ============================================================
+//  SAVE / LOAD
+// ============================================================
+function savePin(pin) {
+    if (USE_FIREBASE && db) {
+        db.ref('pins/' + pin.id).set(pin);
+        // Firebase listener handles re-render
+    } else {
+        pins.push(pin);
+        localStorage.setItem('ue_cctv_pins', JSON.stringify(pins));
+        renderPin(pin);
+        updateUI();
+    }
+}
+
+function loadPins() {
+    if (USE_FIREBASE && db) {
+        db.ref('pins').on('value', snap => {
+            // Clear old markers
+            Object.values(markers).forEach(m => map.removeLayer(m));
+            markers = {};
+            pins    = [];
+            if (snap.exists()) {
+                snap.forEach(c => pins.push(c.val()));
+            }
+            pins.forEach(renderPin);
+            updateUI();
+        });
+    } else {
+        pins.forEach(renderPin);
+        updateUI();
+    }
+}
+
+// ============================================================
+//  RENDER PIN ON MAP
+// ============================================================
+function renderPin(pin) {
+    const m = L.marker([pin.lat, pin.lng], { icon: makeIcon(pin.type) })
+        .bindPopup(buildPopup(pin), { maxWidth: 270 })
+        .addTo(map);
+    markers[pin.id] = m;
+}
+
+// ============================================================
+//  POPUP CONTENT
+// ============================================================
+const NET_LABELS = {
+    'under5':'< 5 Mbps ⚠️','5-10':'5–10 Mbps','10-25':'10–25 Mbps ✓',
+    '25-50':'25–50 Mbps ✓✓','50+':'50+ Mbps ✓✓✓'
+};
+const BAK_LABELS = {
+    'none':'Grid only ⚠️','ups':'UPS Battery','inverter':'Inverter + Battery ✓',
+    'solar':'Solar + Battery ✓✓','generator':'Generator'
+};
+const PLACE_LABELS = {
+    'street-facing':'Street-facing','entrance':'Gate / Entrance',
+    'corner':'Corner — dual view ⭐','elevated':'Elevated (2nd floor+)',
+    'perimeter':'Perimeter wall'
+};
+const FREQ_LABELS  = { 'once':'Once-off','monthly':'Monthly','annual':'Annual' };
+const PAY_LABELS   = { 'eft':'EFT','snapscan':'SnapScan','payfast':'PayFast','cash':'Cash' };
+
+function buildPopup(pin) {
+    const col   = pin.type === 'host' ? '#00c853' : '#2196f3';
+    const label = pin.type === 'host' ? '📹 Camera Host' : '💰 Contributor';
+    const name  = `${pin.fn || ''} ${pin.ln ? pin.ln.charAt(0) + '.' : ''}`.trim();
+
+    let rows = `<div class="pu-row"><i class="fas fa-home"></i><span>${pin.address}</span></div>`;
+
+    if (pin.type === 'host') {
+        rows += `
+        <div class="pu-row"><i class="fas fa-wifi"></i><span>Internet: <strong>${NET_LABELS[pin.internet]||pin.internet}</strong></span></div>
+        <div class="pu-row"><i class="fas fa-bolt"></i><span>Backup: <strong>${BAK_LABELS[pin.backup]||pin.backup}</strong></span></div>
+        <div class="pu-row"><i class="fas fa-map-marker-alt"></i><span>Camera: <strong>${PLACE_LABELS[pin.placement]||pin.placement}</strong></span></div>
+        ${pin.wifi ? `<div class="pu-row"><i class="fas fa-broadcast-tower"></i><span>WiFi on-site: <strong>${pin.wifi}</strong></span></div>` : ''}
+        ${pin.notes ? `<div class="pu-row" style="font-style:italic;color:#8899aa;">"${pin.notes}"</div>` : ''}`;
+    } else {
+        rows += `
+        <div class="pu-row"><i class="fas fa-coins"></i><span>Pledged: <strong style="color:var(--gold)">R${(pin.amount||0).toLocaleString()}</strong></span></div>
+        <div class="pu-row"><i class="fas fa-calendar"></i><span>Frequency: <strong>${FREQ_LABELS[pin.frequency]||pin.frequency}</strong></span></div>
+        ${pin.payment ? `<div class="pu-row"><i class="fas fa-credit-card"></i><span>Via: <strong>${PAY_LABELS[pin.payment]||pin.payment}</strong></span></div>` : ''}
+        ${pin.notes ? `<div class="pu-row" style="font-style:italic;color:#8899aa;">"${pin.notes}"</div>` : ''}`;
+    }
+
+    return `
+        <span class="pu-badge" style="background:${col}22;color:${col};border:1px solid ${col}44;">${label}</span>
+        <div class="pu-name">${name}</div>
+        ${rows}
+        <div class="pu-date">Added ${new Date(pin.timestamp).toLocaleDateString('en-ZA')}</div>`;
+}
+
+// ============================================================
+//  UPDATE ALL UI
+// ============================================================
+function updateUI() {
+    updateStats();
+    renderEntriesList();
+    renderPriorityList();
+}
+
+function updateStats() {
+    const hosts  = pins.filter(p => p.type === 'host');
+    const contribs = pins.filter(p => p.type === 'contributor');
+    const funds  = contribs.reduce((s,p) => s + (p.amount||0), 0);
+    const backup = hosts.filter(p => p.backup && p.backup !== 'none').length;
+    const fast   = hosts.filter(p => ['10-25','25-50','50+'].includes(p.internet)).length;
+    const streets = new Set(pins.map(p => p.street).filter(Boolean)).size;
+
+    set('s-hosts',   hosts.length);
+    set('s-contribs',contribs.length);
+    set('s-funds',   'R' + funds.toLocaleString());
+    set('s-backup',  backup);
+    set('s-fast',    fast);
+    set('s-streets', streets);
+}
+
+function set(id, val) { document.getElementById(id).textContent = val; }
+
+function renderEntriesList() {
+    const empty = document.getElementById('entries-empty');
+    const list  = document.getElementById('entries-list');
+    if (!pins.length) { empty.style.display=''; list.innerHTML=''; return; }
+    empty.style.display = 'none';
+
+    list.innerHTML = [...pins]
+        .sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp))
+        .map(pin => {
+            const isHost = pin.type === 'host';
+            const init   = `${pin.fn?.charAt(0)||''}${pin.ln?.charAt(0)||''}`;
+            let badges   = '';
+            if (isHost) {
+                if (['10-25','25-50','50+'].includes(pin.internet)) badges += `<span class="badge bg-green">Fast Internet</span>`;
+                if (pin.backup && pin.backup !== 'none')            badges += `<span class="badge bg-gold">Backup Power</span>`;
+                if (pin.placement === 'corner')                     badges += `<span class="badge bg-blue">Corner Plot ⭐</span>`;
+            } else {
+                badges += `<span class="badge bg-gold">R${(pin.amount||0).toLocaleString()}</span>`;
+                if (pin.frequency === 'monthly') badges += `<span class="badge bg-blue">Monthly</span>`;
+            }
+            return `
+            <div class="entry-card" onclick="focusPin('${pin.id}')">
+                <div class="ec-header">
+                    <div class="avatar ${isHost ? 'av-host' : 'av-contrib'}">${init}</div>
+                    <div>
+                        <div class="ec-name">${pin.fn||''} ${pin.ln ? pin.ln.charAt(0)+'.' : ''}</div>
+                        <div class="ec-street">${pin.street||pin.address?.split(',')[0]||'Unknown street'}</div>
+                    </div>
+                    <div style="margin-left:auto;font-size:14px;">${isHost ? '📹' : '💰'}</div>
+                </div>
+                <div class="badges">${badges}</div>
+            </div>`;
+        }).join('');
+}
+
+function renderPriorityList() {
+    const contribs = pins.filter(p => p.type === 'contributor');
+    const el       = document.getElementById('priority-list');
+    if (!contribs.length) {
+        el.innerHTML = '<div class="empty-state"><i class="fas fa-trophy"></i>No contributions yet</div>';
+        return;
+    }
+
+    // Aggregate by street
+    const data = {};
+    contribs.forEach(p => {
+        const s = p.street || 'Unknown';
+        if (!data[s]) data[s] = { total:0, count:0, monthly:0, hosts:0 };
+        data[s].total   += p.amount || 0;
+        data[s].count   += 1;
+        if (p.frequency === 'monthly') data[s].monthly += p.amount || 0;
+    });
+    pins.filter(p => p.type === 'host').forEach(p => {
+        const s = p.street || 'Unknown';
+        if (!data[s]) data[s] = { total:0, count:0, monthly:0, hosts:0 };
+        data[s].hosts += 1;
+    });
+
+    const sorted  = Object.entries(data).sort((a,b) => b[1].total - a[1].total);
+    const maxAmt  = sorted[0]?.[1].total || 1;
+    const rClass  = ['r1','r2','r3'];
+
+    el.innerHTML = sorted.map(([street, d], i) => `
+        <div class="priority-item">
+            <div class="p-rank ${rClass[i] || 'rx'}">${i+1}</div>
+            <div class="p-info">
+                <div class="p-street">${street}</div>
+                <div class="p-meta">
+                    ${d.count} contributor${d.count!==1?'s':''}
+                    ${d.hosts ? ` · ${d.hosts} host${d.hosts!==1?'s':''}` : ''}
+                    ${d.monthly ? ` · R${d.monthly}/mo` : ''}
+                </div>
+                <div class="p-bar"><div class="p-fill" style="width:${(d.total/maxAmt*100).toFixed(0)}%"></div></div>
+            </div>
+            <div class="p-amount">R${d.total.toLocaleString()}</div>
+        </div>`).join('');
+}
+
+function focusPin(id) {
+    const pin = pins.find(p => p.id === id);
+    if (!pin || !markers[id]) return;
+    map.setView([pin.lat, pin.lng], 17, { animate:true });
+    setTimeout(() => markers[id].openPopup(), 500);
+}
+
+// ============================================================
+//  TOAST
+// ============================================================
+function toast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 3500);
+}
+
+// ============================================================
+//  CLOSE MODAL ON BACKDROP CLICK
+// ============================================================
+document.getElementById('modal-add').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+});
+
+// ============================================================
+//  INIT
+// ============================================================
+loadPins();
+</script>
+
+</body></html>
