@@ -812,11 +812,12 @@
         </div>
         <div class="modal-body">
             <div class="admin-bar">
-                <button class="admin-filter active" onclick="filterAdmin('all',this)">All</button>
-                <button class="admin-filter" onclick="filterAdmin('paid',this)">✅ Paid</button>
-                <button class="admin-filter" onclick="filterAdmin('pending',this)">⏳ Pending</button>
-                <button class="admin-filter" onclick="filterAdmin('pledge',this)">🤝 Pledge</button>
-                <button class="btn-export" onclick="exportCSV()">⬇ Export CSV</button>
+           <button class="admin-filter active" onclick="filterAdmin('all',this)">All</button>
+<button class="admin-filter" onclick="filterAdmin('hosts',this)">📹 Hosts</button>
+<button class="admin-filter" onclick="filterAdmin('paid',this)">✅ Paid</button>
+<button class="admin-filter" onclick="filterAdmin('pending',this)">⏳ Pending</button>
+<button class="admin-filter" onclick="filterAdmin('pledge',this)">🤝 Pledge</button>
+<button class="btn-export" onclick="exportCSV()">⬇ Export CSV</button>
             </div>
             <div style="overflow-x:auto;">
                 <table class="admin-table">
@@ -1591,55 +1592,122 @@ function filterAdmin(filter, el) {
 }
 
 function renderAdminTable(filter) {
-    const data  = pins.filter(p =>
-        p.type === 'contributor' && (filter === 'all' || (p.status || 'pending') === filter)
-    );
-    const tbody = document.getElementById('admin-tbody');
-    const total = data.reduce((s,p) => s + (p.amount || 0), 0);
-    const paid  = data.filter(p => p.status === 'paid').reduce((s,p) => s + (p.amount || 0), 0);
+const tbody = document.getElementById('admin-tbody');
 
-    if (!data.length) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--muted);">No entries match this filter</td></tr>`;
+// ── Hosts view ──────────────────────────────────────────
+if (filter === 'hosts') {
+    const hosts = pins.filter(p => p.type === 'host');
+
+    if (!hosts.length) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--muted);">No camera hosts registered yet</td></tr>`;
         document.getElementById('admin-total').textContent = '';
         return;
     }
 
-    const stClass = { paid:'st-paid', pending:'st-pending', pledge:'st-pledge' };
-    const stLabel = { paid:'✅ Paid', pending:'⏳ Pending', pledge:'🤝 Pledge' };
+    // Swap table headers for host columns
+    document.querySelector('.admin-table thead tr').innerHTML = `
+        <th>Name</th>
+        <th>Street</th>
+        <th>Internet</th>
+        <th>Backup Power</th>
+        <th>Placement</th>
+        <th>WiFi</th>
+        <th>Actions</th>`;
 
-    tbody.innerHTML = data.map(pin => {
-        const st      = pin.status || 'pending';
-        const ref     = 'UE-' + pin.id.slice(-6).toUpperCase();
-        const waLink  = buildWhatsAppLink(pin);
-        const emlLink = pin.email
-            ? `mailto:${pin.email}?subject=CCTV Contribution — ${ref}` +
-              `&body=Hi ${pin.fn},%0A%0AThank you for pledging R${pin.amount} towards University Estate CCTV.` +
-              `%0A%0APlease arrange payment using reference ${ref}.%0A%0AThank you!`
+    tbody.innerHTML = hosts.map(pin => {
+        const waLink  = pin.phone
+            ? `https://wa.me/${(pin.phone).replace(/\D/g,'').replace(/^0/,'27')}?text=${encodeURIComponent(`Hi ${pin.fn}! Thank you for registering as a camera host for University Estate CCTV. We'll be in touch soon. 📹`)}`
             : '#';
+        const emlLink = pin.email
+            ? `mailto:${pin.email}?subject=University Estate CCTV — Camera Host&body=Hi ${pin.fn},%0A%0AThank you for registering as a camera host. We'll be in touch soon.%0A%0AThank you!`
+            : '#';
+
         return `<tr>
             <td>
                 <strong>${pin.fn || ''} ${pin.ln || ''}</strong><br>
                 <span style="font-size:10px;color:var(--muted);">${pin.phone || 'No phone'}</span>
             </td>
             <td>${pin.street || '—'}</td>
-            <td style="color:var(--gold);font-weight:700;">R${(pin.amount || 0).toLocaleString()}</td>
-            <td>${FREQ_LABELS[pin.frequency] || '—'}</td>
-            <td>${PAY_LABELS[pin.payment] || pin.payment || '—'}</td>
-            <td><span class="status-badge ${stClass[st] || 'st-pledge'}">${stLabel[st] || st}</span></td>
+            <td>${NET_LABELS[pin.internet] || pin.internet || '—'}</td>
+            <td>${BAK_LABELS[pin.backup]   || pin.backup   || '—'}</td>
+            <td>${PLACE_LABELS[pin.placement] || pin.placement || '—'}</td>
+            <td>${pin.wifi || '—'}</td>
             <td>
                 <div class="follow-btns">
-                    <a  class="fbtn wa"  href="${waLink}"  target="_blank" title="WhatsApp follow-up"><i class="fab fa-whatsapp"></i></a>
-                    <a  class="fbtn em"  href="${emlLink}" title="Send email"><i class="fas fa-envelope"></i></a>
-                    <button class="fbtn pay" onclick="adminMarkPaid('${pin.id}')" title="Mark as paid"><i class="fas fa-check"></i></button>
-                    <button class="fbtn del" onclick="adminDelete('${pin.id}')"   title="Delete entry"><i class="fas fa-trash"></i></button>
+                    <a  class="fbtn wa"  href="${waLink}"  target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    <a  class="fbtn em"  href="${emlLink}" title="Email"><i class="fas fa-envelope"></i></a>
+                    <button class="fbtn del" onclick="adminDelete('${pin.id}')" title="Delete host"><i class="fas fa-trash"></i></button>
                 </div>
             </td>
         </tr>`;
     }).join('');
 
     document.getElementById('admin-total').innerHTML =
-        `${data.length} entries &nbsp;·&nbsp; Pledged: <strong style="color:var(--gold)">R${total.toLocaleString()}</strong>` +
-        (paid ? ` &nbsp;·&nbsp; Confirmed: <strong style="color:var(--green)">R${paid.toLocaleString()}</strong>` : '');
+        `${hosts.length} camera host${hosts.length !== 1 ? 's' : ''} registered`;
+    return;
+}
+
+// ── Contributors view (all other filters) ───────────────
+
+// Restore contributor headers
+document.querySelector('.admin-table thead tr').innerHTML = `
+    <th>Name</th>
+    <th>Street</th>
+    <th>Amount</th>
+    <th>Freq</th>
+    <th>Method</th>
+    <th>Status</th>
+    <th>Actions</th>`;
+
+const data  = pins.filter(p =>
+    p.type === 'contributor' && (filter === 'all' || (p.status || 'pending') === filter)
+);
+const total = data.reduce((s,p) => s + (p.amount || 0), 0);
+const paid  = data.filter(p => p.status === 'paid').reduce((s,p) => s + (p.amount || 0), 0);
+
+if (!data.length) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--muted);">No entries match this filter</td></tr>`;
+    document.getElementById('admin-total').textContent = '';
+    return;
+}
+
+const stClass = { paid:'st-paid', pending:'st-pending', pledge:'st-pledge' };
+const stLabel = { paid:'✅ Paid', pending:'⏳ Pending', pledge:'🤝 Pledge' };
+
+tbody.innerHTML = data.map(pin => {
+    const st      = pin.status || 'pending';
+    const ref     = 'UE-' + pin.id.slice(-6).toUpperCase();
+    const waLink  = buildWhatsAppLink(pin);
+    const emlLink = pin.email
+        ? `mailto:${pin.email}?subject=CCTV Contribution — ${ref}` +
+          `&body=Hi ${pin.fn},%0A%0AThank you for pledging R${pin.amount} towards University Estate CCTV.` +
+          `%0A%0APlease arrange payment using reference ${ref}.%0A%0AThank you!`
+        : '#';
+
+    return `<tr>
+        <td>
+            <strong>${pin.fn || ''} ${pin.ln || ''}</strong><br>
+            <span style="font-size:10px;color:var(--muted);">${pin.phone || 'No phone'}</span>
+        </td>
+        <td>${pin.street || '—'}</td>
+        <td style="color:var(--gold);font-weight:700;">R${(pin.amount || 0).toLocaleString()}</td>
+        <td>${FREQ_LABELS[pin.frequency] || '—'}</td>
+        <td>${PAY_LABELS[pin.payment] || pin.payment || '—'}</td>
+        <td><span class="status-badge ${stClass[st] || 'st-pledge'}">${stLabel[st] || st}</span></td>
+        <td>
+            <div class="follow-btns">
+                <a  class="fbtn wa"  href="${waLink}"  target="_blank" title="WhatsApp follow-up"><i class="fab fa-whatsapp"></i></a>
+                <a  class="fbtn em"  href="${emlLink}" title="Send email"><i class="fas fa-envelope"></i></a>
+                <button class="fbtn pay" onclick="adminMarkPaid('${pin.id}')" title="Mark as paid"><i class="fas fa-check"></i></button>
+                <button class="fbtn del" onclick="adminDelete('${pin.id}')"   title="Delete entry"><i class="fas fa-trash"></i></button>
+            </div>
+        </td>
+    </tr>`;
+}).join('');
+
+document.getElementById('admin-total').innerHTML =
+    `${data.length} entries &nbsp;·&nbsp; Pledged: <strong style="color:var(--gold)">R${total.toLocaleString()}</strong>` +
+    (paid ? ` &nbsp;·&nbsp; Confirmed: <strong style="color:var(--green)">R${paid.toLocaleString()}</strong>` : '');
 }
 
 function adminMarkPaid(id) {
