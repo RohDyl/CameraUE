@@ -465,7 +465,7 @@
             </div>
             <div class="leg-item">
                 <div class="leg-ring" style="border-color:var(--green)"></div>
-                <span>12m coverage ring</span>
+                <span>30m coverage ring</span>
             </div>
             <hr class="leg-sep">
             <div class="leg-item">
@@ -474,7 +474,7 @@
             </div>
             <div class="leg-item">
                 <div class="leg-ring" style="border-color:var(--blue)"></div>
-                <span>12m area ring</span>
+                <span>30m area ring</span>
             </div>
             <hr class="leg-sep">
             <div class="leg-item" style="color:var(--muted);font-size:10px;">
@@ -1058,7 +1058,7 @@ function submitHostPin() {
     savePin(pin);
     closeModal();
     clearHostForm();
-    toast('✅ Camera host registered! Your 12m coverage ring is now visible on the map.');
+    toast('✅ Camera host registered! Your 30m coverage ring is now visible on the map.');
 }
 
 // ╔══════════════════════════════════════════════════════════╗
@@ -1157,7 +1157,7 @@ function renderPin(pin) {
 
     // ── 12-metre coverage / area ring ─────────────────────
     const circle = L.circle([pin.lat, pin.lng], {
-        radius:      12,                          // metres
+        radius:      30,                          // metres
         color:       col,
         fillColor:   col,
         fillOpacity: isHost ? 0.13 : 0.07,
@@ -1207,7 +1207,7 @@ function buildPopup(pin) {
         ${pin.notes ? `<div class="pu-row" style="font-style:italic;color:#8899aa;">"${pin.notes}"</div>` : ''}
         <div class="pu-row" style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.08);">
             <i class="fas fa-circle" style="color:#00c853;font-size:8px;margin-top:3px;"></i>
-            <span style="color:#556677;font-size:10px;">12m camera coverage ring shown on map</span>
+           <span style="color:#556677;font-size:10px;">30m camera coverage ring shown on map</span>
         </div>`;
     } else {
         const stCol = { paid:'#00c853', pending:'#ffd600', pledge:'#8899aa' };
@@ -1233,7 +1233,7 @@ function buildPopup(pin) {
         ${pin.notes ? `<div class="pu-row" style="font-style:italic;color:#8899aa;">"${pin.notes}"</div>` : ''}
         <div class="pu-row" style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.08);">
             <i class="fas fa-circle" style="color:#2196f3;font-size:8px;margin-top:3px;"></i>
-            <span style="color:#556677;font-size:10px;">12m area ring shown on map</span>
+            <span style="color:#556677;font-size:10px;">30m area ring shown on map</span>
         </div>`;
     }
 
