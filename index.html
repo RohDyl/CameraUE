@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<head>
+<html lang="en"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>University Estate CCTV Initiative</title>
@@ -64,10 +64,10 @@
             display:flex; align-items:center; justify-content:center;
             font-size:12px; flex-shrink:0;
         }
-        .si-green { background:rgba(0,200,83,0.15); color:var(--green); }
+        .si-green { background:rgba(0,200,83,0.15);  color:var(--green); }
         .si-blue  { background:rgba(33,150,243,0.15); color:var(--blue); }
-        .si-gold  { background:rgba(255,214,0,0.15); color:var(--gold); }
-        .si-red   { background:rgba(244,67,54,0.15); color:var(--red); }
+        .si-gold  { background:rgba(255,214,0,0.15);  color:var(--gold); }
+        .si-red   { background:rgba(244,67,54,0.15);  color:var(--red); }
         .stat-info label { display:block; font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:0.4px; }
         .stat-info strong { font-size:15px; font-weight:700; }
 
@@ -152,10 +152,10 @@
             border-radius:10px; padding:12px 14px; font-size:11px; backdrop-filter:blur(8px);
         }
         .map-legend h4 { font-size:10px; text-transform:uppercase; letter-spacing:0.5px; color:var(--muted); margin-bottom:8px; }
-        .leg-item  { display:flex; align-items:center; gap:7px; margin-bottom:5px; }
-        .leg-dot   { width:11px; height:11px; border-radius:50%; flex-shrink:0; }
-        .leg-ring  { width:14px; height:14px; border-radius:50%; border:2px dashed; background:transparent; flex-shrink:0; }
-        .leg-sep   { border:none; border-top:1px solid var(--border); margin:6px 0; }
+        .leg-item { display:flex; align-items:center; gap:7px; margin-bottom:5px; }
+        .leg-dot  { width:11px; height:11px; border-radius:50%; flex-shrink:0; }
+        .leg-ring { width:14px; height:14px; border-radius:50%; border:2px dashed; background:transparent; flex-shrink:0; }
+        .leg-sep  { border:none; border-top:1px solid var(--border); margin:6px 0; }
 
         /* ── MAP HINT ── */
         .map-hint {
@@ -246,7 +246,7 @@
         .btn-back:hover { border-color:rgba(255,255,255,0.4); }
         .form-title { display:flex; align-items:center; gap:8px; margin-bottom:14px; font-size:14px; font-weight:600; }
 
-        /* ── PAYMENT MODAL ── */
+        /* ── PAYMENT / EFT ── */
         .pay-summary {
             background:rgba(255,214,0,0.07); border:1px solid rgba(255,214,0,0.2);
             border-radius:10px; padding:12px 14px; margin-bottom:16px;
@@ -254,28 +254,13 @@
         .ps-row { display:flex; justify-content:space-between; align-items:center; padding:4px 0; font-size:13px; }
         .ps-row span { color:var(--muted); }
         .ps-div { border:none; border-top:1px solid var(--border); margin:6px 0; }
-        .pay-grid { display:flex; flex-direction:column; gap:8px; }
-        .pay-opt {
-            display:flex; align-items:center; gap:12px; padding:12px 14px;
-            background:var(--card); border:1px solid var(--border);
-            border-radius:10px; color:var(--text); cursor:pointer; text-align:left;
-            transition:all 0.2s; font-family:'Inter',sans-serif; width:100%;
-        }
-        .pay-opt:hover { border-color:rgba(255,255,255,0.35); background:rgba(255,255,255,0.08); }
-        .pay-opt i        { font-size:22px; width:26px; flex-shrink:0; }
-        .pay-opt > div    { flex:1; }
-        .pay-opt strong   { display:block; font-size:13px; font-weight:600; }
-        .pay-opt p        { font-size:11px; color:var(--muted); margin-top:1px; }
-        .pay-badge        { padding:2px 7px; border-radius:4px; font-size:10px; font-weight:600; flex-shrink:0; }
-        .pay-badge.green  { background:rgba(0,200,83,0.2);  color:var(--green); }
-        .pay-badge.muted  { background:rgba(255,255,255,0.08); color:var(--muted); }
         .eft-box {
             background:rgba(33,150,243,0.07); border:1px solid rgba(33,150,243,0.25);
-            border-radius:10px; padding:14px; margin-top:12px;
+            border-radius:10px; padding:14px; margin-bottom:14px;
         }
         .eft-row {
             display:flex; justify-content:space-between; align-items:center;
-            padding:5px 0; font-size:12px; border-bottom:1px solid rgba(255,255,255,0.05);
+            padding:6px 0; font-size:12px; border-bottom:1px solid rgba(255,255,255,0.05);
         }
         .eft-row:last-child { border:none; }
         .eft-row span { color:var(--muted); }
@@ -285,12 +270,6 @@
             margin-left:6px; font-family:'Inter',sans-serif;
         }
         .btn-copy:hover { color:var(--text); }
-        .snapscan-box { text-align:center; padding:16px; }
-        .snapscan-box img { width:160px; height:160px; border-radius:10px; border:3px solid white; margin-bottom:10px; display:block; margin-left:auto; margin-right:auto; }
-        .snapscan-link {
-            display:inline-block; padding:8px 18px; background:#e4002b; color:#fff;
-            border-radius:8px; font-size:13px; font-weight:600; text-decoration:none; margin-top:6px;
-        }
 
         /* ── ADMIN PANEL ── */
         .admin-bar { display:flex; align-items:center; gap:8px; margin-bottom:14px; flex-wrap:wrap; }
@@ -315,8 +294,8 @@
         .admin-table td { padding:9px 10px; border-bottom:1px solid rgba(255,255,255,0.04); vertical-align:middle; }
         .admin-table tr:hover td { background:rgba(255,255,255,0.03); }
         .status-badge { padding:2px 8px; border-radius:4px; font-size:10px; font-weight:600; }
-        .st-paid    { background:rgba(0,200,83,0.2);  color:var(--green); }
-        .st-pending { background:rgba(255,214,0,0.2); color:var(--gold); }
+        .st-paid    { background:rgba(0,200,83,0.2);    color:var(--green); }
+        .st-pending { background:rgba(255,214,0,0.2);   color:var(--gold); }
         .st-pledge  { background:rgba(255,255,255,0.1); color:var(--muted); }
         .follow-btns { display:flex; gap:4px; }
         .fbtn {
@@ -325,10 +304,10 @@
             display:flex; align-items:center; justify-content:center;
             text-decoration:none; transition:all 0.2s;
         }
-        .fbtn.wa:hover  { background:rgba(37,211,102,0.2); border-color:#25d366; color:#25d366; }
+        .fbtn.wa:hover  { background:rgba(37,211,102,0.2); border-color:#25d366;    color:#25d366; }
         .fbtn.em:hover  { background:rgba(33,150,243,0.2); border-color:var(--blue); color:var(--blue); }
-        .fbtn.pay:hover { background:rgba(0,200,83,0.2);   border-color:var(--green); color:var(--green); }
-        .fbtn.del:hover { background:rgba(244,67,54,0.2);   border-color:var(--red); color:var(--red); }
+        .fbtn.pay:hover { background:rgba(0,200,83,0.2);   border-color:var(--green);color:var(--green); }
+        .fbtn.del:hover { background:rgba(244,67,54,0.2);   border-color:var(--red);  color:var(--red); }
 
         /* ── LEAFLET POPUP OVERRIDES ── */
         .leaflet-popup-content-wrapper {
@@ -338,15 +317,12 @@
         }
         .leaflet-popup-tip { background:#182d42 !important; }
         .leaflet-popup-content { margin:12px 14px !important; }
-        .pu-badge {
-            display:inline-block; padding:2px 8px; border-radius:4px;
-            font-size:10px; font-weight:600; margin-bottom:7px;
-        }
-        .pu-name  { font-size:14px; font-weight:700; margin-bottom:8px; }
-        .pu-row   { display:flex; align-items:flex-start; gap:6px; font-size:11px; margin-bottom:4px; color:#aabbcc; }
-        .pu-row i { font-size:10px; margin-top:2px; flex-shrink:0; }
+        .pu-badge  { display:inline-block; padding:2px 8px; border-radius:4px; font-size:10px; font-weight:600; margin-bottom:7px; }
+        .pu-name   { font-size:14px; font-weight:700; margin-bottom:8px; }
+        .pu-row    { display:flex; align-items:flex-start; gap:6px; font-size:11px; margin-bottom:4px; color:#aabbcc; }
+        .pu-row i  { font-size:10px; margin-top:2px; flex-shrink:0; }
         .pu-row strong { color:white; }
-        .pu-date  { font-size:10px; color:#556677; margin-top:7px; }
+        .pu-date   { font-size:10px; color:#556677; margin-top:7px; }
 
         /* ── TOAST ── */
         .toast {
@@ -356,6 +332,13 @@
             pointer-events:none; white-space:nowrap;
         }
         .toast.show { opacity:1; }
+
+        /* ── ADMIN SECRET BUTTON ── */
+        .admin-secret {
+            position:fixed; bottom:8px; left:8px;
+            width:36px; height:36px; cursor:pointer;
+            z-index:100; opacity:0;
+        }
 
         /* ── SCROLLBAR ── */
         ::-webkit-scrollbar { width:4px; }
@@ -375,7 +358,7 @@
 <!-- ══════ HEADER ══════ -->
 <div class="header">
     <div class="header-left">
-        <div class="logo" onclick="adminTrigger()" title="Click 5× for admin">📹</div>
+        <div class="logo" onclick="adminTrigger()" title="University Estate CCTV">📹</div>
         <div>
             <h1>University Estate <span>CCTV</span> Initiative</h1>
             <p>Cape Town Community Security · Sign up to host a camera or contribute funds</p>
@@ -456,7 +439,6 @@
     <div class="map-wrap">
         <div id="map"></div>
 
-        <!-- LEGEND -->
         <div class="map-legend">
             <h4>Legend</h4>
             <div class="leg-item">
@@ -625,30 +607,9 @@
                     <input id="c-addr" placeholder="e.g. 15 Liesbeeck Road">
                     <p class="hint">📍 Helps us prioritise camera placement on your street</p>
                 </div>
-                <div class="frow">
-                    <div class="fg">
-                        <label>Amount (R) *</label>
-                        <input id="c-amt" type="number" placeholder="500" min="10">
-                    </div>
-                    <div class="fg">
-                        <label>Frequency *</label>
-                        <select id="c-freq">
-                            <option value="">Select…</option>
-                            <option value="once">Once-off</option>
-                            <option value="monthly">Monthly</option>
-                            <option value="annual">Annual</option>
-                        </select>
-                    </div>
-                </div>
                 <div class="fg">
-                    <label>Preferred Payment Method</label>
-                    <select id="c-pay">
-                        <option value="">Select…</option>
-                        <option value="eft">EFT / Bank Transfer</option>
-                        <option value="snapscan">SnapScan</option>
-                        <option value="payfast">PayFast</option>
-                        <option value="cash">Cash</option>
-                    </select>
+                    <label>Once-off Contribution Amount (R) *</label>
+                    <input id="c-amt" type="number" placeholder="500" min="10">
                 </div>
                 <div class="fg">
                     <label>Message (optional)</label>
@@ -657,7 +618,7 @@
                 <div style="display:flex;gap:8px;">
                     <button class="btn-back" onclick="backToType()">← Back</button>
                     <button class="btn-sub blue" onclick="submitContribPin()" style="flex:1;">
-                        <i class="fas fa-coins"></i> Continue to Payment
+                        <i class="fas fa-coins"></i> Continue to Payment Details
                     </button>
                 </div>
             </div>
@@ -667,135 +628,73 @@
 </div>
 
 <!-- ══════════════════════════════════════
-     PAYMENT MODAL
+     PAYMENT MODAL — EFT Only
 ══════════════════════════════════════ -->
 <div class="overlay" id="modal-payment">
     <div class="modal">
         <div class="modal-head">
-            <h2>💳 Complete Your Contribution</h2>
+            <h2>🏦 EFT Payment Details</h2>
             <button class="btn-close" onclick="closePaymentModal()">✕</button>
         </div>
         <div class="modal-body">
 
-            <!-- Summary always visible -->
+            <!-- Summary -->
             <div class="pay-summary">
                 <div class="ps-row"><span>Contributor</span><strong id="ps-name">—</strong></div>
                 <div class="ps-row"><span>Street</span><strong id="ps-street">—</strong></div>
                 <hr class="ps-div">
                 <div class="ps-row">
-                    <span>Amount</span>
+                    <span>Once-off Amount</span>
                     <strong id="ps-amount" style="color:var(--gold);font-size:16px;">—</strong>
                 </div>
-                <div class="ps-row"><span>Frequency</span><strong id="ps-freq">—</strong></div>
-                <div class="ps-row">
-                    <span>Reference</span>
-                    <strong id="ps-ref" style="font-size:11px;color:var(--muted);">—</strong>
+            </div>
+
+            <!-- EFT Details -->
+            <p style="font-size:12px;color:var(--muted);margin-bottom:10px;">
+                Please use your <strong>surname and street</strong> as the payment reference:
+            </p>
+            <div class="eft-box">
+                <div class="eft-row">
+                    <span>Account Name</span>
+                    <strong>University Estate Neighbourhood Watch</strong>
+                </div>
+                <div class="eft-row">
+                    <span>Bank</span>
+                    <strong>Standard Bank</strong>
+                </div>
+                <div class="eft-row">
+                    <span>Account No.</span>
+                    <span style="display:flex;align-items:center;">
+                        <strong id="eft-acc">—</strong>
+                        <button class="btn-copy" onclick="copyText('eft-acc')">Copy</button>
+                    </span>
+                </div>
+                <div class="eft-row">
+                    <span>Branch Code</span>
+                    <strong>051 001</strong>
+                </div>
+                <div class="eft-row">
+                    <span>Account Type</span>
+                    <strong>Cheque / Current</strong>
+                </div>
+                <div class="eft-row" style="background:rgba(255,214,0,0.07);margin:4px -14px -14px;padding:8px 14px;border-radius:0 0 10px 10px;">
+                    <span>⭐ Your Reference</span>
+                    <span style="display:flex;align-items:center;">
+                        <strong id="eft-ref" style="color:var(--gold);">—</strong>
+                        <button class="btn-copy" onclick="copyText('eft-ref')">Copy</button>
+                    </span>
                 </div>
             </div>
 
-            <!-- View: options -->
-            <div id="pv-options">
-                <p style="font-size:11px;color:var(--muted);margin-bottom:10px;">
-                    Select your preferred payment method:
-                </p>
-                <div class="pay-grid">
-                    <button class="pay-opt" onclick="payWithPayFast()">
-                        <i class="fas fa-credit-card" style="color:#1a9b3c;"></i>
-                        <div>
-                            <strong>Pay with PayFast</strong>
-                            <p>Credit/debit card · Instant EFT · SnapScan · Mobicred</p>
-                        </div>
-                        <span class="pay-badge green">Recommended</span>
-                    </button>
-                    <button class="pay-opt" onclick="showPV('snapscan')">
-                        <i class="fas fa-qrcode" style="color:#e4002b;"></i>
-                        <div>
-                            <strong>SnapScan QR Code</strong>
-                            <p>Scan with your banking app to pay instantly</p>
-                        </div>
-                    </button>
-                    <button class="pay-opt" onclick="showPV('eft')">
-                        <i class="fas fa-university" style="color:var(--blue);"></i>
-                        <div>
-                            <strong>Manual EFT / Bank Transfer</strong>
-                            <p>Pay directly into our account</p>
-                        </div>
-                    </button>
-                    <button class="pay-opt" onclick="pledgeOnly()">
-                        <i class="fas fa-handshake" style="color:var(--muted);"></i>
-                        <div>
-                            <strong>Pledge Now — Pay Later</strong>
-                            <p>We'll send payment details to your email &amp; WhatsApp</p>
-                        </div>
-                        <span class="pay-badge muted">Follow-up</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- View: SnapScan -->
-            <div id="pv-snapscan" class="hidden">
-                <div class="snapscan-box">
-                    <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">
-                        Open your banking app → <strong>Scan to Pay</strong> → scan this code:
-                    </p>
-                    <img id="snapscan-qr" src="" alt="SnapScan QR Code">
-                    <br>
-                    <a id="snapscan-link" href="#" target="_blank" class="snapscan-link">
-                        <i class="fas fa-external-link-alt"></i> Open SnapScan App
-                    </a>
-                    <p style="font-size:11px;color:var(--muted);margin-top:10px;">
-                        Use reference: <strong id="snapscan-ref">—</strong>
-                    </p>
-                </div>
-                <div style="display:flex;gap:8px;margin-top:8px;">
-                    <button class="btn-back" onclick="showPV('options')">← Back</button>
-                    <button class="btn-sub green" onclick="markPaid('snapscan')" style="flex:1;">
-                        ✅ I've Paid — Confirm
-                    </button>
-                </div>
-            </div>
-
-            <!-- View: EFT -->
-            <div id="pv-eft" class="hidden">
-                <p style="font-size:12px;color:var(--muted);margin-bottom:8px;">
-                    Please use your <strong>reference number</strong> when making the transfer:
-                </p>
-                <div class="eft-box">
-                    <div class="eft-row">
-                        <span>Account Name</span>
-                        <strong>University Estate Neighbourhood Watch</strong>
-                    </div>
-                    <div class="eft-row">
-                        <span>Bank</span><strong>Standard Bank</strong>
-                    </div>
-                    <div class="eft-row">
-                        <span>Account No.</span>
-                        <span style="display:flex;align-items:center;">
-                            <strong id="eft-acc">000 000 0000</strong>
-                            <button class="btn-copy" onclick="copyText('eft-acc')">Copy</button>
-                        </span>
-                    </div>
-                    <div class="eft-row">
-                        <span>Branch Code</span><strong>051 001</strong>
-                    </div>
-                    <div class="eft-row">
-                        <span>Account Type</span><strong>Cheque / Current</strong>
-                    </div>
-                    <div class="eft-row">
-                        <span>Reference</span>
-                        <span style="display:flex;align-items:center;">
-                            <strong id="eft-ref">—</strong>
-                            <button class="btn-copy" onclick="copyText('eft-ref')">Copy</button>
-                        </span>
-                    </div>
-                </div>
-                <div style="display:flex;gap:8px;margin-top:12px;">
-                    <button class="btn-back" onclick="showPV('options')">← Back</button>
-                    <button class="btn-sub blue" onclick="markPaid('eft');sendFollowUpEmail('eft')" style="flex:1;">
-                        📧 Email Me These Details &amp; Confirm
-                    </button>
-                </div>
-            </div>
+            <button class="btn-sub blue" onclick="markPaid();sendFollowUpEmail('eft')" style="width:100%;margin-top:4px;">
+                📧 Email Me These Details
+            </button>
+            <button class="btn-sub green" onclick="markPaid()" style="width:100%;margin-top:8px;">
+                ✅ I Understand — I'll Make the EFT
+            </button>
+            <button class="btn-back" onclick="pledgeOnly()" style="width:100%;margin-top:8px;text-align:center;">
+                🤝 Pledge Only — Contact Me Later
+            </button>
 
         </div>
     </div>
@@ -807,17 +706,17 @@
 <div class="overlay" id="modal-admin">
     <div class="modal" style="max-width:780px;">
         <div class="modal-head">
-            <h2>🔒 Admin — Contribution Tracker</h2>
+            <h2>🔒 Admin — Management Panel</h2>
             <button class="btn-close" onclick="document.getElementById('modal-admin').classList.remove('active')">✕</button>
         </div>
         <div class="modal-body">
             <div class="admin-bar">
-           <button class="admin-filter active" onclick="filterAdmin('all',this)">All</button>
-<button class="admin-filter" onclick="filterAdmin('hosts',this)">📹 Hosts</button>
-<button class="admin-filter" onclick="filterAdmin('paid',this)">✅ Paid</button>
-<button class="admin-filter" onclick="filterAdmin('pending',this)">⏳ Pending</button>
-<button class="admin-filter" onclick="filterAdmin('pledge',this)">🤝 Pledge</button>
-<button class="btn-export" onclick="exportCSV()">⬇ Export CSV</button>
+                <button class="admin-filter active" onclick="filterAdmin('all',this)">All</button>
+                <button class="admin-filter" onclick="filterAdmin('hosts',this)">📹 Hosts</button>
+                <button class="admin-filter" onclick="filterAdmin('paid',this)">✅ Paid</button>
+                <button class="admin-filter" onclick="filterAdmin('pending',this)">⏳ Pending</button>
+                <button class="admin-filter" onclick="filterAdmin('pledge',this)">🤝 Pledge</button>
+                <button class="btn-export" onclick="exportCSV()">⬇ Export CSV</button>
             </div>
             <div style="overflow-x:auto;">
                 <table class="admin-table">
@@ -826,7 +725,6 @@
                             <th>Name</th>
                             <th>Street</th>
                             <th>Amount</th>
-                            <th>Freq</th>
                             <th>Method</th>
                             <th>Status</th>
                             <th>Actions</th>
@@ -843,6 +741,9 @@
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
+<!-- Admin secret — bottom left -->
+<div class="admin-secret" onclick="adminTrigger()"></div>
+
 <!-- ══════════════════════════════════════
      SCRIPTS
 ══════════════════════════════════════ -->
@@ -856,25 +757,19 @@
 // ╔══════════════════════════════════════════════════════════╗
 // ║  ⚙️  CONFIGURATION — update before going live           ║
 // ╚══════════════════════════════════════════════════════════╝
-const PAYFAST_MERCHANT_ID  = 'YOUR_MERCHANT_ID';
-const PAYFAST_MERCHANT_KEY = 'YOUR_MERCHANT_KEY';
-const PAYFAST_SANDBOX      = true;            // ← false for live payments
-const PAYFAST_NOTIFY_URL   = '';              // optional server webhook
-
-const SNAPSCAN_CODE        = 'YOUR_SNAPSCAN_CODE';
-const ORGANISER_WHATSAPP   = '27XXXXXXXXX';  // international format, no +
+const ORGANISER_WHATSAPP   = '27XXXXXXXXX';    // e.g. 27821234567
 const ORGANISER_EMAIL      = 'you@email.com';
-const BANK_ACCOUNT_NUMBER  = '000 000 0000'; // ← your real account number
+const BANK_ACCOUNT_NUMBER  = '000 000 0000';   // ← your real account number
 
 const EMAILJS_PUBLIC_KEY   = 'YOUR_EMAILJS_PUBLIC_KEY';
 const EMAILJS_SERVICE_ID   = 'YOUR_SERVICE_ID';
 const EMAILJS_CONTRIB_TPL  = 'template_contributor';
 const EMAILJS_ADMIN_TPL    = 'template_admin';
-const USE_EMAILJS           = false;          // ← true after EmailJS setup
+const USE_EMAILJS           = false;           // ← true after EmailJS setup
 
-const ADMIN_PASSWORD       = 'cctv2026';     // ← change this!
+const ADMIN_PASSWORD       = 'cctv2026';       // ← change this!
 
-const USE_FIREBASE = false;                   // ← true after Firebase setup
+const USE_FIREBASE = false;                    // ← true after Firebase setup
 const FIREBASE_CONFIG = {
     apiKey:            'YOUR_API_KEY',
     authDomain:        'YOUR_PROJECT.firebaseapp.com',
@@ -898,8 +793,7 @@ const PLACE_LABELS = {
     'street-facing':'Street-facing','entrance':'Gate / Entrance',
     'corner':'Corner — dual view ⭐','elevated':'Elevated (2nd floor+)','perimeter':'Perimeter wall'
 };
-const FREQ_LABELS = { 'once':'Once-off','monthly':'Monthly','annual':'Annual' };
-const PAY_LABELS  = { 'eft':'EFT','snapscan':'SnapScan','payfast':'PayFast','cash':'Cash' };
+const PAY_LABELS = { 'eft':'EFT','cash':'Cash' };
 
 // ╔══════════════════════════════════════════════════════════╗
 // ║  MAP — University Estate, Cape Town                     ║
@@ -938,8 +832,8 @@ function makeIcon(type) {
 // ║  STATE                                                  ║
 // ╚══════════════════════════════════════════════════════════╝
 let pins          = JSON.parse(localStorage.getItem('ue_cctv_pins') || '[]');
-let markers       = {};   // pinId → L.Marker
-let circles       = {};   // pinId → L.Circle  (12m coverage ring)
+let markers       = {};
+let circles       = {};
 let pendingLoc    = null;
 let chosenType    = null;
 let currentPayPin = null;
@@ -958,7 +852,7 @@ if (USE_FIREBASE) {
 }
 
 // ╔══════════════════════════════════════════════════════════╗
-// ║  MAP CLICK → open add-pin modal                         ║
+// ║  MAP CLICK                                              ║
 // ╚══════════════════════════════════════════════════════════╝
 map.on('click', e => {
     pendingLoc = e.latlng;
@@ -969,7 +863,7 @@ map.on('click', e => {
 });
 
 // ╔══════════════════════════════════════════════════════════╗
-// ║  ADD-PIN MODAL CONTROLS                                 ║
+// ║  MODAL CONTROLS                                         ║
 // ╚══════════════════════════════════════════════════════════╝
 function openAddModal() {
     resetAddModal();
@@ -985,26 +879,26 @@ function closeModal() {
 function resetAddModal() {
     showStep('type');
     chosenType = null;
-    document.getElementById('opt-host').classList.remove('sel-host', 'sel-contrib');
-    document.getElementById('opt-contrib').classList.remove('sel-host', 'sel-contrib');
+    document.getElementById('opt-host').classList.remove('sel-host','sel-contrib');
+    document.getElementById('opt-contrib').classList.remove('sel-host','sel-contrib');
     const btn = document.getElementById('btn-next');
-    btn.disabled = true;
+    btn.disabled  = true;
     btn.className = 'btn-sub green';
 }
 
 function showStep(s) {
-    ['type', 'host', 'contributor'].forEach(id =>
+    ['type','host','contributor'].forEach(id =>
         document.getElementById('step-' + id).classList.toggle('hidden', id !== s)
     );
 }
 
 function selectType(t) {
     chosenType = t;
-    document.getElementById('opt-host').classList.remove('sel-host', 'sel-contrib');
-    document.getElementById('opt-contrib').classList.remove('sel-host', 'sel-contrib');
+    document.getElementById('opt-host').classList.remove('sel-host','sel-contrib');
+    document.getElementById('opt-contrib').classList.remove('sel-host','sel-contrib');
     document.getElementById(t === 'host' ? 'opt-host' : 'opt-contrib')
         .classList.add(t === 'host' ? 'sel-host' : 'sel-contrib');
-    const btn = document.getElementById('btn-next');
+    const btn     = document.getElementById('btn-next');
     btn.disabled  = false;
     btn.className = 'btn-sub ' + (t === 'host' ? 'green' : 'blue');
 }
@@ -1059,22 +953,21 @@ function submitHostPin() {
     savePin(pin);
     closeModal();
     clearHostForm();
-    toast('✅ Camera host registered! Your 30m coverage ring is now visible on the map.');
+    toast('✅ Camera host registered! Your 30m coverage ring is visible on the map.');
 }
 
 // ╔══════════════════════════════════════════════════════════╗
-// ║  SUBMIT CONTRIBUTOR PIN → open payment modal            ║
+// ║  SUBMIT CONTRIBUTOR PIN                                 ║
 // ╚══════════════════════════════════════════════════════════╝
 function submitContribPin() {
     if (!pendingLoc) { toast('⚠️ No location selected.'); return; }
 
-    const fn   = v('c-fn'), addr = v('c-addr'),
-          amt  = parseFloat(v('c-amt')), freq = v('c-freq');
+    const fn  = v('c-fn'), addr = v('c-addr'),
+          amt = parseFloat(v('c-amt'));
 
     if (!fn)           { toast('⚠️ Please enter your name');             return; }
     if (!addr)         { toast('⚠️ Please enter your street address');   return; }
     if (!amt || amt<1) { toast('⚠️ Please enter a contribution amount'); return; }
-    if (!freq)         { toast('⚠️ Please select payment frequency');    return; }
 
     const pin = {
         id:        Date.now().toString(),
@@ -1085,8 +978,8 @@ function submitContribPin() {
         status:    'pending',
         fn, ln: v('c-ln'), phone: v('c-ph'), email: v('c-em'),
         address: addr, street: streetFrom(addr),
-        amount: amt, frequency: freq,
-        payment: v('c-pay'), notes: v('c-notes')
+        amount: amt, frequency: 'once',
+        payment: 'eft', notes: v('c-notes')
     };
 
     savePin(pin);
@@ -1112,17 +1005,14 @@ function clearHostForm() {
 function clearContribForm() {
     ['c-fn','c-ln','c-ph','c-em','c-addr','c-amt','c-notes'].forEach(id =>
         document.getElementById(id).value = '');
-    ['c-freq','c-pay'].forEach(id =>
-        document.getElementById(id).selectedIndex = 0);
 }
 
 // ╔══════════════════════════════════════════════════════════╗
-// ║  SAVE & LOAD DATA                                       ║
+// ║  SAVE & LOAD                                            ║
 // ╚══════════════════════════════════════════════════════════╝
 function savePin(pin) {
     if (USE_FIREBASE && db) {
         db.ref('pins/' + pin.id).set(pin);
-        // Firebase real-time listener handles re-render
     } else {
         pins.push(pin);
         localStorage.setItem('ue_cctv_pins', JSON.stringify(pins));
@@ -1134,7 +1024,6 @@ function savePin(pin) {
 function loadPins() {
     if (USE_FIREBASE && db) {
         db.ref('pins').on('value', snap => {
-            // Clear existing layers
             Object.values(markers).forEach(m => map.removeLayer(m));
             Object.values(circles).forEach(c => map.removeLayer(c));
             markers = {}; circles = {}; pins = [];
@@ -1149,36 +1038,33 @@ function loadPins() {
 }
 
 // ╔══════════════════════════════════════════════════════════╗
-// ║  RENDER PIN — marker + 12m coverage ring                ║
+// ║  RENDER PIN — marker + 30m ring (non-interactive)       ║
 // ╚══════════════════════════════════════════════════════════╝
 function renderPin(pin) {
     const isHost = pin.type === 'host';
     const col    = isHost ? '#00c853' : '#2196f3';
-    const popup  = buildPopup(pin);
 
-    // ── 12-metre coverage / area ring ─────────────────────
+    // ── 30m coverage ring — visual only, clicks pass through ──
     const circle = L.circle([pin.lat, pin.lng], {
-radius:      30,
-color:       col,
-fillColor:   col,
-fillOpacity: isHost ? 0.13 : 0.07,
-weight:      isHost ? 2.5 : 1.5,
-dashArray:   isHost ? '6 4' : '3 8',
-interactive: false  // ← clicks pass through to the map
-}).addTo(map);
-
-// circle.bindPopup removed — use the marker pin to open popup instead
+        radius:      30,
+        color:       col,
+        fillColor:   col,
+        fillOpacity: isHost ? 0.13 : 0.07,
+        weight:      isHost ? 2.5 : 1.5,
+        dashArray:   isHost ? '6 4' : '3 8',
+        interactive: false   // ← clicks pass through to map
+    }).addTo(map);
     circles[pin.id] = circle;
 
-    // ── Marker pin ────────────────────────────────────────
+    // ── Marker pin ────────────────────────────────────────────
     const marker = L.marker([pin.lat, pin.lng], { icon: makeIcon(pin.type) })
-        .bindPopup(popup, { maxWidth: 270 })
+        .bindPopup(buildPopup(pin), { maxWidth: 270 })
         .addTo(map);
     markers[pin.id] = marker;
 }
 
 // ╔══════════════════════════════════════════════════════════╗
-// ║  BUILD POPUP CONTENT                                    ║
+// ║  BUILD POPUP                                            ║
 // ╚══════════════════════════════════════════════════════════╝
 function buildPopup(pin) {
     const col   = pin.type === 'host' ? '#00c853' : '#2196f3';
@@ -1189,52 +1075,34 @@ function buildPopup(pin) {
 
     if (pin.type === 'host') {
         rows += `
-        <div class="pu-row">
-            <i class="fas fa-wifi"></i>
-            <span>Internet: <strong>${NET_LABELS[pin.internet] || pin.internet || '—'}</strong></span>
-        </div>
-        <div class="pu-row">
-            <i class="fas fa-bolt"></i>
-            <span>Backup: <strong>${BAK_LABELS[pin.backup] || pin.backup || '—'}</strong></span>
-        </div>
-        <div class="pu-row">
-            <i class="fas fa-map-marker-alt"></i>
-            <span>Camera: <strong>${PLACE_LABELS[pin.placement] || pin.placement || '—'}</strong></span>
-        </div>
-        ${pin.wifi ? `<div class="pu-row">
-            <i class="fas fa-broadcast-tower"></i>
-            <span>WiFi on-site: <strong>${pin.wifi}</strong></span>
-        </div>` : ''}
+        <div class="pu-row"><i class="fas fa-wifi"></i>
+            <span>Internet: <strong>${NET_LABELS[pin.internet] || pin.internet || '—'}</strong></span></div>
+        <div class="pu-row"><i class="fas fa-bolt"></i>
+            <span>Backup: <strong>${BAK_LABELS[pin.backup] || pin.backup || '—'}</strong></span></div>
+        <div class="pu-row"><i class="fas fa-map-marker-alt"></i>
+            <span>Camera: <strong>${PLACE_LABELS[pin.placement] || pin.placement || '—'}</strong></span></div>
+        ${pin.wifi ? `<div class="pu-row"><i class="fas fa-broadcast-tower"></i>
+            <span>WiFi on-site: <strong>${pin.wifi}</strong></span></div>` : ''}
         ${pin.notes ? `<div class="pu-row" style="font-style:italic;color:#8899aa;">"${pin.notes}"</div>` : ''}
         <div class="pu-row" style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.08);">
             <i class="fas fa-circle" style="color:#00c853;font-size:8px;margin-top:3px;"></i>
-           <span style="color:#556677;font-size:10px;">30m camera coverage ring shown on map</span>
+            <span style="color:#556677;font-size:10px;">30m camera coverage ring on map</span>
         </div>`;
     } else {
         const stCol = { paid:'#00c853', pending:'#ffd600', pledge:'#8899aa' };
-        const stLbl = { paid:'✅ Paid', pending:'⏳ Payment pending', pledge:'🤝 Pledge only' };
-        const st = pin.status || 'pending';
+        const stLbl = { paid:'✅ Paid', pending:'⏳ EFT pending', pledge:'🤝 Pledge only' };
+        const st    = pin.status || 'pending';
         rows += `
-        <div class="pu-row">
-            <i class="fas fa-coins"></i>
-            <span>Pledged: <strong style="color:#ffd600">R${(pin.amount || 0).toLocaleString()}</strong></span>
-        </div>
-        <div class="pu-row">
-            <i class="fas fa-calendar"></i>
-            <span>Frequency: <strong>${FREQ_LABELS[pin.frequency] || pin.frequency || '—'}</strong></span>
-        </div>
-        ${pin.payment ? `<div class="pu-row">
-            <i class="fas fa-credit-card"></i>
-            <span>Via: <strong>${PAY_LABELS[pin.payment] || pin.payment}</strong></span>
-        </div>` : ''}
-        <div class="pu-row">
-            <i class="fas fa-circle" style="color:${stCol[st] || '#8899aa'};font-size:8px;margin-top:3px;"></i>
-            <span><strong style="color:${stCol[st] || '#8899aa'}">${stLbl[st] || st}</strong></span>
-        </div>
+        <div class="pu-row"><i class="fas fa-coins"></i>
+            <span>Once-off: <strong style="color:#ffd600">R${(pin.amount || 0).toLocaleString()}</strong></span></div>
+        <div class="pu-row"><i class="fas fa-university"></i>
+            <span>Payment: <strong>EFT</strong></span></div>
+        <div class="pu-row"><i class="fas fa-circle" style="color:${stCol[st]||'#8899aa'};font-size:8px;margin-top:3px;"></i>
+            <span><strong style="color:${stCol[st]||'#8899aa'}">${stLbl[st] || st}</strong></span></div>
         ${pin.notes ? `<div class="pu-row" style="font-style:italic;color:#8899aa;">"${pin.notes}"</div>` : ''}
         <div class="pu-row" style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.08);">
             <i class="fas fa-circle" style="color:#2196f3;font-size:8px;margin-top:3px;"></i>
-            <span style="color:#556677;font-size:10px;">30m area ring shown on map</span>
+            <span style="color:#556677;font-size:10px;">30m area ring on map</span>
         </div>`;
     }
 
@@ -1246,7 +1114,7 @@ function buildPopup(pin) {
 }
 
 // ╔══════════════════════════════════════════════════════════╗
-// ║  UPDATE ALL UI                                          ║
+// ║  UPDATE UI                                              ║
 // ╚══════════════════════════════════════════════════════════╝
 function updateUI() {
     updateStats();
@@ -1280,10 +1148,10 @@ function renderEntriesList() {
     empty.style.display = 'none';
 
     list.innerHTML = [...pins]
-        .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+        .sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp))
         .map(pin => {
             const isHost = pin.type === 'host';
-            const init   = `${pin.fn?.charAt(0) || ''}${pin.ln?.charAt(0) || ''}`;
+            const init   = `${pin.fn?.charAt(0)||''}${pin.ln?.charAt(0)||''}`;
             let badges   = '';
 
             if (isHost) {
@@ -1294,9 +1162,8 @@ function renderEntriesList() {
                 const stClass = { paid:'bg-green', pending:'bg-gold', pledge:'bg-red' };
                 const stLabel = { paid:'✅ Paid', pending:'⏳ Pending', pledge:'🤝 Pledge' };
                 const st = pin.status || 'pending';
-                badges += `<span class="badge bg-gold">R${(pin.amount || 0).toLocaleString()}</span>`;
-                if (pin.frequency === 'monthly') badges += `<span class="badge bg-blue">Monthly</span>`;
-                badges += `<span class="badge ${stClass[st] || ''}">${stLabel[st] || st}</span>`;
+                badges += `<span class="badge bg-gold">R${(pin.amount||0).toLocaleString()}</span>`;
+                badges += `<span class="badge ${stClass[st]||''}">${stLabel[st]||st}</span>`;
             }
 
             return `
@@ -1304,7 +1171,7 @@ function renderEntriesList() {
                 <div class="ec-header">
                     <div class="avatar ${isHost ? 'av-host' : 'av-contrib'}">${init}</div>
                     <div>
-                        <div class="ec-name">${pin.fn || ''} ${pin.ln ? pin.ln.charAt(0) + '.' : ''}</div>
+                        <div class="ec-name">${pin.fn||''} ${pin.ln ? pin.ln.charAt(0)+'.' : ''}</div>
                         <div class="ec-street">${pin.street || pin.address?.split(',')[0] || '—'}</div>
                     </div>
                     <div style="margin-left:auto;font-size:14px;">${isHost ? '📹' : '💰'}</div>
@@ -1325,15 +1192,14 @@ function renderPriorityList() {
     const data = {};
     contribs.forEach(p => {
         const s = p.street || 'Unknown';
-        if (!data[s]) data[s] = { total:0, count:0, monthly:0, hosts:0, paid:0 };
-        data[s].total   += p.amount || 0;
-        data[s].count   += 1;
-        if (p.frequency === 'monthly') data[s].monthly += p.amount || 0;
-        if (p.status    === 'paid')    data[s].paid    += p.amount || 0;
+        if (!data[s]) data[s] = { total:0, count:0, hosts:0, paid:0 };
+        data[s].total += p.amount || 0;
+        data[s].count += 1;
+        if (p.status === 'paid') data[s].paid += p.amount || 0;
     });
     pins.filter(p => p.type === 'host').forEach(p => {
         const s = p.street || 'Unknown';
-        if (!data[s]) data[s] = { total:0, count:0, monthly:0, hosts:0, paid:0 };
+        if (!data[s]) data[s] = { total:0, count:0, hosts:0, paid:0 };
         data[s].hosts += 1;
     });
 
@@ -1343,17 +1209,16 @@ function renderPriorityList() {
 
     el.innerHTML = sorted.map(([street, d], i) => `
         <div class="priority-item">
-            <div class="p-rank ${rClass[i] || 'rx'}">${i + 1}</div>
+            <div class="p-rank ${rClass[i]||'rx'}">${i+1}</div>
             <div class="p-info">
                 <div class="p-street">${street}</div>
                 <div class="p-meta">
-                    ${d.count} contributor${d.count !== 1 ? 's' : ''}
-                    ${d.hosts   ? ` · ${d.hosts} host${d.hosts !== 1 ? 's' : ''}` : ''}
-                    ${d.monthly ? ` · R${d.monthly}/mo` : ''}
-                    ${d.paid    ? ` · <span style="color:var(--green)">R${d.paid} confirmed</span>` : ''}
+                    ${d.count} contributor${d.count!==1?'s':''}
+                    ${d.hosts ? ` · ${d.hosts} host${d.hosts!==1?'s':''}` : ''}
+                    ${d.paid  ? ` · <span style="color:var(--green)">R${d.paid} confirmed</span>` : ''}
                 </div>
                 <div class="p-bar">
-                    <div class="p-fill" style="width:${(d.total / maxAmt * 100).toFixed(0)}%"></div>
+                    <div class="p-fill" style="width:${(d.total/maxAmt*100).toFixed(0)}%"></div>
                 </div>
             </div>
             <div class="p-amount">R${d.total.toLocaleString()}</div>
@@ -1363,7 +1228,7 @@ function renderPriorityList() {
 function focusPin(id) {
     const pin = pins.find(p => p.id === id);
     if (!pin) return;
-    map.setView([pin.lat, pin.lng], 18, { animate: true });
+    map.setView([pin.lat, pin.lng], 18, { animate:true });
     setTimeout(() => markers[id]?.openPopup(), 550);
 }
 
@@ -1372,24 +1237,16 @@ function focusPin(id) {
 // ╚══════════════════════════════════════════════════════════╝
 function openPaymentModal(pin) {
     currentPayPin = pin;
-    const ref = 'UE-' + pin.id.slice(-6).toUpperCase();
 
-    document.getElementById('ps-name').textContent   = `${pin.fn || ''} ${pin.ln || ''}`.trim();
+    // Reference = Surname + Street
+    const ref = `${pin.ln || pin.fn || 'Resident'} ${pin.street || pin.address || ''}`.trim();
+
+    document.getElementById('ps-name').textContent   = `${pin.fn||''} ${pin.ln||''}`.trim();
     document.getElementById('ps-street').textContent = pin.street || pin.address;
-    document.getElementById('ps-amount').textContent =
-        `R${pin.amount.toLocaleString()}` +
-        (pin.frequency === 'monthly' ? ' / month' : pin.frequency === 'annual' ? ' / year' : ' once-off');
-    document.getElementById('ps-freq').textContent   = FREQ_LABELS[pin.frequency] || pin.frequency;
-    document.getElementById('ps-ref').textContent    = ref;
+    document.getElementById('ps-amount').textContent = `R${pin.amount.toLocaleString()}`;
     document.getElementById('eft-ref').textContent   = ref;
     document.getElementById('eft-acc').textContent   = BANK_ACCOUNT_NUMBER;
-    document.getElementById('snapscan-ref').textContent = ref;
 
-    const snapUrl = `https://pos.snapscan.io/qr/${SNAPSCAN_CODE}?id=${ref}&amount=${Math.round(pin.amount * 100)}`;
-    document.getElementById('snapscan-qr').src    = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(snapUrl)}`;
-    document.getElementById('snapscan-link').href = snapUrl;
-
-    showPV('options');
     document.getElementById('modal-payment').classList.add('active');
 }
 
@@ -1398,70 +1255,11 @@ function closePaymentModal() {
     currentPayPin = null;
 }
 
-function showPV(view) {
-    ['options', 'snapscan', 'eft'].forEach(id =>
-        document.getElementById('pv-' + id).classList.toggle('hidden', id !== view)
-    );
-}
-
-// ── PayFast redirect ────────────────────────────────────────
-function payWithPayFast() {
+function markPaid() {
     if (!currentPayPin) return;
-    const pin = currentPayPin;
-    const ref = 'UE-' + pin.id.slice(-6).toUpperCase();
-
-    const url = PAYFAST_SANDBOX
-        ? 'https://sandbox.payfast.co.za/eng/process'
-        : 'https://www.payfast.co.za/eng/process';
-
-    const fields = {
-        merchant_id:      PAYFAST_MERCHANT_ID,
-        merchant_key:     PAYFAST_MERCHANT_KEY,
-        name_first:       pin.fn  || '',
-        name_last:        pin.ln  || '',
-        email_address:    pin.email || '',
-        m_payment_id:     pin.id,
-        amount:           pin.amount.toFixed(2),
-        item_name:        'University Estate CCTV Contribution',
-        item_description: `${FREQ_LABELS[pin.frequency] || pin.frequency} — ${pin.street || pin.address}`,
-        custom_str1:      ref
-    };
-
-    if (pin.frequency === 'monthly' || pin.frequency === 'annual') {
-        Object.assign(fields, {
-            subscription_type: 1,
-            billing_date:      new Date().toISOString().split('T')[0],
-            recurring_amount:  pin.amount.toFixed(2),
-            frequency:         pin.frequency === 'monthly' ? 3 : 6,
-            cycles:            0
-        });
-    }
-    if (PAYFAST_NOTIFY_URL) fields.notify_url = PAYFAST_NOTIFY_URL;
-
-    const form = document.createElement('form');
-    form.method = 'post';
-    form.action = url;
-    Object.entries(fields).forEach(([k, val]) => {
-        const inp = document.createElement('input');
-        inp.type = 'hidden'; inp.name = k; inp.value = val;
-        form.appendChild(inp);
-    });
-
-    updatePinStatus(pin.id, 'pending');
-    document.body.appendChild(form);
-    form.submit();
-}
-
-// ── Mark paid / pledge ──────────────────────────────────────
-function markPaid(method) {
-    if (!currentPayPin) return;
-    const pin = currentPayPin;
-    updatePinStatus(pin.id, method === 'eft' ? 'pending' : 'paid');
-    sendFollowUpEmail(method);
+    updatePinStatus(currentPayPin.id, 'pending');
     closePaymentModal();
-    toast(method === 'eft'
-        ? '📧 EFT details noted — we\'ll confirm once payment is received.'
-        : '✅ Payment confirmed! Thank you for your contribution. 🏘️');
+    toast('✅ EFT details noted — we\'ll confirm once payment is received. Thank you! 🏘️');
 }
 
 function pledgeOnly() {
@@ -1486,15 +1284,12 @@ function updatePinStatus(id, status) {
     pins[idx].paymentTs = new Date().toISOString();
     localStorage.setItem('ue_cctv_pins', JSON.stringify(pins));
     if (USE_FIREBASE && db) db.ref('pins/' + id).update({ status, paymentTs: pins[idx].paymentTs });
-    // Refresh open popups
-    const updatedPopup = buildPopup(pins[idx]);
-    markers[id]?.setPopupContent(updatedPopup);
-    circles[id]?.setPopupContent(updatedPopup);
+    markers[id]?.setPopupContent(buildPopup(pins[idx]));
     updateUI();
 }
 
 // ╔══════════════════════════════════════════════════════════╗
-// ║  EMAILJS AUTO-EMAILS                                    ║
+// ║  EMAILJS                                                ║
 // ╚══════════════════════════════════════════════════════════╝
 function sendFollowUpEmail(method) {
     if (!USE_EMAILJS || !currentPayPin) return;
@@ -1510,9 +1305,7 @@ function sendFollowUpEmail(method) {
 
 function _doSendEmails(method) {
     const pin = currentPayPin;
-    const ref = 'UE-' + pin.id.slice(-6).toUpperCase();
-    const pfUrl = `https://${PAYFAST_SANDBOX ? 'sandbox.' : ''}payfast.co.za/eng/process` +
-        `?merchant_id=${PAYFAST_MERCHANT_ID}&amount=${pin.amount}&item_name=CCTV+Contribution&m_payment_id=${pin.id}`;
+    const ref = `${pin.ln || pin.fn || 'Resident'} ${pin.street || ''}`.trim();
 
     if (pin.email) {
         emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_CONTRIB_TPL, {
@@ -1520,9 +1313,7 @@ function _doSendEmails(method) {
             to_name:      pin.fn,
             reference:    ref,
             amount:       `R${pin.amount.toLocaleString()}`,
-            frequency:    FREQ_LABELS[pin.frequency] || pin.frequency,
             method,
-            payfast_link: pfUrl,
             bank_acc:     BANK_ACCOUNT_NUMBER,
             bank_ref:     ref,
             organiser_wa: `https://wa.me/${ORGANISER_WHATSAPP}`
@@ -1530,29 +1321,28 @@ function _doSendEmails(method) {
     }
 
     emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_ADMIN_TPL, {
-        contributor_name:    `${pin.fn} ${pin.ln || ''}`.trim(),
+        contributor_name:    `${pin.fn} ${pin.ln||''}`.trim(),
         contributor_email:   pin.email  || 'Not provided',
         contributor_phone:   pin.phone  || 'Not provided',
         contributor_address: pin.address,
         amount:              `R${pin.amount.toLocaleString()}`,
-        frequency:           FREQ_LABELS[pin.frequency] || pin.frequency,
-        method, reference:   ref,
+        method,
+        reference:           ref,
         wa_link:             buildWhatsAppLink(pin)
     }).catch(e => console.warn('Admin email failed:', e));
 }
 
 function buildWhatsAppLink(pin) {
-    const num = (pin.phone || '').replace(/\D/g,'').replace(/^0/,'27') || ORGANISER_WHATSAPP;
-    const ref = 'UE-' + pin.id.slice(-6).toUpperCase();
+    const num = (pin.phone||'').replace(/\D/g,'').replace(/^0/,'27') || ORGANISER_WHATSAPP;
+    const ref = `${pin.ln||pin.fn||'Resident'} ${pin.street||''}`.trim();
     const msg = encodeURIComponent(
         `Hi ${pin.fn}! Thank you for your pledge of R${pin.amount} towards University Estate CCTV cameras. ` +
-        `Your reference is *${ref}*. Please arrange payment via PayFast, SnapScan or EFT at your earliest convenience. ` +
-        `Reply here if you need help. Thank you! 🏘️📹`
+        `Please make an EFT to the University Estate Neighbourhood Watch account using reference *${ref}*. ` +
+        `Reply here if you need the banking details. Thank you! 🏘️📹`
     );
     return `https://wa.me/${num}?text=${msg}`;
 }
 
-// ── Copy to clipboard ───────────────────────────────────────
 function copyText(id) {
     const text = document.getElementById(id).textContent.replace(/\s/g,'');
     navigator.clipboard?.writeText(text)
@@ -1592,122 +1382,105 @@ function filterAdmin(filter, el) {
 }
 
 function renderAdminTable(filter) {
-const tbody = document.getElementById('admin-tbody');
+    const tbody = document.getElementById('admin-tbody');
 
-// ── Hosts view ──────────────────────────────────────────
-if (filter === 'hosts') {
-    const hosts = pins.filter(p => p.type === 'host');
+    // ── HOSTS VIEW ──────────────────────────────────────────
+    if (filter === 'hosts') {
+        const hosts = pins.filter(p => p.type === 'host');
 
-    if (!hosts.length) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--muted);">No camera hosts registered yet</td></tr>`;
+        document.querySelector('.admin-table thead tr').innerHTML = `
+            <th>Name</th><th>Street</th><th>Internet</th>
+            <th>Backup Power</th><th>Placement</th><th>Actions</th>`;
+
+        if (!hosts.length) {
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--muted);">No camera hosts registered yet</td></tr>`;
+            document.getElementById('admin-total').textContent = '';
+            return;
+        }
+
+        tbody.innerHTML = hosts.map(pin => {
+            const waLink  = pin.phone
+                ? `https://wa.me/${(pin.phone).replace(/\D/g,'').replace(/^0/,'27')}?text=${encodeURIComponent(`Hi ${pin.fn}! Thank you for registering as a camera host for University Estate CCTV. We'll be in touch soon. 📹`)}`
+                : '#';
+            const emlLink = pin.email
+                ? `mailto:${pin.email}?subject=University Estate CCTV — Camera Host&body=Hi ${pin.fn},%0A%0AThank you for registering as a camera host. We will be in touch soon.%0A%0AThank you!`
+                : '#';
+            return `<tr>
+                <td>
+                    <strong>${pin.fn||''} ${pin.ln||''}</strong><br>
+                    <span style="font-size:10px;color:var(--muted);">${pin.phone||'No phone'}</span>
+                </td>
+                <td>${pin.street||'—'}</td>
+                <td>${NET_LABELS[pin.internet]||pin.internet||'—'}</td>
+                <td>${BAK_LABELS[pin.backup]||pin.backup||'—'}</td>
+                <td>${PLACE_LABELS[pin.placement]||pin.placement||'—'}</td>
+                <td>
+                    <div class="follow-btns">
+                        <a class="fbtn wa" href="${waLink}"  target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        <a class="fbtn em" href="${emlLink}" title="Email"><i class="fas fa-envelope"></i></a>
+                        <button class="fbtn del" onclick="adminDelete('${pin.id}')" title="Delete host"><i class="fas fa-trash"></i></button>
+                    </div>
+                </td>
+            </tr>`;
+        }).join('');
+
+        document.getElementById('admin-total').innerHTML =
+            `${hosts.length} camera host${hosts.length!==1?'s':''} registered`;
+        return;
+    }
+
+    // ── CONTRIBUTORS VIEW ────────────────────────────────────
+    document.querySelector('.admin-table thead tr').innerHTML = `
+        <th>Name</th><th>Street</th><th>Amount</th>
+        <th>Method</th><th>Status</th><th>Actions</th>`;
+
+    const data  = pins.filter(p =>
+        p.type === 'contributor' && (filter === 'all' || (p.status||'pending') === filter)
+    );
+    const total = data.reduce((s,p) => s + (p.amount||0), 0);
+    const paid  = data.filter(p => p.status === 'paid').reduce((s,p) => s + (p.amount||0), 0);
+
+    if (!data.length) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--muted);">No entries match this filter</td></tr>`;
         document.getElementById('admin-total').textContent = '';
         return;
     }
 
-    // Swap table headers for host columns
-    document.querySelector('.admin-table thead tr').innerHTML = `
-        <th>Name</th>
-        <th>Street</th>
-        <th>Internet</th>
-        <th>Backup Power</th>
-        <th>Placement</th>
-        <th>WiFi</th>
-        <th>Actions</th>`;
+    const stClass = { paid:'st-paid', pending:'st-pending', pledge:'st-pledge' };
+    const stLabel = { paid:'✅ Paid', pending:'⏳ Pending', pledge:'🤝 Pledge' };
 
-    tbody.innerHTML = hosts.map(pin => {
-        const waLink  = pin.phone
-            ? `https://wa.me/${(pin.phone).replace(/\D/g,'').replace(/^0/,'27')}?text=${encodeURIComponent(`Hi ${pin.fn}! Thank you for registering as a camera host for University Estate CCTV. We'll be in touch soon. 📹`)}`
-            : '#';
+    tbody.innerHTML = data.map(pin => {
+        const st      = pin.status || 'pending';
+        const ref     = `${pin.ln||pin.fn||'Resident'} ${pin.street||''}`.trim();
+        const waLink  = buildWhatsAppLink(pin);
         const emlLink = pin.email
-            ? `mailto:${pin.email}?subject=University Estate CCTV — Camera Host&body=Hi ${pin.fn},%0A%0AThank you for registering as a camera host. We'll be in touch soon.%0A%0AThank you!`
+            ? `mailto:${pin.email}?subject=CCTV Contribution — ${ref}` +
+              `&body=Hi ${pin.fn},%0A%0AThank you for pledging R${pin.amount} towards University Estate CCTV.` +
+              `%0A%0APlease make an EFT using reference: ${ref}.%0A%0AThank you!`
             : '#';
-
         return `<tr>
             <td>
-                <strong>${pin.fn || ''} ${pin.ln || ''}</strong><br>
-                <span style="font-size:10px;color:var(--muted);">${pin.phone || 'No phone'}</span>
+                <strong>${pin.fn||''} ${pin.ln||''}</strong><br>
+                <span style="font-size:10px;color:var(--muted);">${pin.phone||'No phone'}</span>
             </td>
-            <td>${pin.street || '—'}</td>
-            <td>${NET_LABELS[pin.internet] || pin.internet || '—'}</td>
-            <td>${BAK_LABELS[pin.backup]   || pin.backup   || '—'}</td>
-            <td>${PLACE_LABELS[pin.placement] || pin.placement || '—'}</td>
-            <td>${pin.wifi || '—'}</td>
+            <td>${pin.street||'—'}</td>
+            <td style="color:var(--gold);font-weight:700;">R${(pin.amount||0).toLocaleString()}</td>
+            <td>EFT</td>
+            <td><span class="status-badge ${stClass[st]||'st-pledge'}">${stLabel[st]||st}</span></td>
             <td>
                 <div class="follow-btns">
                     <a  class="fbtn wa"  href="${waLink}"  target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
                     <a  class="fbtn em"  href="${emlLink}" title="Email"><i class="fas fa-envelope"></i></a>
-                    <button class="fbtn del" onclick="adminDelete('${pin.id}')" title="Delete host"><i class="fas fa-trash"></i></button>
+                    <button class="fbtn pay" onclick="adminMarkPaid('${pin.id}')" title="Mark as paid"><i class="fas fa-check"></i></button>
+                    <button class="fbtn del" onclick="adminDelete('${pin.id}')"   title="Delete"><i class="fas fa-trash"></i></button>
                 </div>
             </td>
         </tr>`;
     }).join('');
 
     document.getElementById('admin-total').innerHTML =
-        `${hosts.length} camera host${hosts.length !== 1 ? 's' : ''} registered`;
-    return;
-}
-
-// ── Contributors view (all other filters) ───────────────
-
-// Restore contributor headers
-document.querySelector('.admin-table thead tr').innerHTML = `
-    <th>Name</th>
-    <th>Street</th>
-    <th>Amount</th>
-    <th>Freq</th>
-    <th>Method</th>
-    <th>Status</th>
-    <th>Actions</th>`;
-
-const data  = pins.filter(p =>
-    p.type === 'contributor' && (filter === 'all' || (p.status || 'pending') === filter)
-);
-const total = data.reduce((s,p) => s + (p.amount || 0), 0);
-const paid  = data.filter(p => p.status === 'paid').reduce((s,p) => s + (p.amount || 0), 0);
-
-if (!data.length) {
-    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--muted);">No entries match this filter</td></tr>`;
-    document.getElementById('admin-total').textContent = '';
-    return;
-}
-
-const stClass = { paid:'st-paid', pending:'st-pending', pledge:'st-pledge' };
-const stLabel = { paid:'✅ Paid', pending:'⏳ Pending', pledge:'🤝 Pledge' };
-
-tbody.innerHTML = data.map(pin => {
-    const st      = pin.status || 'pending';
-    const ref     = 'UE-' + pin.id.slice(-6).toUpperCase();
-    const waLink  = buildWhatsAppLink(pin);
-    const emlLink = pin.email
-        ? `mailto:${pin.email}?subject=CCTV Contribution — ${ref}` +
-          `&body=Hi ${pin.fn},%0A%0AThank you for pledging R${pin.amount} towards University Estate CCTV.` +
-          `%0A%0APlease arrange payment using reference ${ref}.%0A%0AThank you!`
-        : '#';
-
-    return `<tr>
-        <td>
-            <strong>${pin.fn || ''} ${pin.ln || ''}</strong><br>
-            <span style="font-size:10px;color:var(--muted);">${pin.phone || 'No phone'}</span>
-        </td>
-        <td>${pin.street || '—'}</td>
-        <td style="color:var(--gold);font-weight:700;">R${(pin.amount || 0).toLocaleString()}</td>
-        <td>${FREQ_LABELS[pin.frequency] || '—'}</td>
-        <td>${PAY_LABELS[pin.payment] || pin.payment || '—'}</td>
-        <td><span class="status-badge ${stClass[st] || 'st-pledge'}">${stLabel[st] || st}</span></td>
-        <td>
-            <div class="follow-btns">
-                <a  class="fbtn wa"  href="${waLink}"  target="_blank" title="WhatsApp follow-up"><i class="fab fa-whatsapp"></i></a>
-                <a  class="fbtn em"  href="${emlLink}" title="Send email"><i class="fas fa-envelope"></i></a>
-                <button class="fbtn pay" onclick="adminMarkPaid('${pin.id}')" title="Mark as paid"><i class="fas fa-check"></i></button>
-                <button class="fbtn del" onclick="adminDelete('${pin.id}')"   title="Delete entry"><i class="fas fa-trash"></i></button>
-            </div>
-        </td>
-    </tr>`;
-}).join('');
-
-document.getElementById('admin-total').innerHTML =
-    `${data.length} entries &nbsp;·&nbsp; Pledged: <strong style="color:var(--gold)">R${total.toLocaleString()}</strong>` +
-    (paid ? ` &nbsp;·&nbsp; Confirmed: <strong style="color:var(--green)">R${paid.toLocaleString()}</strong>` : '');
+        `${data.length} entries &nbsp;·&nbsp; Pledged: <strong style="color:var(--gold)">R${total.toLocaleString()}</strong>` +
+        (paid ? ` &nbsp;·&nbsp; Confirmed: <strong style="color:var(--green)">R${paid.toLocaleString()}</strong>` : '');
 }
 
 function adminMarkPaid(id) {
@@ -1732,30 +1505,29 @@ function adminDelete(id) {
 }
 
 function exportCSV() {
-    const hdr  = ['Reference','First Name','Last Name','Phone','Email','Address','Street','Amount (R)','Frequency','Payment','Status','Date'];
-    const rows = pins.filter(p => p.type === 'contributor').map(p => [
-        'UE-' + p.id.slice(-6).toUpperCase(),
-        p.fn || '', p.ln || '', p.phone || '', p.email || '',
-        p.address || '', p.street || '',
-        p.amount  || 0,
-        FREQ_LABELS[p.frequency] || p.frequency || '',
-        PAY_LABELS[p.payment]    || p.payment    || '',
-        p.status  || 'pending',
+    const hdr  = ['Type','Name','Phone','Email','Address','Street','Amount (R)','Status','Date'];
+    const rows = pins.map(p => [
+        p.type === 'host' ? 'Camera Host' : 'Contributor',
+        `${p.fn||''} ${p.ln||''}`.trim(),
+        p.phone   || '',
+        p.email   || '',
+        p.address || '',
+        p.street  || '',
+        p.type === 'contributor' ? (p.amount||0) : '—',
+        p.type === 'contributor' ? (p.status||'pending') : '—',
         new Date(p.timestamp).toLocaleDateString('en-ZA')
     ].map(val => `"${String(val).replace(/"/g,'""')}"`).join(','));
 
-    const blob = new Blob([[hdr.join(','), ...rows].join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const blob = new Blob([[hdr.join(','), ...rows].join('\n')], { type:'text/csv;charset=utf-8;' });
     const url  = URL.createObjectURL(blob);
     Object.assign(document.createElement('a'), {
         href: url,
-        download: `UE-CCTV-Contributors-${new Date().toISOString().split('T')[0]}.csv`
+        download: `UE-CCTV-${new Date().toISOString().split('T')[0]}.csv`
     }).click();
     URL.revokeObjectURL(url);
 }
 
-// ╔══════════════════════════════════════════════════════════╗
-// ║  TOAST                                                  ║
-// ╚══════════════════════════════════════════════════════════╝
+// ── Toast ────────────────────────────────────────────────────
 function toast(msg) {
     const el = document.getElementById('toast');
     el.textContent = msg;
@@ -1763,8 +1535,8 @@ function toast(msg) {
     setTimeout(() => el.classList.remove('show'), 3500);
 }
 
-// ── Close modals on backdrop click ──────────────────────────
-['modal-add', 'modal-payment', 'modal-admin'].forEach(id => {
+// ── Close on backdrop click ──────────────────────────────────
+['modal-add','modal-payment','modal-admin'].forEach(id => {
     document.getElementById(id).addEventListener('click', function(e) {
         if (e.target === this) {
             if (id === 'modal-payment') closePaymentModal();
@@ -1773,7 +1545,7 @@ function toast(msg) {
     });
 });
 
-// ── Init ────────────────────────────────────────────────────
+// ── Init ─────────────────────────────────────────────────────
 loadPins();
 </script>
 
