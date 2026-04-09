@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script>emailjs.init('paste_your_public_key_here');</script>
+
 
     <style>
         :root {
@@ -619,9 +619,9 @@
                 </div>
                 <div style="display:flex;gap:8px;">
                     <button class="btn-back" onclick="backToType()">← Back</button>
-                    <button class="btn-sub blue" onclick="submitContribPin()" style="flex:1;">
-                        <i class="fas fa-coins"></i> Continue to Payment Details
-                    </button>
+               <button class="btn-sub blue" onclick="sendFollowUpEmail('eft');markPaid()" style="width:100%;margin-top:4px;">
+📧 Email Me These Details
+</button>
                 </div>
             </div>
 
@@ -1336,39 +1336,40 @@ function sendFollowUpEmail(method) {
     }
 }
 
-function _doSendEmails(method) {
- const pin = currentPayPin;
- if (!pin) return;
- const ref = `${pin.ln || pin.fn || 'Resident'} ${pin.street || ''}`.trim();
 
- // ── Email to contributor ──────────────────────────────
- if (pin.email) {
-     emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_CONTRIB_TPL, {
-         to_name:    pin.fn,
-         to_email:   pin.email,
-         amount:     `R${pin.amount.toLocaleString()}`,
-         reference:  ref
-     })
-     .then(() => toast('📧 Banking details sent to ' + pin.email))
-     .catch(e => {
-         console.warn('Email failed:', e);
-         toast('⚠️ Email could not be sent — please screenshot the details');
-     });
- } else {
-     toast('⚠️ No email address provided — please screenshot the details');
- }
+function _doSendEmails(method) {
+const pin = currentPayPin;
+if (!pin) return;
+const ref = `${pin.ln || pin.fn || 'Resident'} ${pin.street || ''}`.trim();
+
+if (pin.email) {
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_CONTRIB_TPL, {
+        to_name:   pin.fn,
+        to_email:  pin.email,
+        amount:    `R${pin.amount.toLocaleString()}`,
+        reference: ref
+    })
+    .then(() => toast('📧 Banking details sent to ' + pin.email))
+    .catch(e => {
+        console.warn('Email failed:', e);
+        toast('⚠️ Email could not be sent — please screenshot the details');
+    });
+} else {
+    toast('⚠️ No email address provided — please screenshot the details');
+}
 }
 
-    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_ADMIN_TPL, {
-        contributor_name:    `${pin.fn} ${pin.ln||''}`.trim(),
-        contributor_email:   pin.email  || 'Not provided',
-        contributor_phone:   pin.phone  || 'Not provided',
-        contributor_address: pin.address,
-        amount:              `R${pin.amount.toLocaleString()}`,
-        method,
-        reference:           ref,
-        wa_link:             buildWhatsAppLink(pin)
-    }).catch(e => console.warn('Admin email failed:', e));
+// ── Notification email to organiser ──────────────
+emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_ADMIN_TPL, {
+    contributor_name:    `${pin.fn} ${pin.ln||''}`.trim(),
+    contributor_email:   pin.email   || 'Not provided',
+    contributor_phone:   pin.phone   || 'Not provided',
+    contributor_address: pin.address || '',
+    amount:              `R${pin.amount.toLocaleString()}`,
+    method,
+    reference:           ref,
+    wa_link:             buildWhatsAppLink(pin)
+}).catch(e => console.warn('Admin email failed:', e));
 }
 
 function buildWhatsAppLink(pin) {
@@ -1583,7 +1584,7 @@ function toast(msg) {
         }
     });
 });
-
+emailjs.init(EMAILJS_PUBLIC_KEY);
 // ── Init ─────────────────────────────────────────────────────
 loadPins();
 </script>
