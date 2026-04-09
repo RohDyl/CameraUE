@@ -761,7 +761,7 @@ function makeIcon(type) {
 }
 
 // ── STATE ───────────────────────────────────────────────────
-let pins          = JSON.parse(localStorage.getItem('ue_cctv_pins') || '[]');
+let pins = USE_FIREBASE ? [] : JSON.parse(localStorage.getItem('ue_cctv_pins') || '[]');
 let markers       = {};
 let circles       = {};
 let pendingLoc    = null;
