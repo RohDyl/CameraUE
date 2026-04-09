@@ -1012,9 +1012,12 @@ function clearContribForm() {
 // ║  SAVE & LOAD                                            ║
 // ╚══════════════════════════════════════════════════════════╝
 function savePin(pin) {
-pins.push(pin);      // add to local array immediately
-renderPin(pin);      // draw pin + ring on map immediately
-updateUI();          // update stats + sidebar immediately
+// Prevent duplicates
+if (pins.find(p => p.id === pin.id)) return;
+
+pins.push(pin);
+renderPin(pin);
+updateUI();
 
 if (USE_FIREBASE && db) {
     db.ref('pins/' + pin.id).set(pin)
@@ -1025,19 +1028,45 @@ if (USE_FIREBASE && db) {
 }
 
 function loadPins() {
-    if (USE_FIREBASE && db) {
-        db.ref('pins').on('value', snap => {
-            Object.values(markers).forEach(m => map.removeLayer(m));
-            Object.values(circles).forEach(c => map.removeLayer(c));
-            markers = {}; circles = {}; pins = [];
-            if (snap.exists()) snap.forEach(child => pins.push(child.val()));
-            pins.forEach(renderPin);
+if (USE_FIREBASE && db) {
+
+    // New pin added by anyone
+    db.ref('pins').on('child_added', snap => {
+        const pin = snap.val();
+        if (!pins.find(p => p.id === pin.id)) {
+            pins.push(pin);
+            renderPin(pin);
             updateUI();
-        });
-    } else {
-        pins.forEach(renderPin);
-        updateUI();
-    }
+        }
+    });
+
+    // Pin updated (status change, mark as paid etc)
+    db.ref('pins').on('child_changed', snap => {
+        const pin = snap.val();
+        const idx = pins.findIndex(p => p.id === pin.id);
+        if (idx > -1) {
+            pins[idx] = pin;
+            markers[pin.id]?.setPopupContent(buildPopup(pin));
+            updateUI();
+        }
+    });
+
+    // Pin deleted by admin
+    db.ref('pins').on('child_removed', snap => {
+        const id = snap.val().id;
+        const idx = pins.findIndex(p => p.id === id);
+        if (idx > -1) {
+            pins.splice(idx, 1);
+            if (markers[id]) { map.removeLayer(markers[id]); delete markers[id]; }
+            if (circles[id]) { map.removeLayer(circles[id]); delete circles[id]; }
+            updateUI();
+        }
+    });
+
+} else {
+    pins.forEach(renderPin);
+    updateUI();
+}
 }
 
 // ╔══════════════════════════════════════════════════════════╗
