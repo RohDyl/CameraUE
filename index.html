@@ -1012,14 +1012,17 @@ function clearContribForm() {
 // ║  SAVE & LOAD                                            ║
 // ╚══════════════════════════════════════════════════════════╝
 function savePin(pin) {
-    if (USE_FIREBASE && db) {
-        db.ref('pins/' + pin.id).set(pin);
-    } else {
-        pins.push(pin);
-        localStorage.setItem('ue_cctv_pins', JSON.stringify(pins));
-        renderPin(pin);
-        updateUI();
-    }
+if (USE_FIREBASE && db) {
+    pins.push(pin); // ← add locally straight away so status updates work
+    db.ref('pins/' + pin.id).set(pin)
+        .catch(e => console.warn('Firebase save failed:', e));
+    // Firebase listener handles rendering for all other devices
+} else {
+    pins.push(pin);
+    localStorage.setItem('ue_cctv_pins', JSON.stringify(pins));
+    renderPin(pin);
+    updateUI();
+}
 }
 
 function loadPins() {
