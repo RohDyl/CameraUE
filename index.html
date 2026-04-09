@@ -1012,16 +1012,15 @@ function clearContribForm() {
 // ║  SAVE & LOAD                                            ║
 // ╚══════════════════════════════════════════════════════════╝
 function savePin(pin) {
+pins.push(pin);      // add to local array immediately
+renderPin(pin);      // draw pin + ring on map immediately
+updateUI();          // update stats + sidebar immediately
+
 if (USE_FIREBASE && db) {
-    pins.push(pin); // ← add locally straight away so status updates work
     db.ref('pins/' + pin.id).set(pin)
         .catch(e => console.warn('Firebase save failed:', e));
-    // Firebase listener handles rendering for all other devices
 } else {
-    pins.push(pin);
     localStorage.setItem('ue_cctv_pins', JSON.stringify(pins));
-    renderPin(pin);
-    updateUI();
 }
 }
 
@@ -1341,7 +1340,7 @@ function buildWhatsAppLink(pin) {
     const ref = `${pin.ln||pin.fn||'Resident'} ${pin.street||''}`.trim();
     const msg = encodeURIComponent(
         `Hi ${pin.fn}! Thank you for your pledge of R${pin.amount} towards University Estate CCTV cameras. ` +
-        `Please make an EFT to the University Estate Neighbourhood Watch account using reference *${ref}*. ` +
+        `Please make an EFT to the UE Camera Fund account using reference *${ref}*. ` +
         `Reply here if you need the banking details. Thank you! 🏘️📹`
     );
     return `https://wa.me/${num}?text=${msg}`;
