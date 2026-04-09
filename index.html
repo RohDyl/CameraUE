@@ -6,8 +6,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
     <style>
         :root {
@@ -29,8 +28,6 @@
             background:var(--navy); color:var(--text);
             display:flex; flex-direction:column; overflow:hidden;
         }
-
-        /* ── HEADER ── */
         .header {
             background:var(--navy-light); border-bottom:1px solid var(--border);
             padding:10px 18px; display:flex; align-items:center;
@@ -54,8 +51,6 @@
             white-space:nowrap; font-family:'Inter',sans-serif;
         }
         .btn-add-header:hover { background:var(--green-dark); color:#fff; }
-
-        /* ── STATS BAR ── */
         .stats-bar {
             background:var(--navy-light); border-bottom:1px solid var(--border);
             padding:7px 18px; display:flex; gap:18px; overflow-x:auto; flex-shrink:0;
@@ -72,11 +67,7 @@
         .si-red   { background:rgba(244,67,54,0.15);  color:var(--red); }
         .stat-info label { display:block; font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:0.4px; }
         .stat-info strong { font-size:15px; font-weight:700; }
-
-        /* ── MAIN LAYOUT ── */
         .main { display:flex; flex:1; overflow:hidden; min-height:0; }
-
-        /* ── SIDEBAR ── */
         .sidebar {
             width:290px; background:var(--navy-light);
             border-right:1px solid var(--border);
@@ -92,8 +83,6 @@
         }
         .tab.active { color:var(--text); border-bottom-color:var(--green); }
         .tab-content { flex:1; overflow-y:auto; }
-
-        /* ── ENTRY CARDS ── */
         .entries-wrap, .priority-wrap { padding:8px; }
         .entry-card {
             background:var(--card); border:1px solid var(--border);
@@ -117,8 +106,6 @@
         .bg-blue  { background:rgba(33,150,243,0.2); color:var(--blue); }
         .bg-gold  { background:rgba(255,214,0,0.2);  color:var(--gold); }
         .bg-red   { background:rgba(244,67,54,0.2);  color:#ff7961; }
-
-        /* ── PRIORITY LIST ── */
         .priority-note { font-size:10px; color:var(--muted); padding:6px 0 10px; }
         .priority-item {
             display:flex; align-items:center; gap:9px;
@@ -142,12 +129,8 @@
         .p-amount { font-size:12px; font-weight:700; color:var(--gold); }
         .empty-state { text-align:center; padding:30px 10px; color:var(--muted); font-size:12px; }
         .empty-state i { font-size:22px; margin-bottom:8px; display:block; }
-
-        /* ── MAP ── */
         .map-wrap { flex:1; position:relative; overflow:hidden; }
         #map      { width:100%; height:100%; }
-
-        /* ── MAP LEGEND ── */
         .map-legend {
             position:absolute; top:10px; right:10px; z-index:400;
             background:rgba(13,27,42,0.93); border:1px solid var(--border);
@@ -158,8 +141,6 @@
         .leg-dot  { width:11px; height:11px; border-radius:50%; flex-shrink:0; }
         .leg-ring { width:14px; height:14px; border-radius:50%; border:2px dashed; background:transparent; flex-shrink:0; }
         .leg-sep  { border:none; border-top:1px solid var(--border); margin:6px 0; }
-
-        /* ── MAP HINT ── */
         .map-hint {
             position:absolute; bottom:18px; left:50%; transform:translateX(-50%); z-index:400;
             background:rgba(13,27,42,0.88); border:1px solid var(--border);
@@ -167,8 +148,6 @@
             pointer-events:none; white-space:nowrap; backdrop-filter:blur(8px);
         }
         .map-hint i { color:var(--green); margin-right:5px; }
-
-        /* ── MODALS ── */
         .overlay {
             position:fixed; inset:0; background:rgba(0,0,0,0.72);
             z-index:2000; display:none; align-items:center; justify-content:center; padding:16px;
@@ -191,8 +170,6 @@
             display:flex; align-items:center; justify-content:center;
         }
         .modal-body { padding:18px; }
-
-        /* ── TYPE SELECTOR ── */
         .type-grid { display:grid; grid-template-columns:1fr 1fr; gap:11px; margin-bottom:18px; }
         .type-opt {
             border:2px solid var(--border); border-radius:12px;
@@ -206,8 +183,6 @@
         .type-opt.type-contrib i { color:var(--blue); }
         .type-opt h3 { font-size:13px; font-weight:600; margin-bottom:3px; }
         .type-opt p  { font-size:11px; color:var(--muted); }
-
-        /* ── FORMS ── */
         .fg   { margin-bottom:12px; }
         .frow { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
         label {
@@ -247,8 +222,6 @@
         }
         .btn-back:hover { border-color:rgba(255,255,255,0.4); }
         .form-title { display:flex; align-items:center; gap:8px; margin-bottom:14px; font-size:14px; font-weight:600; }
-
-        /* ── PAYMENT / EFT ── */
         .pay-summary {
             background:rgba(255,214,0,0.07); border:1px solid rgba(255,214,0,0.2);
             border-radius:10px; padding:12px 14px; margin-bottom:16px;
@@ -272,8 +245,6 @@
             margin-left:6px; font-family:'Inter',sans-serif;
         }
         .btn-copy:hover { color:var(--text); }
-
-        /* ── ADMIN PANEL ── */
         .admin-bar { display:flex; align-items:center; gap:8px; margin-bottom:14px; flex-wrap:wrap; }
         .admin-filter {
             padding:5px 10px; background:var(--card); border:1px solid var(--border);
@@ -310,8 +281,6 @@
         .fbtn.em:hover  { background:rgba(33,150,243,0.2); border-color:var(--blue); color:var(--blue); }
         .fbtn.pay:hover { background:rgba(0,200,83,0.2);   border-color:var(--green);color:var(--green); }
         .fbtn.del:hover { background:rgba(244,67,54,0.2);   border-color:var(--red);  color:var(--red); }
-
-        /* ── LEAFLET POPUP OVERRIDES ── */
         .leaflet-popup-content-wrapper {
             background:#182d42 !important; border:1px solid rgba(255,255,255,0.12) !important;
             border-radius:10px !important; color:white !important;
@@ -325,8 +294,6 @@
         .pu-row i  { font-size:10px; margin-top:2px; flex-shrink:0; }
         .pu-row strong { color:white; }
         .pu-date   { font-size:10px; color:#556677; margin-top:7px; }
-
-        /* ── TOAST ── */
         .toast {
             position:fixed; bottom:70px; left:50%; transform:translateX(-50%);
             background:var(--green); color:#000; padding:9px 20px; border-radius:20px;
@@ -334,20 +301,15 @@
             pointer-events:none; white-space:nowrap;
         }
         .toast.show { opacity:1; }
-
-        /* ── ADMIN SECRET BUTTON ── */
         .admin-secret {
             position:fixed; bottom:8px; left:8px;
             width:36px; height:36px; cursor:pointer;
             z-index:100; opacity:0;
         }
-
-        /* ── SCROLLBAR ── */
         ::-webkit-scrollbar { width:4px; }
         ::-webkit-scrollbar-track { background:transparent; }
         ::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.15); border-radius:2px; }
         .hidden { display:none !important; }
-
         @media (max-width:700px) {
             .sidebar { display:none; }
             .header h1 { font-size:14px; }
@@ -357,7 +319,6 @@
 </head>
 <body>
 
-<!-- ══════ HEADER ══════ -->
 <div class="header">
     <div class="header-left">
         <div class="logo" onclick="adminTrigger()" title="University Estate CCTV">📹</div>
@@ -371,7 +332,6 @@
     </button>
 </div>
 
-<!-- ══════ STATS BAR ══════ -->
 <div class="stats-bar">
     <div class="stat">
         <div class="stat-icon si-green"><i class="fas fa-camera"></i></div>
@@ -403,10 +363,7 @@
     </div>
 </div>
 
-<!-- ══════ MAIN ══════ -->
 <div class="main">
-
-    <!-- SIDEBAR -->
     <div class="sidebar">
         <div class="sidebar-top">
             <h3>Community Signups</h3>
@@ -437,10 +394,8 @@
         </div>
     </div>
 
-    <!-- MAP -->
     <div class="map-wrap">
         <div id="map"></div>
-
         <div class="map-legend">
             <h4>Legend</h4>
             <div class="leg-item">
@@ -466,7 +421,6 @@
                 &nbsp;Click map to add pin
             </div>
         </div>
-
         <div class="map-hint">
             <i class="fas fa-hand-pointer"></i>
             Click anywhere on the map to register your location
@@ -474,9 +428,7 @@
     </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     ADD PIN MODAL
-══════════════════════════════════════ -->
+<!-- ADD PIN MODAL -->
 <div class="overlay" id="modal-add">
     <div class="modal">
         <div class="modal-head">
@@ -485,7 +437,6 @@
         </div>
         <div class="modal-body">
 
-            <!-- STEP 1: Type -->
             <div id="step-type">
                 <p style="font-size:12px;color:var(--muted);margin-bottom:14px;">
                     How would you like to support University Estate's security?
@@ -507,7 +458,7 @@
                 </button>
             </div>
 
-            <!-- STEP 2A: Host Form -->
+            <!-- HOST FORM -->
             <div id="step-host" class="hidden">
                 <div class="form-title">
                     <i class="fas fa-camera" style="color:var(--green)"></i>
@@ -586,7 +537,7 @@
                 </div>
             </div>
 
-            <!-- STEP 2B: Contributor Form -->
+            <!-- CONTRIBUTOR FORM -->
             <div id="step-contributor" class="hidden">
                 <div class="form-title">
                     <i class="fas fa-hand-holding-usd" style="color:var(--blue)"></i>
@@ -617,11 +568,12 @@
                     <label>Message (optional)</label>
                     <textarea id="c-notes" rows="2" placeholder="Any message for the organising committee…"></textarea>
                 </div>
+                <!-- ✅ FIX B: Correct button restored -->
                 <div style="display:flex;gap:8px;">
                     <button class="btn-back" onclick="backToType()">← Back</button>
-               <button class="btn-sub blue" onclick="sendFollowUpEmail('eft');markPaid()" style="width:100%;margin-top:4px;">
-📧 Email Me These Details
-</button>
+                    <button class="btn-sub blue" onclick="submitContribPin()" style="flex:1;">
+                        <i class="fas fa-coins"></i> Continue to Payment Details
+                    </button>
                 </div>
             </div>
 
@@ -629,9 +581,7 @@
     </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     PAYMENT MODAL — EFT Only
-══════════════════════════════════════ -->
+<!-- PAYMENT MODAL -->
 <div class="overlay" id="modal-payment">
     <div class="modal">
         <div class="modal-head">
@@ -639,8 +589,6 @@
             <button class="btn-close" onclick="closePaymentModal()">✕</button>
         </div>
         <div class="modal-body">
-
-            <!-- Summary -->
             <div class="pay-summary">
                 <div class="ps-row"><span>Contributor</span><strong id="ps-name">—</strong></div>
                 <div class="ps-row"><span>Street</span><strong id="ps-street">—</strong></div>
@@ -650,8 +598,6 @@
                     <strong id="ps-amount" style="color:var(--gold);font-size:16px;">—</strong>
                 </div>
             </div>
-
-            <!-- EFT Details -->
             <p style="font-size:12px;color:var(--muted);margin-bottom:10px;">
                 Please use your <strong>surname and street</strong> as the payment reference:
             </p>
@@ -688,7 +634,8 @@
                 </div>
             </div>
 
-            <button class="btn-sub blue" onclick="markPaid();sendFollowUpEmail('eft')" style="width:100%;margin-top:4px;">
+            <!-- ✅ FIX C: sendFollowUpEmail called BEFORE markPaid -->
+            <button class="btn-sub blue" onclick="sendFollowUpEmail('eft');markPaid()" style="width:100%;margin-top:4px;">
                 📧 Email Me These Details
             </button>
             <button class="btn-sub green" onclick="markPaid()" style="width:100%;margin-top:8px;">
@@ -697,14 +644,11 @@
             <button class="btn-back" onclick="pledgeOnly()" style="width:100%;margin-top:8px;text-align:center;">
                 🤝 Pledge Only — Contact Me Later
             </button>
-
         </div>
     </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     ADMIN PANEL
-══════════════════════════════════════ -->
+<!-- ADMIN PANEL -->
 <div class="overlay" id="modal-admin">
     <div class="modal" style="max-width:780px;">
         <div class="modal-head">
@@ -740,15 +684,9 @@
     </div>
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
-
-<!-- Admin secret — bottom left -->
 <div class="admin-secret" onclick="adminTrigger()"></div>
 
-<!-- ══════════════════════════════════════
-     SCRIPTS
-══════════════════════════════════════ -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
@@ -756,33 +694,28 @@
 <script>
 'use strict';
 
-// ╔══════════════════════════════════════════════════════════╗
-// ║  ⚙️  CONFIGURATION — update before going live           ║
-// ╚══════════════════════════════════════════════════════════╝
-const ORGANISER_WHATSAPP   = '27829222648';    // e.g. 27821234567
+const ORGANISER_WHATSAPP   = '27829222648';
 const ORGANISER_EMAIL      = 'dylan.rohleder@gmail.com';
-const BANK_ACCOUNT_NUMBER  = '13138857287';   // ← your real account number
+const BANK_ACCOUNT_NUMBER  = '13138857287';
 
 const EMAILJS_PUBLIC_KEY  = '-lGj2Ou-ZHA8Hqdf6';
 const EMAILJS_SERVICE_ID  = 'service_qjoyyal';
 const EMAILJS_CONTRIB_TPL = 'template_epddnxf';
 const USE_EMAILJS          = true;
 
-const ADMIN_PASSWORD       = 'cctv2026';       // ← change this!
+const ADMIN_PASSWORD = 'cctv2026';
 
-const USE_FIREBASE = true;                    // ← true after Firebase setup
+const USE_FIREBASE = true;
 const FIREBASE_CONFIG = {
-  apiKey: "AIzaSyD49eFozw1R_ILIzx4yLXlyCWQQ1jOs9SA",
-  authDomain: "university-estate-camera-fund.firebaseapp.com",
-  databaseURL: "https://university-estate-camera-fund-default-rtdb.firebaseio.com",
-  projectId: "university-estate-camera-fund",
-  storageBucket: "university-estate-camera-fund.firebasestorage.app",
-  messagingSenderId: "302600698349",
-  appId: "1:302600698349:web:4bc8c039e7516470970fe4",
-  measurementId: "G-2BE283KBF3"
+    apiKey:            'AIzaSyD49eFozw1R_ILIzx4yLXlyCWQQ1jOs9SA',
+    authDomain:        'university-estate-camera-fund.firebaseapp.com',
+    databaseURL:       'https://university-estate-camera-fund-default-rtdb.firebaseio.com',
+    projectId:         'university-estate-camera-fund',
+    storageBucket:     'university-estate-camera-fund.firebasestorage.app',
+    messagingSenderId: '302600698349',
+    appId:             '1:302600698349:web:4bc8c039e7516470970fe4'
 };
 
-// ── Label maps ──────────────────────────────────────────────
 const NET_LABELS = {
     'under5':'< 5 Mbps ⚠️','5-10':'5–10 Mbps',
     '10-25':'10–25 Mbps ✓','25-50':'25–50 Mbps ✓✓','50+':'50+ Mbps ✓✓✓'
@@ -797,13 +730,11 @@ const PLACE_LABELS = {
 };
 const PAY_LABELS = { 'eft':'EFT','cash':'Cash' };
 
-// ╔══════════════════════════════════════════════════════════╗
-// ║  MAP — University Estate, Cape Town                     ║
-// ╚══════════════════════════════════════════════════════════╝
+// ── MAP ─────────────────────────────────────────────────────
 const map = L.map('map', {
-center: [-33.93823, 18.45270],
-zoom: 17,
-zoomControl: true
+    center: [-33.93823, 18.45270],
+    zoom: 17,
+    zoomControl: true
 });
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -811,7 +742,6 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19
 }).addTo(map);
 
-// ── Custom marker icons ─────────────────────────────────────
 function makeIcon(type) {
     const col = type === 'host' ? '#00c853' : '#2196f3';
     const ico = type === 'host' ? '📹' : '💰';
@@ -830,9 +760,7 @@ function makeIcon(type) {
     });
 }
 
-// ╔══════════════════════════════════════════════════════════╗
-// ║  STATE                                                  ║
-// ╚══════════════════════════════════════════════════════════╝
+// ── STATE ───────────────────────────────────────────────────
 let pins          = JSON.parse(localStorage.getItem('ue_cctv_pins') || '[]');
 let markers       = {};
 let circles       = {};
@@ -843,7 +771,7 @@ let adminClicks   = 0;
 let adminFilter_  = 'all';
 let db            = null;
 
-// ── Firebase init ───────────────────────────────────────────
+// ── FIREBASE ─────────────────────────────────────────────────
 if (USE_FIREBASE) {
     try {
         firebase.initializeApp(FIREBASE_CONFIG);
@@ -853,9 +781,7 @@ if (USE_FIREBASE) {
     }
 }
 
-// ╔══════════════════════════════════════════════════════════╗
-// ║  MAP CLICK                                              ║
-// ╚══════════════════════════════════════════════════════════╝
+// ── MAP CLICK ────────────────────────────────────────────────
 map.on('click', e => {
     pendingLoc = e.latlng;
     const txt = `${e.latlng.lat.toFixed(5)}, ${e.latlng.lng.toFixed(5)}`;
@@ -864,9 +790,7 @@ map.on('click', e => {
     openAddModal();
 });
 
-// ╔══════════════════════════════════════════════════════════╗
-// ║  MODAL CONTROLS                                         ║
-// ╚══════════════════════════════════════════════════════════╝
+// ── MODAL CONTROLS ───────────────────────────────────────────
 function openAddModal() {
     resetAddModal();
     document.getElementById('modal-add').classList.add('active');
@@ -924,9 +848,7 @@ function switchTab(name, el) {
     document.getElementById('tab-priority').classList.toggle('hidden', name !== 'priority');
 }
 
-// ╔══════════════════════════════════════════════════════════╗
-// ║  SUBMIT HOST PIN                                        ║
-// ╚══════════════════════════════════════════════════════════╝
+// ── SUBMIT HOST ──────────────────────────────────────────────
 function submitHostPin() {
     if (!pendingLoc) { toast('⚠️ No location selected.'); return; }
 
@@ -934,11 +856,11 @@ function submitHostPin() {
           addr  = v('h-addr'), net = v('h-net'),
           bak   = v('h-bak'), place = v('h-place');
 
-    if (!fn || !ln) { toast('⚠️ Please enter your name');             return; }
-    if (!addr)      { toast('⚠️ Please enter your street address');   return; }
-    if (!net)       { toast('⚠️ Please select your internet speed');  return; }
+    if (!fn || !ln) { toast('⚠️ Please enter your name');            return; }
+    if (!addr)      { toast('⚠️ Please enter your street address');  return; }
+    if (!net)       { toast('⚠️ Please select your internet speed'); return; }
     if (!bak)       { toast('⚠️ Please select backup power option'); return; }
-    if (!place)     { toast('⚠️ Please select camera placement');     return; }
+    if (!place)     { toast('⚠️ Please select camera placement');    return; }
 
     const pin = {
         id:        Date.now().toString(),
@@ -958,9 +880,7 @@ function submitHostPin() {
     toast('✅ Camera host registered! Your 30m coverage ring is visible on the map.');
 }
 
-// ╔══════════════════════════════════════════════════════════╗
-// ║  SUBMIT CONTRIBUTOR PIN                                 ║
-// ╚══════════════════════════════════════════════════════════╝
+// ── SUBMIT CONTRIBUTOR ───────────────────────────────────────
 function submitContribPin() {
     if (!pendingLoc) { toast('⚠️ No location selected.'); return; }
 
@@ -990,7 +910,7 @@ function submitContribPin() {
     openPaymentModal(pin);
 }
 
-// ── Helpers ─────────────────────────────────────────────────
+// ── HELPERS ──────────────────────────────────────────────────
 const v = id => document.getElementById(id)?.value?.trim() || '';
 
 function streetFrom(addr) {
@@ -1009,75 +929,60 @@ function clearContribForm() {
         document.getElementById(id).value = '');
 }
 
-// ╔══════════════════════════════════════════════════════════╗
-// ║  SAVE & LOAD                                            ║
-// ╚══════════════════════════════════════════════════════════╝
+// ── SAVE & LOAD ──────────────────────────────────────────────
 function savePin(pin) {
-// Prevent duplicates
-if (pins.find(p => p.id === pin.id)) return;
-
-pins.push(pin);
-renderPin(pin);
-updateUI();
-
-if (USE_FIREBASE && db) {
-    db.ref('pins/' + pin.id).set(pin)
-        .catch(e => console.warn('Firebase save failed:', e));
-} else {
-    localStorage.setItem('ue_cctv_pins', JSON.stringify(pins));
-}
+    if (pins.find(p => p.id === pin.id)) return;
+    pins.push(pin);
+    renderPin(pin);
+    updateUI();
+    if (USE_FIREBASE && db) {
+        db.ref('pins/' + pin.id).set(pin)
+            .catch(e => console.warn('Firebase save failed:', e));
+    } else {
+        localStorage.setItem('ue_cctv_pins', JSON.stringify(pins));
+    }
 }
 
 function loadPins() {
-if (USE_FIREBASE && db) {
-
-    // New pin added by anyone
-    db.ref('pins').on('child_added', snap => {
-        const pin = snap.val();
-        if (!pins.find(p => p.id === pin.id)) {
-            pins.push(pin);
-            renderPin(pin);
-            updateUI();
-        }
-    });
-
-    // Pin updated (status change, mark as paid etc)
-    db.ref('pins').on('child_changed', snap => {
-        const pin = snap.val();
-        const idx = pins.findIndex(p => p.id === pin.id);
-        if (idx > -1) {
-            pins[idx] = pin;
-            markers[pin.id]?.setPopupContent(buildPopup(pin));
-            updateUI();
-        }
-    });
-
-    // Pin deleted by admin
-    db.ref('pins').on('child_removed', snap => {
-        const id = snap.val().id;
-        const idx = pins.findIndex(p => p.id === id);
-        if (idx > -1) {
-            pins.splice(idx, 1);
-            if (markers[id]) { map.removeLayer(markers[id]); delete markers[id]; }
-            if (circles[id]) { map.removeLayer(circles[id]); delete circles[id]; }
-            updateUI();
-        }
-    });
-
-} else {
-    pins.forEach(renderPin);
-    updateUI();
-}
+    if (USE_FIREBASE && db) {
+        db.ref('pins').on('child_added', snap => {
+            const pin = snap.val();
+            if (!pins.find(p => p.id === pin.id)) {
+                pins.push(pin);
+                renderPin(pin);
+                updateUI();
+            }
+        });
+        db.ref('pins').on('child_changed', snap => {
+            const pin = snap.val();
+            const idx = pins.findIndex(p => p.id === pin.id);
+            if (idx > -1) {
+                pins[idx] = pin;
+                markers[pin.id]?.setPopupContent(buildPopup(pin));
+                updateUI();
+            }
+        });
+        db.ref('pins').on('child_removed', snap => {
+            const id = snap.val().id;
+            const idx = pins.findIndex(p => p.id === id);
+            if (idx > -1) {
+                pins.splice(idx, 1);
+                if (markers[id]) { map.removeLayer(markers[id]); delete markers[id]; }
+                if (circles[id]) { map.removeLayer(circles[id]); delete circles[id]; }
+                updateUI();
+            }
+        });
+    } else {
+        pins.forEach(renderPin);
+        updateUI();
+    }
 }
 
-// ╔══════════════════════════════════════════════════════════╗
-// ║  RENDER PIN — marker + 30m ring (non-interactive)       ║
-// ╚══════════════════════════════════════════════════════════╝
+// ── RENDER PIN ───────────────────────────────────────────────
 function renderPin(pin) {
     const isHost = pin.type === 'host';
     const col    = isHost ? '#00c853' : '#2196f3';
 
-    // ── 30m coverage ring — visual only, clicks pass through ──
     const circle = L.circle([pin.lat, pin.lng], {
         radius:      30,
         color:       col,
@@ -1085,20 +990,17 @@ function renderPin(pin) {
         fillOpacity: isHost ? 0.13 : 0.07,
         weight:      isHost ? 2.5 : 1.5,
         dashArray:   isHost ? '6 4' : '3 8',
-        interactive: false   // ← clicks pass through to map
+        interactive: false
     }).addTo(map);
     circles[pin.id] = circle;
 
-    // ── Marker pin ────────────────────────────────────────────
     const marker = L.marker([pin.lat, pin.lng], { icon: makeIcon(pin.type) })
         .bindPopup(buildPopup(pin), { maxWidth: 270 })
         .addTo(map);
     markers[pin.id] = marker;
 }
 
-// ╔══════════════════════════════════════════════════════════╗
-// ║  BUILD POPUP                                            ║
-// ╚══════════════════════════════════════════════════════════╝
+// ── BUILD POPUP ──────────────────────────────────────────────
 function buildPopup(pin) {
     const col   = pin.type === 'host' ? '#00c853' : '#2196f3';
     const label = pin.type === 'host' ? '📹 Camera Host' : '💰 Contributor';
@@ -1146,9 +1048,7 @@ function buildPopup(pin) {
         <div class="pu-date">Added ${new Date(pin.timestamp).toLocaleDateString('en-ZA')}</div>`;
 }
 
-// ╔══════════════════════════════════════════════════════════╗
-// ║  UPDATE UI                                              ║
-// ╚══════════════════════════════════════════════════════════╝
+// ── UPDATE UI ────────────────────────────────────────────────
 function updateUI() {
     updateStats();
     renderEntriesList();
@@ -1163,7 +1063,6 @@ function updateStats() {
     const backup   = hosts.filter(p => p.backup && p.backup !== 'none').length;
     const fast     = hosts.filter(p => ['10-25','25-50','50+'].includes(p.internet)).length;
     const streets  = new Set(pins.map(p => p.street).filter(Boolean)).size;
-
     const set = (id, val) => document.getElementById(id).textContent = val;
     set('s-hosts',   hosts.length);
     set('s-contribs',contribs.length);
@@ -1186,7 +1085,6 @@ function renderEntriesList() {
             const isHost = pin.type === 'host';
             const init   = `${pin.fn?.charAt(0)||''}${pin.ln?.charAt(0)||''}`;
             let badges   = '';
-
             if (isHost) {
                 if (['10-25','25-50','50+'].includes(pin.internet)) badges += `<span class="badge bg-green">Fast Internet</span>`;
                 if (pin.backup && pin.backup !== 'none')            badges += `<span class="badge bg-gold">Backup Power</span>`;
@@ -1198,7 +1096,6 @@ function renderEntriesList() {
                 badges += `<span class="badge bg-gold">R${(pin.amount||0).toLocaleString()}</span>`;
                 badges += `<span class="badge ${stClass[st]||''}">${stLabel[st]||st}</span>`;
             }
-
             return `
             <div class="entry-card" onclick="focusPin('${pin.id}')">
                 <div class="ec-header">
@@ -1221,7 +1118,6 @@ function renderPriorityList() {
         el.innerHTML = '<div class="empty-state"><i class="fas fa-trophy"></i>No contributions yet</div>';
         return;
     }
-
     const data = {};
     contribs.forEach(p => {
         const s = p.street || 'Unknown';
@@ -1235,11 +1131,9 @@ function renderPriorityList() {
         if (!data[s]) data[s] = { total:0, count:0, hosts:0, paid:0 };
         data[s].hosts += 1;
     });
-
     const sorted = Object.entries(data).sort((a,b) => b[1].total - a[1].total);
     const maxAmt = sorted[0]?.[1].total || 1;
     const rClass = ['r1','r2','r3'];
-
     el.innerHTML = sorted.map(([street, d], i) => `
         <div class="priority-item">
             <div class="p-rank ${rClass[i]||'rx'}">${i+1}</div>
@@ -1265,21 +1159,15 @@ function focusPin(id) {
     setTimeout(() => markers[id]?.openPopup(), 550);
 }
 
-// ╔══════════════════════════════════════════════════════════╗
-// ║  PAYMENT MODAL                                          ║
-// ╚══════════════════════════════════════════════════════════╝
+// ── PAYMENT MODAL ────────────────────────────────────────────
 function openPaymentModal(pin) {
     currentPayPin = pin;
-
-    // Reference = Surname + Street
     const ref = `${pin.ln || pin.fn || 'Resident'} ${pin.street || pin.address || ''}`.trim();
-
     document.getElementById('ps-name').textContent   = `${pin.fn||''} ${pin.ln||''}`.trim();
     document.getElementById('ps-street').textContent = pin.street || pin.address;
     document.getElementById('ps-amount').textContent = `R${pin.amount.toLocaleString()}`;
     document.getElementById('eft-ref').textContent   = ref;
     document.getElementById('eft-acc').textContent   = BANK_ACCOUNT_NUMBER;
-
     document.getElementById('modal-payment').classList.add('active');
 }
 
@@ -1321,55 +1209,35 @@ function updatePinStatus(id, status) {
     updateUI();
 }
 
-// ╔══════════════════════════════════════════════════════════╗
-// ║  EMAILJS                                                ║
-// ╚══════════════════════════════════════════════════════════╝
+// ── EMAILJS ──────────────────────────────────────────────────
 function sendFollowUpEmail(method) {
     if (!USE_EMAILJS || !currentPayPin) return;
-    if (!window.emailjs) {
-        const s = document.createElement('script');
-        s.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
-        s.onload = () => { emailjs.init(EMAILJS_PUBLIC_KEY); _doSendEmails(method); };
-        document.head.appendChild(s);
-    } else {
+    if (window.emailjs) {
         _doSendEmails(method);
     }
 }
 
-
+// ✅ FIX A: Clean function — no orphaned code, no extra closing brace
 function _doSendEmails(method) {
-const pin = currentPayPin;
-if (!pin) return;
-const ref = `${pin.ln || pin.fn || 'Resident'} ${pin.street || ''}`.trim();
+    const pin = currentPayPin;
+    if (!pin) return;
+    const ref = `${pin.ln || pin.fn || 'Resident'} ${pin.street || ''}`.trim();
 
-if (pin.email) {
-    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_CONTRIB_TPL, {
-        to_name:   pin.fn,
-        to_email:  pin.email,
-        amount:    `R${pin.amount.toLocaleString()}`,
-        reference: ref
-    })
-    .then(() => toast('📧 Banking details sent to ' + pin.email))
-    .catch(e => {
-        console.warn('Email failed:', e);
-        toast('⚠️ Email could not be sent — please screenshot the details');
-    });
-} else {
-    toast('⚠️ No email address provided — please screenshot the details');
-}
-
-
-// ── Notification email to organiser ──────────────
-emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_ADMIN_TPL, {
-    contributor_name:    `${pin.fn} ${pin.ln||''}`.trim(),
-    contributor_email:   pin.email   || 'Not provided',
-    contributor_phone:   pin.phone   || 'Not provided',
-    contributor_address: pin.address || '',
-    amount:              `R${pin.amount.toLocaleString()}`,
-    method,
-    reference:           ref,
-    wa_link:             buildWhatsAppLink(pin)
-}).catch(e => console.warn('Admin email failed:', e));
+    if (pin.email) {
+        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_CONTRIB_TPL, {
+            to_name:   pin.fn,
+            to_email:  pin.email,
+            amount:    `R${pin.amount.toLocaleString()}`,
+            reference: ref
+        })
+        .then(() => toast('📧 Banking details sent to ' + pin.email))
+        .catch(e => {
+            console.warn('Email failed:', e);
+            toast('⚠️ Email could not be sent — please screenshot the details');
+        });
+    } else {
+        toast('⚠️ No email address provided — please screenshot the details');
+    }
 }
 
 function buildWhatsAppLink(pin) {
@@ -1395,9 +1263,7 @@ function copyText(id) {
         });
 }
 
-// ╔══════════════════════════════════════════════════════════╗
-// ║  ADMIN PANEL                                            ║
-// ╚══════════════════════════════════════════════════════════╝
+// ── ADMIN PANEL ──────────────────────────────────────────────
 function adminTrigger() {
     adminClicks++;
     if (adminClicks >= 5) {
@@ -1424,52 +1290,42 @@ function filterAdmin(filter, el) {
 function renderAdminTable(filter) {
     const tbody = document.getElementById('admin-tbody');
 
-    // ── HOSTS VIEW ──────────────────────────────────────────
     if (filter === 'hosts') {
         const hosts = pins.filter(p => p.type === 'host');
-
         document.querySelector('.admin-table thead tr').innerHTML = `
             <th>Name</th><th>Street</th><th>Internet</th>
             <th>Backup Power</th><th>Placement</th><th>Actions</th>`;
-
         if (!hosts.length) {
             tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--muted);">No camera hosts registered yet</td></tr>`;
             document.getElementById('admin-total').textContent = '';
             return;
         }
-
         tbody.innerHTML = hosts.map(pin => {
             const waLink  = pin.phone
-                ? `https://wa.me/${(pin.phone).replace(/\D/g,'').replace(/^0/,'27')}?text=${encodeURIComponent(`Hi ${pin.fn}! Thank you for registering as a camera host for University Estate CCTV. We'll be in touch soon. 📹`)}`
+                ? `https://wa.me/${pin.phone.replace(/\D/g,'').replace(/^0/,'27')}?text=${encodeURIComponent(`Hi ${pin.fn}! Thank you for registering as a camera host for University Estate CCTV. We'll be in touch soon. 📹`)}`
                 : '#';
             const emlLink = pin.email
                 ? `mailto:${pin.email}?subject=University Estate CCTV — Camera Host&body=Hi ${pin.fn},%0A%0AThank you for registering as a camera host. We will be in touch soon.%0A%0AThank you!`
                 : '#';
             return `<tr>
-                <td>
-                    <strong>${pin.fn||''} ${pin.ln||''}</strong><br>
-                    <span style="font-size:10px;color:var(--muted);">${pin.phone||'No phone'}</span>
-                </td>
+                <td><strong>${pin.fn||''} ${pin.ln||''}</strong><br>
+                    <span style="font-size:10px;color:var(--muted);">${pin.phone||'No phone'}</span></td>
                 <td>${pin.street||'—'}</td>
                 <td>${NET_LABELS[pin.internet]||pin.internet||'—'}</td>
                 <td>${BAK_LABELS[pin.backup]||pin.backup||'—'}</td>
                 <td>${PLACE_LABELS[pin.placement]||pin.placement||'—'}</td>
-                <td>
-                    <div class="follow-btns">
-                        <a class="fbtn wa" href="${waLink}"  target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-                        <a class="fbtn em" href="${emlLink}" title="Email"><i class="fas fa-envelope"></i></a>
-                        <button class="fbtn del" onclick="adminDelete('${pin.id}')" title="Delete host"><i class="fas fa-trash"></i></button>
-                    </div>
-                </td>
+                <td><div class="follow-btns">
+                    <a class="fbtn wa" href="${waLink}" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    <a class="fbtn em" href="${emlLink}" title="Email"><i class="fas fa-envelope"></i></a>
+                    <button class="fbtn del" onclick="adminDelete('${pin.id}')" title="Delete"><i class="fas fa-trash"></i></button>
+                </div></td>
             </tr>`;
         }).join('');
-
         document.getElementById('admin-total').innerHTML =
             `${hosts.length} camera host${hosts.length!==1?'s':''} registered`;
         return;
     }
 
-    // ── CONTRIBUTORS VIEW ────────────────────────────────────
     document.querySelector('.admin-table thead tr').innerHTML = `
         <th>Name</th><th>Street</th><th>Amount</th>
         <th>Method</th><th>Status</th><th>Actions</th>`;
@@ -1499,22 +1355,18 @@ function renderAdminTable(filter) {
               `%0A%0APlease make an EFT using reference: ${ref}.%0A%0AThank you!`
             : '#';
         return `<tr>
-            <td>
-                <strong>${pin.fn||''} ${pin.ln||''}</strong><br>
-                <span style="font-size:10px;color:var(--muted);">${pin.phone||'No phone'}</span>
-            </td>
+            <td><strong>${pin.fn||''} ${pin.ln||''}</strong><br>
+                <span style="font-size:10px;color:var(--muted);">${pin.phone||'No phone'}</span></td>
             <td>${pin.street||'—'}</td>
             <td style="color:var(--gold);font-weight:700;">R${(pin.amount||0).toLocaleString()}</td>
             <td>EFT</td>
             <td><span class="status-badge ${stClass[st]||'st-pledge'}">${stLabel[st]||st}</span></td>
-            <td>
-                <div class="follow-btns">
-                    <a  class="fbtn wa"  href="${waLink}"  target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-                    <a  class="fbtn em"  href="${emlLink}" title="Email"><i class="fas fa-envelope"></i></a>
-                    <button class="fbtn pay" onclick="adminMarkPaid('${pin.id}')" title="Mark as paid"><i class="fas fa-check"></i></button>
-                    <button class="fbtn del" onclick="adminDelete('${pin.id}')"   title="Delete"><i class="fas fa-trash"></i></button>
-                </div>
-            </td>
+            <td><div class="follow-btns">
+                <a class="fbtn wa"  href="${waLink}"  target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                <a class="fbtn em"  href="${emlLink}" title="Email"><i class="fas fa-envelope"></i></a>
+                <button class="fbtn pay" onclick="adminMarkPaid('${pin.id}')" title="Mark as paid"><i class="fas fa-check"></i></button>
+                <button class="fbtn del" onclick="adminDelete('${pin.id}')"   title="Delete"><i class="fas fa-trash"></i></button>
+            </div></td>
         </tr>`;
     }).join('');
 
@@ -1549,15 +1401,11 @@ function exportCSV() {
     const rows = pins.map(p => [
         p.type === 'host' ? 'Camera Host' : 'Contributor',
         `${p.fn||''} ${p.ln||''}`.trim(),
-        p.phone   || '',
-        p.email   || '',
-        p.address || '',
-        p.street  || '',
+        p.phone || '', p.email || '', p.address || '', p.street || '',
         p.type === 'contributor' ? (p.amount||0) : '—',
         p.type === 'contributor' ? (p.status||'pending') : '—',
         new Date(p.timestamp).toLocaleDateString('en-ZA')
     ].map(val => `"${String(val).replace(/"/g,'""')}"`).join(','));
-
     const blob = new Blob([[hdr.join(','), ...rows].join('\n')], { type:'text/csv;charset=utf-8;' });
     const url  = URL.createObjectURL(blob);
     Object.assign(document.createElement('a'), {
@@ -1567,7 +1415,7 @@ function exportCSV() {
     URL.revokeObjectURL(url);
 }
 
-// ── Toast ────────────────────────────────────────────────────
+// ── TOAST ────────────────────────────────────────────────────
 function toast(msg) {
     const el = document.getElementById('toast');
     el.textContent = msg;
@@ -1575,7 +1423,7 @@ function toast(msg) {
     setTimeout(() => el.classList.remove('show'), 3500);
 }
 
-// ── Close on backdrop click ──────────────────────────────────
+// ── BACKDROP CLOSE ───────────────────────────────────────────
 ['modal-add','modal-payment','modal-admin'].forEach(id => {
     document.getElementById(id).addEventListener('click', function(e) {
         if (e.target === this) {
@@ -1584,8 +1432,9 @@ function toast(msg) {
         }
     });
 });
-emailjs.init(EMAILJS_PUBLIC_KEY);
-// ── Init ─────────────────────────────────────────────────────
+
+// ── INIT ─────────────────────────────────────────────────────
+if (window.emailjs) emailjs.init(EMAILJS_PUBLIC_KEY);
 loadPins();
 </script>
 
