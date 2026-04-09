@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init('paste_your_public_key_here');</script>
 
     <style>
         :root {
@@ -759,13 +761,12 @@
 // ╚══════════════════════════════════════════════════════════╝
 const ORGANISER_WHATSAPP   = '27829222648';    // e.g. 27821234567
 const ORGANISER_EMAIL      = 'dylan.rohleder@gmail.com';
-const BANK_ACCOUNT_NUMBER  = '070909709';   // ← your real account number
+const BANK_ACCOUNT_NUMBER  = '13138857287';   // ← your real account number
 
-const EMAILJS_PUBLIC_KEY   = 'YOUR_EMAILJS_PUBLIC_KEY';
-const EMAILJS_SERVICE_ID   = 'YOUR_SERVICE_ID';
-const EMAILJS_CONTRIB_TPL  = 'template_contributor';
-const EMAILJS_ADMIN_TPL    = 'template_admin';
-const USE_EMAILJS           = false;           // ← true after EmailJS setup
+const EMAILJS_PUBLIC_KEY  = '-lGj2Ou-ZHA8Hqdf6';
+const EMAILJS_SERVICE_ID  = 'service_qjoyyal';
+const EMAILJS_CONTRIB_TPL = 'template_epddnxf';
+const USE_EMAILJS          = true;
 
 const ADMIN_PASSWORD       = 'cctv2026';       // ← change this!
 
@@ -1336,21 +1337,27 @@ function sendFollowUpEmail(method) {
 }
 
 function _doSendEmails(method) {
-    const pin = currentPayPin;
-    const ref = `${pin.ln || pin.fn || 'Resident'} ${pin.street || ''}`.trim();
+ const pin = currentPayPin;
+ if (!pin) return;
+ const ref = `${pin.ln || pin.fn || 'Resident'} ${pin.street || ''}`.trim();
 
-    if (pin.email) {
-        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_CONTRIB_TPL, {
-            to_email:     pin.email,
-            to_name:      pin.fn,
-            reference:    ref,
-            amount:       `R${pin.amount.toLocaleString()}`,
-            method,
-            bank_acc:     BANK_ACCOUNT_NUMBER,
-            bank_ref:     ref,
-            organiser_wa: `https://wa.me/${ORGANISER_WHATSAPP}`
-        }).catch(e => console.warn('Contributor email failed:', e));
-    }
+ // ── Email to contributor ──────────────────────────────
+ if (pin.email) {
+     emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_CONTRIB_TPL, {
+         to_name:    pin.fn,
+         to_email:   pin.email,
+         amount:     `R${pin.amount.toLocaleString()}`,
+         reference:  ref
+     })
+     .then(() => toast('📧 Banking details sent to ' + pin.email))
+     .catch(e => {
+         console.warn('Email failed:', e);
+         toast('⚠️ Email could not be sent — please screenshot the details');
+     });
+ } else {
+     toast('⚠️ No email address provided — please screenshot the details');
+ }
+}
 
     emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_ADMIN_TPL, {
         contributor_name:    `${pin.fn} ${pin.ln||''}`.trim(),
