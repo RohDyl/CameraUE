@@ -72,6 +72,9 @@
             line-height:1.45;
         }
         .armed-summary.show { display:block; }
+        .existing-summary { display:none; padding:0 18px 8px; font-size:11px; color:var(--muted); line-height:1.45; }
+        .existing-summary.show { display:block; }
+        .existing-summary strong { color:var(--text); font-weight:600; }
         .armed-summary strong { color:var(--text); font-weight:600; }
         .choice-row { display:flex; flex-wrap:wrap; gap:8px; }
         .choice {
@@ -126,6 +129,8 @@
         }
         .av-host    { background:rgba(0,200,83,0.25);  color:var(--green); }
         .av-contrib { background:rgba(33,150,243,0.25); color:var(--blue); }
+        .av-both    { background:rgba(168,85,247,0.25); color:#c084fc; }
+        .av-existing{ background:rgba(0,188,212,0.25);  color:#00bcd4; }
         .ec-name   { font-size:12px; font-weight:600; }
         .ec-street { font-size:10px; color:var(--muted); }
         .badges    { display:flex; gap:3px; flex-wrap:wrap; }
@@ -134,6 +139,8 @@
         .bg-blue  { background:rgba(33,150,243,0.2); color:var(--blue); }
         .bg-gold  { background:rgba(255,214,0,0.2);  color:var(--gold); }
         .bg-red   { background:rgba(244,67,54,0.2);  color:#ff7961; }
+        .bg-purple{ background:rgba(168,85,247,0.2); color:#c084fc; }
+        .bg-teal  { background:rgba(0,188,212,0.2);  color:#26c6da; }
         .priority-note { font-size:10px; color:var(--muted); padding:6px 0 10px; }
         .priority-item {
             display:flex; align-items:center; gap:9px;
@@ -206,9 +213,13 @@
         .type-opt:hover { border-color:rgba(255,255,255,0.3); }
         .type-opt.sel-host   { border-color:var(--green); background:rgba(0,200,83,0.08); }
         .type-opt.sel-contrib{ border-color:var(--blue);  background:rgba(33,150,243,0.08); }
+        .type-opt.sel-both   { border-color:#a855f7;      background:rgba(168,85,247,0.10); }
+        .type-opt.sel-existing{ border-color:#00bcd4;     background:rgba(0,188,212,0.10); }
         .type-opt i { font-size:26px; margin-bottom:7px; display:block; }
         .type-opt.type-host   i { color:var(--green); }
         .type-opt.type-contrib i { color:var(--blue); }
+        .type-opt.type-both i { color:#c084fc; }
+        .type-opt.type-existing i { color:#26c6da; }
         .type-opt h3 { font-size:13px; font-weight:600; margin-bottom:3px; }
         .type-opt p  { font-size:11px; color:var(--muted); }
         .fg   { margin-bottom:12px; }
@@ -233,6 +244,10 @@
         .loc-box i { color:var(--green); }
         .loc-box.blue-loc { background:rgba(33,150,243,0.08); border-color:rgba(33,150,243,0.25); }
         .loc-box.blue-loc i { color:var(--blue); }
+        .loc-box.teal-loc { background:rgba(0,188,212,0.08); border-color:rgba(0,188,212,0.25); }
+        .loc-box.teal-loc i { color:#26c6da; }
+        .form-sub { font-size:11px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:0.4px; margin:4px 0 10px; padding-top:10px; border-top:1px solid var(--border); }
+        .both-note { font-size:11px; color:#d8b4fe; background:rgba(168,85,247,0.10); border:1px solid rgba(168,85,247,0.3); border-radius:7px; padding:8px 10px; margin-bottom:12px; line-height:1.45; }
         .loc-text { font-size:11px; color:var(--muted); }
         .btn-sub {
             width:100%; padding:11px; border:none; border-radius:9px;
@@ -242,6 +257,8 @@
         .btn-sub:hover { opacity:0.88; transform:translateY(-1px); }
         .btn-sub.green { background:var(--green); color:#000; }
         .btn-sub.blue  { background:var(--blue);  color:#fff; }
+        .btn-sub.purple{ background:#a855f7; color:#fff; }
+        .btn-sub.teal  { background:#00bcd4; color:#00282e; }
         .btn-sub:disabled { opacity:0.4; cursor:not-allowed; transform:none; }
         .btn-back {
             flex-shrink:0; padding:11px 14px; background:transparent;
@@ -381,7 +398,7 @@
             .btn-ghost .lbl { display:none; }
             .btn-add-header { padding:9px 11px; }
             .stats-bar { gap:10px; padding:6px 10px; }
-            .armed-summary { padding:0 10px 6px; }
+            .armed-summary, .existing-summary { padding:0 10px 6px; }
             .mode-banner { padding:5px 10px; }
             .map-hint { display:none; }
             .map-legend { padding:8px 10px; font-size:10px; top:6px; right:6px; }
@@ -439,6 +456,10 @@
         <div class="stat-icon si-blue"><i class="fas fa-hand-holding-heart" aria-hidden="true"></i></div>
         <div class="stat-info"><label id="stat-contribs-label">Interested</label><strong id="s-contribs">0</strong></div>
     </div>
+    <div class="stat">
+        <div class="stat-icon" style="background:rgba(0,188,212,0.15);color:#26c6da;"><i class="fas fa-video" aria-hidden="true"></i></div>
+        <div class="stat-info"><label>Existing cameras</label><strong id="s-existing">0</strong></div>
+    </div>
     <div class="stat hidden" id="stat-armed">
         <div class="stat-icon si-red"><i class="fas fa-shield-halved" aria-hidden="true"></i></div>
         <div class="stat-info"><label>Armed response</label><strong id="s-armed">0</strong></div>
@@ -457,6 +478,7 @@
     </div>
 </div>
 <div class="armed-summary" id="armed-summary" aria-live="polite"></div>
+<div class="existing-summary" id="existing-summary" aria-live="polite"></div>
 </div>
 <div class="mode-banner hidden" id="mode-banner" role="status"></div>
 
@@ -502,6 +524,9 @@
             <hr class="leg-sep">
             <div class="leg-item"><div class="leg-dot" style="background:var(--blue)"></div><span id="legend-contrib">Interested resident</span></div>
             <div class="leg-item"><div class="leg-ring" style="border-color:var(--blue)"></div><span>30m area ring</span></div>
+            <hr class="leg-sep">
+            <div class="leg-item"><div class="leg-dot" style="background:#a855f7"></div><span>Host &amp; contributor</span></div>
+            <div class="leg-item"><div class="leg-dot" style="background:#00bcd4"></div><span>Existing camera (approx.)</span></div>
         </div>
         <div class="map-hint"><i class="fas fa-hand-pointer" aria-hidden="true"></i> Tap the map to place your pin, or use “Add Your Pin”</div>
         <div class="confirm-bar" id="confirm-bar" role="region" aria-label="Confirm your location">
@@ -535,13 +560,24 @@
                         <h3 id="opt-contrib-title">I'd contribute</h3>
                         <p id="opt-contrib-desc">I'd be willing to contribute towards cameras in my street</p>
                     </div>
+                    <div class="type-opt type-both" id="opt-both" role="button" tabindex="0" onclick="selectType('both')">
+                        <i class="fas fa-handshake" aria-hidden="true"></i>
+                        <h3>Host &amp; contribute</h3>
+                        <p>I can host a camera <em>and</em> I'd contribute towards cameras in my street</p>
+                    </div>
+                    <div class="type-opt type-existing" id="opt-existing" role="button" tabindex="0" onclick="selectType('existing')">
+                        <i class="fas fa-video" aria-hidden="true"></i>
+                        <h3>I already have a camera</h3>
+                        <p>I have a camera already and can tell you about it</p>
+                    </div>
                 </div>
                 <button class="btn-sub green" id="btn-next" onclick="goToForm()" disabled>Continue <i class="fas fa-arrow-right" aria-hidden="true"></i></button>
             </div>
 
             <!-- HOST FORM -->
             <div id="step-host" class="hidden">
-                <div class="form-title"><i class="fas fa-camera" style="color:var(--green)" aria-hidden="true"></i> Camera Host Registration</div>
+                <div class="form-title"><i class="fas fa-camera" id="host-form-icon" style="color:var(--green)" aria-hidden="true"></i> <span id="host-form-title-text">Camera Host Registration</span></div>
+                <div class="both-note hidden" id="h-both-note">You're registering as a <strong>camera host</strong> and also registering <strong>interest in contributing</strong> towards cameras in your street. No payment is taken.</div>
                 <div class="loc-box"><i class="fas fa-map-marker-alt" aria-hidden="true"></i><span class="loc-text">Location set ✓ — shown publicly only as an approximate spot</span></div>
                 <div class="frow">
                     <div class="fg"><label for="h-fn">First Name *</label><input id="h-fn" maxlength="40" autocomplete="given-name"></div>
@@ -629,7 +665,7 @@
                 </div>
                 <div style="display:flex;gap:8px;">
                     <button class="btn-back" onclick="backToType()">← Back</button>
-                    <button class="btn-sub green" id="btn-host-submit" onclick="submitPin('host')" style="flex:1;"><i class="fas fa-camera" aria-hidden="true"></i> Register as Camera Host</button>
+                    <button class="btn-sub green" id="btn-host-submit" onclick="submitPin(chosenType === 'both' ? 'both' : 'host')" style="flex:1;"><i class="fas fa-camera" aria-hidden="true"></i> <span id="btn-host-submit-text">Register as Camera Host</span></button>
                 </div>
             </div>
 
@@ -682,6 +718,99 @@
                 </div>
             </div>
 
+
+            <!-- EXISTING CAMERA FORM -->
+            <div id="step-existing" class="hidden">
+                <div class="form-title"><i class="fas fa-video" style="color:#26c6da" aria-hidden="true"></i> <span>I already have a camera</span></div>
+                <div class="loc-box teal-loc"><i class="fas fa-map-marker-alt" aria-hidden="true"></i><span class="loc-text">Location set ✓ — shown publicly only as an approximate spot</span></div>
+                <div class="frow">
+                    <div class="fg"><label for="e-fn">First Name *</label><input id="e-fn" maxlength="40" autocomplete="given-name"></div>
+                    <div class="fg"><label for="e-ln">Last Name *</label><input id="e-ln" maxlength="40" autocomplete="family-name"></div>
+                </div>
+                <div class="frow">
+                    <div class="fg"><label for="e-ph">Phone *</label><input id="e-ph" type="tel" inputmode="tel" placeholder="082 123 4567" autocomplete="tel"></div>
+                    <div class="fg"><label for="e-em">Email *</label><input id="e-em" type="email" maxlength="100" placeholder="name@example.com" autocomplete="email"></div>
+                </div>
+                <div class="frow">
+                    <div class="fg"><label for="e-street">Street *</label><select id="e-street" onchange="toggleStreetOther('e')"></select></div>
+                    <div class="fg"><label for="e-num">House / unit no. *</label><input id="e-num" maxlength="12" placeholder="12" autocomplete="off"></div>
+                </div>
+                <div class="fg hidden" id="e-street-other-wrap">
+                    <label for="e-street-other">Street name *</label>
+                    <input id="e-street-other" maxlength="60" placeholder="Street name" autocomplete="off">
+                </div>
+                <p class="hint" style="margin:-6px 0 12px;">🔒 Your house number, contact details and camera details stay private. The public map shows only your first name, street name, an approximate pin and that an existing camera is registered there.</p>
+
+                <div class="form-sub">About your camera</div>
+                <div class="frow">
+                    <div class="fg"><label for="e-brand">Brand / model (optional)</label><input id="e-brand" maxlength="60" placeholder="e.g. brand and model" autocomplete="off"></div>
+                    <div class="fg"><label for="e-count">Number of cameras *</label><input id="e-count" type="number" inputmode="numeric" min="1" max="20" step="1" placeholder="1"></div>
+                </div>
+                <div class="fg">
+                    <label id="e-covers-label">What does it cover? * <span style="text-transform:none;letter-spacing:0;">(tick all that apply)</span></label>
+                    <div class="choice-row" role="group" aria-labelledby="e-covers-label">
+                        <label class="choice"><input type="checkbox" name="e-covers" value="street" onchange="toggleCoversOther()"> Street-facing</label>
+                        <label class="choice"><input type="checkbox" name="e-covers" value="driveway" onchange="toggleCoversOther()"> Driveway</label>
+                        <label class="choice"><input type="checkbox" name="e-covers" value="gate" onchange="toggleCoversOther()"> Gate</label>
+                        <label class="choice"><input type="checkbox" name="e-covers" value="other" onchange="toggleCoversOther()"> Other</label>
+                    </div>
+                    <input id="e-covers-other" class="hidden" maxlength="60" placeholder="What else does it cover?" aria-label="Other area covered" style="margin-top:8px;" autocomplete="off">
+                </div>
+                <div class="fg">
+                    <label id="e-rec-label">How does it record? *</label>
+                    <div class="choice-row" role="radiogroup" aria-labelledby="e-rec-label">
+                        <label class="choice"><input type="radio" name="e-rec" value="cloud"> Cloud</label>
+                        <label class="choice"><input type="radio" name="e-rec" value="local"> Local NVR / DVR</label>
+                        <label class="choice"><input type="radio" name="e-rec" value="sd"> SD card</label>
+                        <label class="choice"><input type="radio" name="e-rec" value="unknown"> Don't know</label>
+                    </div>
+                </div>
+                <div class="fg">
+                    <label id="e-night-label">Does it have night vision? *</label>
+                    <div class="choice-row" role="radiogroup" aria-labelledby="e-night-label">
+                        <label class="choice"><input type="radio" name="e-night" value="yes"> Yes</label>
+                        <label class="choice"><input type="radio" name="e-night" value="no"> No</label>
+                        <label class="choice"><input type="radio" name="e-night" value="unknown"> Don't know</label>
+                    </div>
+                </div>
+                <div class="fg">
+                    <label id="e-share-label">Would you share footage or join a shared camera network? *</label>
+                    <div class="choice-row" role="radiogroup" aria-labelledby="e-share-label">
+                        <label class="choice"><input type="radio" name="e-share" value="yes"> Yes</label>
+                        <label class="choice"><input type="radio" name="e-share" value="maybe"> Maybe</label>
+                        <label class="choice"><input type="radio" name="e-share" value="no"> No</label>
+                    </div>
+                    <p class="hint">This is only to gauge interest. Nothing is shared without a further conversation with you.</p>
+                </div>
+                <div class="form-sub">A bit more about you</div>
+                <div class="fg" id="e-armed-wrap">
+                    <label id="e-armed-label">Are you signed up with an armed response company? *</label>
+                    <div class="choice-row" role="radiogroup" aria-labelledby="e-armed-label">
+                        <label class="choice"><input type="radio" name="e-armed" value="yes" onchange="toggleArmedFields('e')"> Yes</label>
+                        <label class="choice"><input type="radio" name="e-armed" value="no" onchange="toggleArmedFields('e')"> No</label>
+                        <label class="choice"><input type="radio" name="e-armed" value="prefer-not" onchange="toggleArmedFields('e')"> Prefer not to say</label>
+                    </div>
+                    <div id="e-armed-provider-wrap" class="hidden" style="margin-top:10px;">
+                        <label for="e-armed-provider">Provider *</label>
+                        <select id="e-armed-provider" onchange="toggleArmedOther('e')"></select>
+                        <input id="e-armed-other" class="hidden" maxlength="60" placeholder="Provider name" aria-label="Other provider name" style="margin-top:8px;" autocomplete="off">
+                    </div>
+                    <p class="hint">Kept private — never shown on the public map.</p>
+                </div>
+                <div class="fg">
+                    <label for="e-notes">Notes (optional)</label>
+                    <textarea id="e-notes" rows="2" maxlength="500" placeholder="Anything else about your camera or property… (kept private)"></textarea>
+                </div>
+                <div class="notice-box">This is an independent community project run by University Estate neighbours. We collect your name, contact details, address and map location to plan camera placement and to contact you about the project. Because you are registering an existing camera, we also collect the camera details you enter here and keep them private. Your details are not shared with third parties and are never shown publicly in full. You can ask the organiser to delete your details at any time. <button type="button" class="link-btn" onclick="openModal('modal-privacy', true)">Read the full privacy notice</button>.</div>
+                <div class="fg">
+                    <label class="consent" for="e-consent"><input type="checkbox" id="e-consent"> <span>I have read the privacy notice and consent to my personal information being processed for this purpose (POPIA). *</span></label>
+                </div>
+                <div style="display:flex;gap:8px;">
+                    <button class="btn-back" onclick="backToType()">← Back</button>
+                    <button class="btn-sub teal" id="btn-existing-submit" onclick="submitPin('existing')" style="flex:1;"><i class="fas fa-video" aria-hidden="true"></i> Register my camera</button>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
@@ -728,6 +857,8 @@
                     <button class="admin-filter active" data-filter="all">All</button>
                     <button class="admin-filter" data-filter="hosts">📹 Hosts</button>
                     <button class="admin-filter" data-filter="interested" id="adm-f-int">Interested</button>
+                    <button class="admin-filter" data-filter="both">📹🤝 Host + contribute</button>
+                    <button class="admin-filter" data-filter="existing">🎥 Existing camera</button>
                     <span class="donations-only-wrap"></span>
                     <button class="btn-export" onclick="exportCSV()">⬇ Export CSV</button>
                     <button class="admin-filter" id="btn-signout" onclick="adminSignOut()">Sign out</button>
@@ -799,7 +930,7 @@ const ABOUT = {
     learnMoreUrl:  ''    // optional link to more information (leave empty to hide)
 };
 
-const PRIVACY_VERSION = '2026-11';
+const PRIVACY_VERSION = '2026-11-2';
 
 // Firebase web config (public by design; protection comes from database.rules.json).
 // Add ?local=1 to the page URL to run in local-test mode with Firebase off.
@@ -839,6 +970,12 @@ const ARMED_PROVIDERS = [
     { id: 'princeton',           label: 'Princeton Security' }
 ];
 const ARMED_STATUS_LABELS = { yes: 'Yes', no: 'No', 'prefer-not': 'Prefer not to say' };
+
+// Existing-camera answer labels (stored values are the keys).
+const CAM_COVER_LABELS = { street: 'Street-facing', driveway: 'Driveway', gate: 'Gate', other: 'Other' };
+const CAM_REC_LABELS   = { cloud: 'Cloud', local: 'Local NVR / DVR', sd: 'SD card', unknown: "Don't know" };
+const CAM_NIGHT_LABELS = { yes: 'Yes', no: 'No', unknown: "Don't know" };
+const CAM_SHARE_LABELS = { yes: 'Yes', maybe: 'Maybe', no: 'No' };
 
 const NET_LABELS = {
     'under5':'< 5 Mbps ⚠️','5-10':'5–10 Mbps',
@@ -920,6 +1057,23 @@ function armedDisplay(p) {
     if (p.armedResponse !== 'yes') return ARMED_STATUS_LABELS[p.armedResponse] || p.armedResponse;
     return armedProviderLabel(p.armedProvider, p.armedProviderOther) || 'Yes';
 }
+// Signup types: 'host', 'contributor' (shown as "Interested" while donations are off),
+// 'both' (hosts a camera AND registers interest in contributing) and 'existing' (already has a camera).
+const isHostType     = t => t === 'host' || t === 'both';
+const isInterestType = t => t === 'contributor' || t === 'both';
+const TYPES = {
+    host:        { color: '#00c853', icon: '📹', avatar: 'av-host',     admin: '📹 Host',                 csv: 'Camera Host',          popup: '📹 Camera Host' },
+    contributor: { color: '#2196f3', icon: DONATIONS_ENABLED ? '💰' : '🤝', avatar: 'av-contrib',
+                   admin: '🤝 ' + (DONATIONS_ENABLED ? 'Contributor' : 'Interested'),
+                   csv: DONATIONS_ENABLED ? 'Contributor' : 'Interested',
+                   popup: DONATIONS_ENABLED ? '💰 Contributor' : '🤝 Interested' },
+    both:        { color: '#a855f7', icon: '📹', avatar: 'av-both',     admin: '📹🤝 Host + contribute',  csv: 'Host and contribute',  popup: '📹🤝 Host + contribute' },
+    existing:    { color: '#00bcd4', icon: '🎥', avatar: 'av-existing', admin: '🎥 Existing camera',      csv: 'Existing camera',      popup: '🎥 Existing camera' }
+};
+const typeInfo = t => TYPES[t] || TYPES.contributor;
+const coversList = p => Object.keys(p.camCovers || {}).filter(k => p.camCovers[k] && CAM_COVER_LABELS[k])
+    .map(k => k === 'other' && p.camCoversOther ? 'Other: ' + p.camCoversOther : CAM_COVER_LABELS[k]);
+
 const clean = o => Object.fromEntries(Object.entries(o).filter(([, x]) => x !== undefined && x !== ''));
 
 // ════════════════════════════════════════════════════════════
@@ -943,8 +1097,8 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 function makeIcon(type) {
-    const col = type === 'host' ? '#00c853' : type === 'new' ? '#ffd600' : '#2196f3';
-    const ico = type === 'host' ? '📹' : type === 'new' ? '📍' : (DONATIONS_ENABLED ? '💰' : '🤝');
+    const col = type === 'new' ? '#ffd600' : typeInfo(type).color;
+    const ico = type === 'new' ? '📍' : typeInfo(type).icon;
     return L.divIcon({
         className: '',
         html: `<div style="background:${col};width:34px;height:34px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:3px solid white;box-shadow:0 3px 10px rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;"><span style="transform:rotate(45deg);font-size:13px;">${ico}</span></div>`,
@@ -1030,15 +1184,16 @@ async function buildRecords(f) {
     const g = generalise(exact.lat, exact.lng, id);
     const ts = LOCAL ? Date.now() : firebase.database.ServerValue.TIMESTAMP;
     const [emailHash, phoneHash] = await Promise.all([sha256Hex(f.email), sha256Hex(f.phone)]);
-    const isHost = f.type === 'host';
+    const isHost = isHostType(f.type);
+    const isInterest = isInterestType(f.type);
 
     const pub = clean({
         type: f.type, fn: f.fn, street: f.street, lat: g.lat, lng: g.lng, ts,
         fast: isHost ? ['10-25', '25-50', '50+'].includes(f.internet) : undefined,
         backup: isHost ? (f.backup !== 'none') : undefined,
         corner: isHost ? (f.placement === 'corner') : undefined,
-        amount: DONATIONS_ENABLED && !isHost ? f.amount : undefined,
-        status: DONATIONS_ENABLED && !isHost ? 'pending' : undefined
+        amount: DONATIONS_ENABLED && isInterest ? f.amount : undefined,
+        status: DONATIONS_ENABLED && isInterest ? 'pending' : undefined
     });
     const priv = clean({
         type: f.type, fn: f.fn, ln: f.ln, phone: f.phone, email: f.email,
@@ -1050,8 +1205,10 @@ async function buildRecords(f) {
         armedProviderOther: f.armedProviderOther,
         internet: f.internet, backup: f.backup, placement: f.placement, wifi: f.wifi,
         notes: f.notes,
-        amount: DONATIONS_ENABLED && !isHost ? f.amount : undefined,
-        status: DONATIONS_ENABLED && !isHost ? 'pending' : undefined
+        camBrand: f.camBrand, camCount: f.camCount, camCovers: f.camCovers, camCoversOther: f.camCoversOther,
+        camRecording: f.camRecording, camNight: f.camNight, camShare: f.camShare,
+        amount: DONATIONS_ENABLED && isInterest ? f.amount : undefined,
+        status: DONATIONS_ENABLED && isInterest ? 'pending' : undefined
     });
     return { id, pub, priv, emailHash, phoneHash };
 }
@@ -1099,8 +1256,8 @@ const contribWord = () => DONATIONS_ENABLED ? 'Contributor' : 'Interested';
 
 function renderPin(pin) {
     if (!pin || typeof pin.lat !== 'number' || typeof pin.lng !== 'number') return;
-    const isHost = pin.type === 'host';
-    const col = isHost ? '#00c853' : '#2196f3';
+    const isHost = isHostType(pin.type);
+    const col = typeInfo(pin.type).color;
     circles[pin.id] = L.circle([pin.lat, pin.lng], {
         radius: 30, color: col, fillColor: col,
         fillOpacity: isHost ? 0.13 : 0.07, weight: isHost ? 2.5 : 1.5,
@@ -1112,9 +1269,9 @@ function renderPin(pin) {
 }
 
 function buildPopup(pin) {
-    const isHost = pin.type === 'host';
-    const col = isHost ? '#00c853' : '#2196f3';
-    const label = isHost ? '📹 Camera Host' : (DONATIONS_ENABLED ? '💰 Contributor' : '🤝 Interested');
+    const isHost = isHostType(pin.type);
+    const col = typeInfo(pin.type).color;
+    const label = typeInfo(pin.type).popup;
     let rows = `<div class="pu-row"><i class="fas fa-road" aria-hidden="true"></i><span>${esc(pin.street || '—')}</span></div>`;
     if (isHost) {
         const badges = [];
@@ -1122,15 +1279,20 @@ function buildPopup(pin) {
         if (pin.backup) badges.push('Backup power');
         if (pin.corner) badges.push('Corner plot ⭐');
         if (badges.length) rows += `<div class="pu-row"><i class="fas fa-check" aria-hidden="true"></i><span>${badges.map(esc).join(' · ')}</span></div>`;
-    } else if (DONATIONS_ENABLED && pin.amount) {
-        const st = { paid: '✅ Paid', pending: '⏳ EFT pending', pledge: '🤝 Pledge only' }[pin.status] || '';
-        rows += `<div class="pu-row"><i class="fas fa-coins" aria-hidden="true"></i><span>Once-off: <strong style="color:#ffd600">${esc(money(pin.amount))}</strong> ${esc(st)}</span></div>`;
-    } else {
-        rows += `<div class="pu-row"><i class="fas fa-hand-paper" aria-hidden="true"></i><span><strong>Registered interest in contributing</strong></span></div>`;
+    }
+    if (pin.type === 'existing') {
+        rows += `<div class="pu-row"><i class="fas fa-video" aria-hidden="true"></i><span><strong>Existing camera registered</strong></span></div>`;
+    } else if (isInterestType(pin.type)) {
+        if (DONATIONS_ENABLED && pin.amount) {
+            const st = { paid: '✅ Paid', pending: '⏳ EFT pending', pledge: '🤝 Pledge only' }[pin.status] || '';
+            rows += `<div class="pu-row"><i class="fas fa-coins" aria-hidden="true"></i><span>Once-off: <strong style="color:#ffd600">${esc(money(pin.amount))}</strong> ${esc(st)}</span></div>`;
+        } else {
+            rows += `<div class="pu-row"><i class="fas fa-hand-paper" aria-hidden="true"></i><span><strong>Registered interest in contributing</strong></span></div>`;
+        }
     }
     rows += `<div class="pu-row" style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.08);"><i class="fas fa-circle" style="color:${col};font-size:8px;margin-top:3px;" aria-hidden="true"></i><span style="color:#8899aa;font-size:10px;">Approximate location · 30m ring</span></div>`;
     const date = pin.ts ? new Date(pin.ts).toLocaleDateString('en-ZA') : '';
-    return `<span class="pu-badge" style="background:${col}22;color:${col};border:1px solid ${col}44;">${label}</span>
+    return `<span class="pu-badge" style="background:${col}22;color:${col};border:1px solid ${col}44;">${esc(label)}</span>
         <div class="pu-name">${esc(pin.fn || '')}</div>${rows}
         ${date ? `<div class="pu-date">Added ${esc(date)}</div>` : ''}`;
 }
@@ -1139,11 +1301,12 @@ function updateUI() { updateStats(); renderEntriesList(); renderPriorityList(); 
 
 function updateStats() {
     const all      = [...publicPins.values()];
-    const hosts    = all.filter(p => p.type === 'host');
-    const contribs = all.filter(p => p.type === 'contributor');
+    const hosts    = all.filter(p => isHostType(p.type));        // host + host-and-contribute
+    const contribs = all.filter(p => isInterestType(p.type));    // contributor + host-and-contribute
     const set = (id, val) => { const el = $(id); if (el) el.textContent = val; };
     set('s-hosts',    hosts.length);
     set('s-contribs', contribs.length);
+    set('s-existing', all.filter(p => p.type === 'existing').length);
     set('s-backup',   hosts.filter(p => p.backup).length);
     set('s-fast',     hosts.filter(p => p.fast).length);
     set('s-streets',  new Set(all.map(p => p.street).filter(Boolean)).size);
@@ -1159,6 +1322,7 @@ function updateArmedStats() {
     const show = LOCAL || adminVerified;
     $('stat-armed').classList.toggle('hidden', !show);
     const box = $('armed-summary');
+    updateExistingSummary(show);
     if (!show) { box.textContent = ''; box.classList.remove('show'); return; }
     const signed = [...privatePins.values()].filter(p => p.armedResponse === 'yes');
     $('s-armed').textContent = signed.length;
@@ -1174,27 +1338,45 @@ function updateArmedStats() {
     } else { box.textContent = ''; box.classList.remove('show'); }
 }
 
+// Camera details are private, so this summary is for the signed-in organiser (or local test mode) only.
+function updateExistingSummary(show) {
+    const box = $('existing-summary');
+    const ex = show ? [...privatePins.values()].filter(p => p.type === 'existing') : [];
+    if (!ex.length) { box.textContent = ''; box.classList.remove('show'); return; }
+    const cams = ex.reduce((n, p) => n + (Number(p.camCount) || 0), 0);
+    const share = k => ex.filter(p => p.camShare === k).length;
+    const night = ex.filter(p => p.camNight === 'yes').length;
+    box.innerHTML = `Existing cameras: <strong>${ex.length}</strong> household${ex.length !== 1 ? 's' : ''} · <strong>${cams}</strong> camera${cams !== 1 ? 's' : ''} · ` +
+        `willing to share footage / join network: <strong>${share('yes')}</strong> yes · <strong>${share('maybe')}</strong> maybe · <strong>${share('no')}</strong> no · ` +
+        `night vision: <strong>${night}</strong>`;
+    box.classList.add('show');
+}
+
 function renderEntriesList() {
     const empty = $('entries-empty'), list = $('entries-list');
     const all = [...publicPins.values()].sort((a, b) => (b.ts || 0) - (a.ts || 0));
     empty.style.display = all.length ? 'none' : '';
     list.innerHTML = all.map(pin => {
-        const isHost = pin.type === 'host';
+        const isHost = isHostType(pin.type);
+        const ti = typeInfo(pin.type);
         let badges = '';
+        if (pin.type === 'both') badges += '<span class="badge bg-purple">Host + contribute</span>';
         if (isHost) {
             if (pin.fast)   badges += '<span class="badge bg-green">Fast Internet</span>';
             if (pin.backup) badges += '<span class="badge bg-gold">Backup Power</span>';
             if (pin.corner) badges += '<span class="badge bg-blue">Corner Plot ⭐</span>';
-        } else if (DONATIONS_ENABLED && pin.amount) {
-            badges += `<span class="badge bg-gold">${esc(money(pin.amount))}</span>`;
-        } else {
-            badges += '<span class="badge bg-blue">Interested</span>';
+        }
+        if (pin.type === 'existing') {
+            badges += '<span class="badge bg-teal">Existing camera</span>';
+        } else if (isInterestType(pin.type)) {
+            if (DONATIONS_ENABLED && pin.amount) badges += `<span class="badge bg-gold">${esc(money(pin.amount))}</span>`;
+            else if (pin.type === 'contributor')  badges += '<span class="badge bg-blue">Interested</span>';
         }
         return `<div class="entry-card" role="button" tabindex="0" data-id="${esc(pin.id)}">
             <div class="ec-header">
-                <div class="avatar ${isHost ? 'av-host' : 'av-contrib'}" aria-hidden="true">${esc((pin.fn || '?').charAt(0).toUpperCase())}</div>
+                <div class="avatar ${esc(ti.avatar)}" aria-hidden="true">${esc((pin.fn || '?').charAt(0).toUpperCase())}</div>
                 <div><div class="ec-name">${esc(pin.fn || '')}</div><div class="ec-street">${esc(pin.street || '—')}</div></div>
-                <div style="margin-left:auto;font-size:14px;" aria-hidden="true">${isHost ? '📹' : (DONATIONS_ENABLED ? '💰' : '🤝')}</div>
+                <div style="margin-left:auto;font-size:14px;" aria-hidden="true">${esc(pin.type === 'both' ? '📹🤝' : ti.icon)}</div>
             </div>
             <div class="badges">${badges}</div>
         </div>`;
@@ -1206,9 +1388,11 @@ function renderPriorityList() {
     const data = {};
     publicPins.forEach(p => {
         const s = p.street || 'Unknown';
-        data[s] = data[s] || { total: 0, count: 0, hosts: 0 };
-        if (p.type === 'host') data[s].hosts++;
-        else { data[s].count++; data[s].total += p.amount || 0; }
+        data[s] = data[s] || { total: 0, count: 0, hosts: 0, existing: 0, people: 0 };
+        data[s].people++;                                   // one household = one point, whatever the type
+        if (isHostType(p.type)) data[s].hosts++;
+        if (isInterestType(p.type)) { data[s].count++; data[s].total += p.amount || 0; }
+        if (p.type === 'existing') data[s].existing++;
     });
     const rows = Object.entries(data);
     if (!rows.length) {
@@ -1217,16 +1401,18 @@ function renderPriorityList() {
     }
     rows.sort((a, b) => DONATIONS_ENABLED
         ? (b[1].total - a[1].total) || (b[1].count - a[1].count)
-        : (b[1].count + b[1].hosts) - (a[1].count + a[1].hosts) || (b[1].hosts - a[1].hosts));
+        : (b[1].people - a[1].people) || (b[1].hosts - a[1].hosts));
     const maxAmt = Math.max(1, ...rows.map(([, d]) => d.total));
-    const maxInt = Math.max(1, ...rows.map(([, d]) => d.count + d.hosts));
+    const maxInt = Math.max(1, ...rows.map(([, d]) => d.people));
     const rClass = ['r1', 'r2', 'r3'];
     el.innerHTML = rows.map(([street, d], i) => {
-        const pct = DONATIONS_ENABLED ? d.total / maxAmt * 100 : (d.count + d.hosts) / maxInt * 100;
-        const right = DONATIONS_ENABLED ? money(d.total) : String(d.count + d.hosts);
-        const meta = DONATIONS_ENABLED
-            ? `${d.count} contributor${d.count !== 1 ? 's' : ''}${d.hosts ? ` · ${d.hosts} host${d.hosts !== 1 ? 's' : ''}` : ''}`
-            : `${d.count} interested${d.hosts ? ` · ${d.hosts} host${d.hosts !== 1 ? 's' : ''}` : ''}`;
+        const pct = DONATIONS_ENABLED ? d.total / maxAmt * 100 : d.people / maxInt * 100;
+        const right = DONATIONS_ENABLED ? money(d.total) : String(d.people);
+        const meta = (DONATIONS_ENABLED
+            ? `${d.count} contributor${d.count !== 1 ? 's' : ''}`
+            : `${d.count} interested`)
+            + (d.hosts ? ` · ${d.hosts} host${d.hosts !== 1 ? 's' : ''}` : '')
+            + (d.existing ? ` · ${d.existing} existing camera${d.existing !== 1 ? 's' : ''}` : '');
         return `<div class="priority-item">
             <div class="p-rank ${rClass[i] || 'rx'}">${i + 1}</div>
             <div class="p-info"><div class="p-street">${esc(street)}</div><div class="p-meta">${esc(meta)}</div>
@@ -1291,7 +1477,7 @@ function renderAbout() {
         <h3>How it works</h3>
         <ol>
             <li>Tap “Add Your Pin” and drop a pin on your property.</li>
-            <li>Choose <strong>Camera Host</strong> (you can host a camera) or <strong>I'd contribute</strong> (you'd be willing to chip in).</li>
+            <li>Choose <strong>Camera Host</strong> (you can host a camera), <strong>I'd contribute</strong> (you'd be willing to chip in), <strong>Host &amp; contribute</strong> (both), or <strong>I already have a camera</strong> (and tell us about it).</li>
             <li>The map and street ranking show where interest is strongest, so cameras can be planned where they help most.</li>
             <li>The organiser contacts you before anything is installed or any money is discussed.</li>
         </ol>
@@ -1308,9 +1494,9 @@ function renderPrivacy() {
         <h3>Who is responsible for your information?</h3>
         <p>This is an independent community project run by University Estate neighbours. The organiser (${tbd(ORGANISER.name)}) is the responsible party that holds your information. Contact: ${tbd(ORGANISER.contact)}.</p>
         <h3>What we collect and why</h3>
-        <p>Your name, phone number, email address, street address, map location and whether you use armed response. We use it only to plan where cameras could go, and to contact you about this project.</p>
+        <p>Your name, phone number, email address, street address, map location and whether you use armed response. If you register a camera you already have, we also collect the camera details you enter (brand/model, number of cameras, what they cover, how they record, night vision, and whether you would share footage or join a shared network). We use it only to plan where cameras could go, and to contact you about this project.</p>
         <h3>What the public sees</h3>
-        <p>Only your first name, street name and an approximate pin (blurred by about 15 m). Your surname, contact details, house number, exact location and armed-response answers are never shown publicly.</p>
+        <p>Only your first name, street name and an approximate pin (blurred by about 15 m). Your surname, contact details, house number, exact location and armed-response answers are never shown publicly. Camera details are kept private; for an existing camera the map shows only that one is registered at that approximate spot.</p>
         <h3>Sharing</h3>
         <p>We do not share your information with third parties.</p>
         <h3>Keeping and deleting your information</h3>
@@ -1361,17 +1547,37 @@ function closeModal() {
 }
 function resetAddModal() {
     showStep('type'); chosenType = null;
-    ['opt-host', 'opt-contrib'].forEach(i => $(i).classList.remove('sel-host', 'sel-contrib'));
+    clearTypeSelection();
     const b = $('btn-next'); b.disabled = true; b.className = 'btn-sub green';
 }
-function showStep(s) { ['type', 'host', 'contributor'].forEach(id => $('step-' + id).classList.toggle('hidden', id !== s)); }
-function selectType(t) {
-    chosenType = t;
-    ['opt-host', 'opt-contrib'].forEach(i => $(i).classList.remove('sel-host', 'sel-contrib'));
-    $(t === 'host' ? 'opt-host' : 'opt-contrib').classList.add(t === 'host' ? 'sel-host' : 'sel-contrib');
-    const b = $('btn-next'); b.disabled = false; b.className = 'btn-sub ' + (t === 'host' ? 'green' : 'blue');
+const TYPE_TILE = { host: 'opt-host', contributor: 'opt-contrib', both: 'opt-both', existing: 'opt-existing' };
+const TYPE_SEL  = { host: 'sel-host', contributor: 'sel-contrib', both: 'sel-both', existing: 'sel-existing' };
+const TYPE_BTN  = { host: 'green', contributor: 'blue', both: 'purple', existing: 'teal' };
+// 'host' and 'both' share one form (step-host); 'both' just adds the interest note.
+const TYPE_STEP = { host: 'host', both: 'host', contributor: 'contributor', existing: 'existing' };
+function clearTypeSelection() {
+    Object.values(TYPE_TILE).forEach(i => $(i).classList.remove(...Object.values(TYPE_SEL)));
 }
-function goToForm() { if (chosenType && pendingLoc) showStep(chosenType); }
+function showStep(s) { ['type', 'host', 'contributor', 'existing'].forEach(id => $('step-' + id).classList.toggle('hidden', id !== s)); }
+function selectType(t) {
+    if (!TYPE_TILE[t]) return;
+    chosenType = t;
+    clearTypeSelection();
+    $(TYPE_TILE[t]).classList.add(TYPE_SEL[t]);
+    const b = $('btn-next'); b.disabled = false; b.className = 'btn-sub ' + TYPE_BTN[t];
+}
+function setHostMode(both) {
+    $('h-both-note').classList.toggle('hidden', !both);
+    $('host-form-title-text').textContent = both ? 'Host & contribute registration' : 'Camera Host Registration';
+    $('host-form-icon').style.color = both ? '#c084fc' : 'var(--green)';
+    $('btn-host-submit-text').textContent = both ? 'Register as host & contributor' : 'Register as Camera Host';
+    $('h-amt-wrap')?.classList.toggle('hidden', !both);
+}
+function goToForm() {
+    if (!(chosenType && pendingLoc)) return;
+    if (TYPE_STEP[chosenType] === 'host') setHostMode(chosenType === 'both');
+    showStep(TYPE_STEP[chosenType]);
+}
 function backToType() { showStep('type'); }
 document.addEventListener('keydown', e => {
     if ((e.key === 'Enter' || e.key === ' ') && e.target.matches?.('.type-opt,.entry-card')) {
@@ -1390,7 +1596,7 @@ function fillSelects() {
     const prov = '<option value="">Select provider…</option>' +
         ARMED_PROVIDERS.map(p => `<option value="${esc(p.id)}">${esc(p.label)}</option>`).join('') +
         '<option value="other">Other</option>';
-    ['h', 'c'].forEach(p => { $(p + '-street').innerHTML = streets; $(p + '-armed-provider').innerHTML = prov; });
+    ['h', 'c', 'e'].forEach(p => { $(p + '-street').innerHTML = streets; $(p + '-armed-provider').innerHTML = prov; });
 }
 function toggleStreetOther(p) {
     const other = v(p + '-street') === '__other';
@@ -1408,16 +1614,21 @@ function toggleArmedOther(p) {
     $(p + '-armed-other').classList.toggle('hidden', !o);
     if (!o) $(p + '-armed-other').value = '';
 }
+function toggleCoversOther() {
+    const on = !!document.querySelector('input[name="e-covers"][value="other"]:checked');
+    $('e-covers-other').classList.toggle('hidden', !on);
+    if (!on) $('e-covers-other').value = '';
+}
 function resetForm(p) {
-    [`${p}-fn`, `${p}-ln`, `${p}-ph`, `${p}-em`, `${p}-num`, `${p}-street-other`, `${p}-notes`, `${p}-armed-other`, `${p}-amt`, `${p}-armed-provider`, `${p}-street`,
-     'h-net', 'h-bak', 'h-place', 'h-wifi'].forEach(id => { const el = $(id); if (el && (p === 'h' || !id.startsWith('h-'))) el.value = ''; });
-    document.querySelectorAll(`input[name="${p}-armed"]`).forEach(r => { r.checked = false; });
-    $(p + '-consent').checked = false;
+    const root = $('step-' + ({ h: 'host', c: 'contributor', e: 'existing' })[p]);
+    root.querySelectorAll('input:not([type=radio]):not([type=checkbox]), select, textarea').forEach(el => { el.value = ''; });
+    root.querySelectorAll('input[type=radio], input[type=checkbox]').forEach(el => { el.checked = false; });
     toggleStreetOther(p); toggleArmedFields(p); toggleArmedOther(p);
+    if (p === 'e') toggleCoversOther();
 }
 
 function readForm(type) {
-    const p = type === 'host' ? 'h' : 'c';
+    const p = formPrefix(type);
     const fail = m => { toast('⚠️ ' + m); return null; };
     const fn = v(p + '-fn'), ln = v(p + '-ln');
     if (!fn) return fail('Please enter your first name');
@@ -1435,14 +1646,35 @@ function readForm(type) {
     const num = v(p + '-num');
     if (!/^[0-9A-Za-z\/\- ]{1,12}$/.test(num)) return fail('Please enter your house or unit number');
     const f = { type, fn, ln, phone, email, street, num, latlng: pendingLoc, notes: v(p + '-notes') };
-    if (type === 'host') {
+    if (isHostType(type)) {
         f.internet = v('h-net'); f.backup = v('h-bak'); f.placement = v('h-place'); f.wifi = v('h-wifi');
         if (!f.internet) return fail('Please select your internet speed');
         if (!f.backup)   return fail('Please select a backup power option');
         if (!f.placement) return fail('Please select camera placement');
-    } else if (DONATIONS_ENABLED) {
-        f.amount = parseFloat(v('c-amt'));
+    }
+    if (isInterestType(type) && DONATIONS_ENABLED) {
+        f.amount = parseFloat(v(p + '-amt'));
         if (!(f.amount >= 10)) return fail('Please enter a contribution amount (minimum R10)');
+    }
+    if (type === 'existing') {
+        f.camBrand = v('e-brand');
+        if (f.camBrand.length > 60) return fail('Camera brand / model is too long (max 60 characters)');
+        const cnt = v('e-count');
+        if (!/^\d{1,2}$/.test(cnt) || +cnt < 1 || +cnt > 20) return fail('Please enter how many cameras you have (1–20)');
+        f.camCount = +cnt;
+        const covers = [...document.querySelectorAll('input[name="e-covers"]:checked')].map(c => c.value).filter(k => CAM_COVER_LABELS[k]);
+        if (!covers.length) return fail('Please tick what your camera covers');
+        f.camCovers = Object.fromEntries(covers.map(k => [k, true]));
+        if (covers.includes('other')) {
+            f.camCoversOther = v('e-covers-other');
+            if (!f.camCoversOther) return fail('Please say what else your camera covers');
+        }
+        f.camRecording = radioVal('e-rec');
+        if (!f.camRecording) return fail('Please say how your camera records');
+        f.camNight = radioVal('e-night');
+        if (!f.camNight) return fail('Please say whether it has night vision');
+        f.camShare = radioVal('e-share');
+        if (!f.camShare) return fail('Please say whether you would share footage or join a shared network');
     }
     f.armedResponse = radioVal(p + '-armed');
     if (!f.armedResponse) return fail('Please say whether you have armed response');
@@ -1459,21 +1691,24 @@ function readForm(type) {
     return f;
 }
 
+const formPrefix = type => type === 'host' || type === 'both' ? 'h' : type === 'existing' ? 'e' : 'c';
 let submitting = false;
 async function submitPin(type) {
     if (submitting) return;
     const f = readForm(type);
     if (!f) return;
-    const btn = $(type === 'host' ? 'btn-host-submit' : 'btn-contrib-submit');
+    const btn = $({ host: 'btn-host-submit', both: 'btn-host-submit', existing: 'btn-existing-submit' }[type] || 'btn-contrib-submit');
     submitting = true; btn.disabled = true;
     try {
         const rec = await buildRecords(f);
         await savePin(rec);                       // resolves only when the write succeeded
-        const p = type === 'host' ? 'h' : 'c';
+        const p = formPrefix(type);
         const pin = { ...rec.priv, id: rec.id };
         closeModal(); resetForm(p);
         if (type === 'host') toast('✅ Camera host registered! Thank you — we will be in touch.');
+        else if (type === 'existing') toast('✅ Thank you — your existing camera has been registered. We\'ll be in touch.');
         else if (DONATIONS_ENABLED) openPaymentModal(pin);
+        else if (type === 'both') toast('✅ Thank you — registered as a camera host and interested contributor. We\'ll be in touch.');
         else toast('✅ Thank you — your interest has been recorded. We\'ll be in touch.');
     } catch (e) {
         if (!e.silent) toast('⚠️ ' + e.message);
@@ -1569,9 +1804,11 @@ $('admin-tbody').addEventListener('click', e => {
 
 function adminRows() {
     let rows = [...privatePins.values()].sort((a, b) => (b.ts || 0) - (a.ts || 0));
-    if (adminFilter === 'hosts') rows = rows.filter(p => p.type === 'host');
-    else if (adminFilter === 'interested') rows = rows.filter(p => p.type === 'contributor');
-    else if (['paid', 'pending', 'pledge'].includes(adminFilter)) rows = rows.filter(p => p.type === 'contributor' && (p.status || 'pending') === adminFilter);
+    if (adminFilter === 'hosts') rows = rows.filter(p => isHostType(p.type));            // host + host-and-contribute
+    else if (adminFilter === 'interested') rows = rows.filter(p => isInterestType(p.type)); // contributor + host-and-contribute
+    else if (adminFilter === 'both') rows = rows.filter(p => p.type === 'both');
+    else if (adminFilter === 'existing') rows = rows.filter(p => p.type === 'existing');
+    else if (['paid', 'pending', 'pledge'].includes(adminFilter)) rows = rows.filter(p => isInterestType(p.type) && (p.status || 'pending') === adminFilter);
     return rows;
 }
 const safeTel = p => String(p || '').replace(/[^\d]/g, '');
@@ -1585,18 +1822,26 @@ function renderAdmin() {
         return;
     }
     tbody.innerHTML = rows.map(p => {
-        const isHost = p.type === 'host';
+        const isHost = isHostType(p.type);
         const tel = safeTel(p.phone);
         const wa = tel ? `https://wa.me/${tel}?text=${encodeURIComponent(`Hi ${p.fn || ''}! Thank you for registering your interest in the University Estate CCTV initiative. We'll be in touch soon.`)}` : '#';
         const mail = p.email ? `mailto:${encodeURIComponent(p.email)}?subject=${encodeURIComponent('University Estate CCTV')}&body=${encodeURIComponent(`Hi ${p.fn || ''},\n\nThank you for registering your interest. We will be in touch soon.\n`)}` : '#';
-        let details;
+        let details = '';
         if (isHost) details = `${esc(NET_LABELS[p.internet] || p.internet || '—')}<br>${esc(BAK_LABELS[p.backup] || p.backup || '—')}<br>${esc(PLACE_LABELS[p.placement] || p.placement || '—')}`;
-        else if (DONATIONS_ENABLED) details = `${esc(money(p.amount))} · ${esc(p.status || 'pending')}`;
-        else details = '—';
+        if (p.type === 'existing') {
+            details = `<strong>${esc(p.camBrand || 'Brand not given')}</strong> × ${esc(p.camCount ?? '?')}<br>` +
+                `Covers: ${esc(coversList(p).join(', ') || '—')}<br>` +
+                `Recording: ${esc(CAM_REC_LABELS[p.camRecording] || p.camRecording || '—')}<br>` +
+                `Night vision: ${esc(CAM_NIGHT_LABELS[p.camNight] || p.camNight || '—')}<br>` +
+                `Share / network: ${esc(CAM_SHARE_LABELS[p.camShare] || p.camShare || '—')}`;
+        } else if (DONATIONS_ENABLED && isInterestType(p.type)) {
+            details += `${details ? '<br>' : ''}${esc(money(p.amount))} · ${esc(p.status || 'pending')}`;
+        }
+        if (!details) details = '—';
         const consent = p.consent?.accepted ? '✓ ' + esc(new Date(p.consent.ts).toLocaleDateString('en-ZA')) : '<span class="tbc">none (pre-notice)</span>';
-        const pay = DONATIONS_ENABLED && !isHost ? `<button class="fbtn pay" data-act="paid" data-id="${esc(p.id)}" title="Mark as paid" aria-label="Mark as paid"><i class="fas fa-check"></i></button>` : '';
+        const pay = DONATIONS_ENABLED && isInterestType(p.type) ? `<button class="fbtn pay" data-act="paid" data-id="${esc(p.id)}" title="Mark as paid" aria-label="Mark as paid"><i class="fas fa-check"></i></button>` : '';
         return `<tr>
-            <td>${isHost ? '📹 Host' : '🤝 ' + contribWord()}</td>
+            <td>${esc(typeInfo(p.type).admin)}</td>
             <td class="wrap"><strong>${esc(p.fn)} ${esc(p.ln)}</strong></td>
             <td class="wrap">${esc(p.phone || 'No phone')}<br><span style="font-size:10px;color:var(--muted);">${esc(p.email || '')}</span></td>
             <td class="wrap">${esc(p.address || p.street || '—')}</td>
@@ -1610,8 +1855,8 @@ function renderAdmin() {
                 <button class="fbtn del" data-act="delete" data-id="${esc(p.id)}" title="Delete" aria-label="Delete"><i class="fas fa-trash"></i></button>
             </div></td></tr>`;
     }).join('');
-    const nHost = rows.filter(p => p.type === 'host').length;
-    $('admin-total').textContent = `${rows.length} entr${rows.length !== 1 ? 'ies' : 'y'} · ${nHost} host${nHost !== 1 ? 's' : ''} · ${rows.length - nHost} ${contribWord().toLowerCase()}`;
+    const n = t => rows.filter(p => p.type === t).length;
+    $('admin-total').textContent = `${rows.length} entr${rows.length !== 1 ? 'ies' : 'y'} · ${n('host')} host · ${n('contributor')} ${contribWord().toLowerCase()} · ${n('both')} host + contribute · ${n('existing')} existing camera`;
 }
 
 async function adminDelete(id) {
@@ -1657,16 +1902,24 @@ const csvCell = (val, isPhone) => {
 function exportCSV() {
     const hdr = ['Type', 'First name', 'Last name', 'Phone', 'Email', 'Address', 'Street', 'Exact lat', 'Exact lng']
         .concat(DONATIONS_ENABLED ? ['Amount (R)', 'Status'] : [])
-        .concat(['Armed response', 'Provider', 'Internet', 'Backup power', 'Placement', 'Notes', 'Consent given', 'Consent date', 'Date added']);
+        .concat(['Armed response', 'Provider', 'Internet', 'Backup power', 'Placement',
+                 'Existing camera: brand/model', 'Existing camera: number', 'Existing camera: covers', 'Existing camera: recording',
+                 'Existing camera: night vision', 'Existing camera: share footage / join network',
+                 'Notes', 'Consent given', 'Consent date', 'Date added']);
     const rows = [...privatePins.values()].sort((a, b) => (a.ts || 0) - (b.ts || 0)).map(p => {
-        const c = [p.type === 'host' ? 'Camera Host' : contribWord(), p.fn, p.ln, p.phone, p.email, p.address, p.street, p.lat, p.lng];
+        const c = [typeInfo(p.type).csv, p.fn, p.ln, p.phone, p.email, p.address, p.street, p.lat, p.lng];
         const out = c.map((x, i) => csvCell(x, i === 3));
-        if (DONATIONS_ENABLED) { out.push(csvCell(p.type === 'contributor' ? (p.amount || 0) : ''), csvCell(p.type === 'contributor' ? (p.status || 'pending') : '')); }
+        if (DONATIONS_ENABLED) { out.push(csvCell(isInterestType(p.type) ? (p.amount || 0) : ''), csvCell(isInterestType(p.type) ? (p.status || 'pending') : '')); }
         out.push(
             csvCell(p.armedResponse ? (ARMED_STATUS_LABELS[p.armedResponse] || p.armedResponse) : ''),
             csvCell(p.armedResponse === 'yes' ? armedProviderLabel(p.armedProvider, p.armedProviderOther) : ''),
             csvCell(NET_LABELS[p.internet] || p.internet || ''), csvCell(BAK_LABELS[p.backup] || p.backup || ''),
-            csvCell(PLACE_LABELS[p.placement] || p.placement || ''), csvCell(p.notes || ''),
+            csvCell(PLACE_LABELS[p.placement] || p.placement || ''),
+            csvCell(p.camBrand || ''), csvCell(p.camCount ?? ''), csvCell(coversList(p).join('; ')),
+            csvCell(CAM_REC_LABELS[p.camRecording] || p.camRecording || ''),
+            csvCell(CAM_NIGHT_LABELS[p.camNight] || p.camNight || ''),
+            csvCell(CAM_SHARE_LABELS[p.camShare] || p.camShare || ''),
+            csvCell(p.notes || ''),
             csvCell(p.consent?.accepted ? 'Yes' : 'No'),
             csvCell(p.consent?.ts ? new Date(p.consent.ts).toLocaleDateString('en-ZA') : ''),
             csvCell(p.ts ? new Date(p.ts).toLocaleDateString('en-ZA') : ''));
@@ -1810,6 +2063,8 @@ function applyDonationsMode() {
         <div class="stat"><div class="stat-icon si-green"><i class="fas fa-check-circle"></i></div><div class="stat-info"><label>Confirmed Paid</label><strong id="s-paid">R0</strong></div></div>`);
     $('c-notes').closest('.fg').insertAdjacentHTML('beforebegin', `
         <div class="fg"><label for="c-amt">Once-off Contribution Amount (R) *</label><input id="c-amt" type="number" min="10" max="100000" placeholder="500"></div>`);
+    $('h-notes').closest('.fg').insertAdjacentHTML('beforebegin', `
+        <div class="fg hidden" id="h-amt-wrap"><label for="h-amt">Once-off Contribution Amount (R) *</label><input id="h-amt" type="number" min="10" max="100000" placeholder="500"></div>`);
     $('adm-f-int').textContent = 'Contributors';
     $('adm-f-int').insertAdjacentHTML('afterend', `
         <button class="admin-filter" data-filter="paid">✅ Paid</button>

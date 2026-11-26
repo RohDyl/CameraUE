@@ -8,7 +8,7 @@
         ".write": "auth != null && ((!data.exists() && newData.exists()) || (auth != null && auth.uid === '6yfIa8J33eScEaH6yxwNqStKkyD3' && auth.token.firebase.sign_in_provider !== 'anonymous'))",
         ".validate": "$id.matches(/^[A-Za-z0-9_-]{8,40}$/) && newData.hasChildren(['type','fn','street','lat','lng','ts'])",
         "type": {
-          ".validate": "newData.isString() && (newData.val() === 'host' || newData.val() === 'contributor')"
+          ".validate": "newData.isString() && (newData.val() === 'host' || newData.val() === 'contributor' || newData.val() === 'both' || newData.val() === 'existing')"
         },
         "fn": {
           ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 40"
@@ -49,9 +49,9 @@
       ".read": "(auth != null && auth.uid === '6yfIa8J33eScEaH6yxwNqStKkyD3' && auth.token.firebase.sign_in_provider !== 'anonymous')",
       "$id": {
         ".write": "auth != null && ((!data.exists() && newData.exists()) || (auth != null && auth.uid === '6yfIa8J33eScEaH6yxwNqStKkyD3' && auth.token.firebase.sign_in_provider !== 'anonymous'))",
-        ".validate": "$id.matches(/^[A-Za-z0-9_-]{8,40}$/) && newData.hasChildren(['type','fn','ln','phone','email','address','street','lat','lng','ts','emailHash','phoneHash','consent'])",
+        ".validate": "$id.matches(/^[A-Za-z0-9_-]{8,40}$/) && newData.hasChildren(['type','fn','ln','phone','email','address','street','lat','lng','ts','emailHash','phoneHash','consent']) && (newData.child('type').val() !== 'existing' || newData.hasChildren(['camCount','camCovers','camRecording','camNight','camShare'])) && (newData.child('type').val() === 'existing' || !(newData.hasChild('camBrand') || newData.hasChild('camCount') || newData.hasChild('camCovers') || newData.hasChild('camCoversOther') || newData.hasChild('camRecording') || newData.hasChild('camNight') || newData.hasChild('camShare')))",
         "type": {
-          ".validate": "newData.isString() && (newData.val() === 'host' || newData.val() === 'contributor')"
+          ".validate": "newData.isString() && (newData.val() === 'host' || newData.val() === 'contributor' || newData.val() === 'both' || newData.val() === 'existing')"
         },
         "fn": {
           ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 40"
@@ -124,6 +124,42 @@
         },
         "wifi": {
           ".validate": "newData.isString() && (newData.val() === 'yes' || newData.val() === 'partial' || newData.val() === 'no')"
+        },
+        "camBrand": {
+          ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 60"
+        },
+        "camCount": {
+          ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 20 && newData.val() % 1 === 0"
+        },
+        "camCovers": {
+          ".validate": "newData.hasChildren()",
+          "street": {
+            ".validate": "newData.val() === true"
+          },
+          "driveway": {
+            ".validate": "newData.val() === true"
+          },
+          "gate": {
+            ".validate": "newData.val() === true"
+          },
+          "other": {
+            ".validate": "newData.val() === true"
+          },
+          "$other": {
+            ".validate": false
+          }
+        },
+        "camCoversOther": {
+          ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 60 && newData.parent().child('camCovers').hasChild('other')"
+        },
+        "camRecording": {
+          ".validate": "newData.isString() && (newData.val() === 'cloud' || newData.val() === 'local' || newData.val() === 'sd' || newData.val() === 'unknown')"
+        },
+        "camNight": {
+          ".validate": "newData.isString() && (newData.val() === 'yes' || newData.val() === 'no' || newData.val() === 'unknown')"
+        },
+        "camShare": {
+          ".validate": "newData.isString() && (newData.val() === 'yes' || newData.val() === 'maybe' || newData.val() === 'no')"
         },
         "notes": {
           ".validate": "newData.isString() && newData.val().length >= 0 && newData.val().length <= 500"
