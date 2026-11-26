@@ -5,7 +5,7 @@
     "pins_public": {
       ".read": true,
       "$id": {
-        ".write": "auth != null && ((!data.exists() && newData.exists()) || (auth != null && auth.uid === 'PASTE_ADMIN_UID_HERE' && auth.token.firebase.sign_in_provider !== 'anonymous'))",
+        ".write": "auth != null && ((!data.exists() && newData.exists()) || (auth != null && auth.uid === '6yfIa8J33eScEaH6yxwNqStKkyD3' && auth.token.firebase.sign_in_provider !== 'anonymous'))",
         ".validate": "$id.matches(/^[A-Za-z0-9_-]{8,40}$/) && newData.hasChildren(['type','fn','street','lat','lng','ts'])",
         "type": {
           ".validate": "newData.isString() && (newData.val() === 'host' || newData.val() === 'contributor')"
@@ -38,7 +38,7 @@
           ".validate": "newData.isNumber() && newData.val() >= 10 && newData.val() <= 100000"
         },
         "status": {
-          ".validate": "newData.isString() && (newData.val() === 'pending' || newData.val() === 'pledge' || newData.val() === 'paid') && (newData.val() !== 'paid' || (auth != null && auth.uid === 'PASTE_ADMIN_UID_HERE' && auth.token.firebase.sign_in_provider !== 'anonymous'))"
+          ".validate": "newData.isString() && (newData.val() === 'pending' || newData.val() === 'pledge' || newData.val() === 'paid') && (newData.val() !== 'paid' || (auth != null && auth.uid === '6yfIa8J33eScEaH6yxwNqStKkyD3' && auth.token.firebase.sign_in_provider !== 'anonymous'))"
         },
         "$other": {
           ".validate": false
@@ -46,9 +46,9 @@
       }
     },
     "pins_private": {
-      ".read": "(auth != null && auth.uid === 'PASTE_ADMIN_UID_HERE' && auth.token.firebase.sign_in_provider !== 'anonymous')",
+      ".read": "(auth != null && auth.uid === '6yfIa8J33eScEaH6yxwNqStKkyD3' && auth.token.firebase.sign_in_provider !== 'anonymous')",
       "$id": {
-        ".write": "auth != null && ((!data.exists() && newData.exists()) || (auth != null && auth.uid === 'PASTE_ADMIN_UID_HERE' && auth.token.firebase.sign_in_provider !== 'anonymous'))",
+        ".write": "auth != null && ((!data.exists() && newData.exists()) || (auth != null && auth.uid === '6yfIa8J33eScEaH6yxwNqStKkyD3' && auth.token.firebase.sign_in_provider !== 'anonymous'))",
         ".validate": "$id.matches(/^[A-Za-z0-9_-]{8,40}$/) && newData.hasChildren(['type','fn','ln','phone','email','address','street','lat','lng','ts','emailHash','phoneHash','consent'])",
         "type": {
           ".validate": "newData.isString() && (newData.val() === 'host' || newData.val() === 'contributor')"
@@ -60,10 +60,10 @@
           ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 40"
         },
         "phone": {
-          ".validate": "newData.isString() && newData.val().length <= 20 && (newData.val().matches(/^\\+27[1-9][0-9]{8}$/) || (auth != null && auth.uid === 'PASTE_ADMIN_UID_HERE' && auth.token.firebase.sign_in_provider !== 'anonymous'))"
+          ".validate": "newData.isString() && newData.val().length <= 20 && (newData.val().matches(/^\\+27[1-9][0-9]{8}$/) || (auth != null && auth.uid === '6yfIa8J33eScEaH6yxwNqStKkyD3' && auth.token.firebase.sign_in_provider !== 'anonymous'))"
         },
         "email": {
-          ".validate": "newData.isString() && newData.val().length <= 100 && (newData.val().matches(/^[^@ ]+@[^@ ]+\\.[^@ ]{2,}$/) || (auth != null && auth.uid === 'PASTE_ADMIN_UID_HERE' && auth.token.firebase.sign_in_provider !== 'anonymous'))"
+          ".validate": "newData.isString() && newData.val().length <= 100 && (newData.val().matches(/^[^@ ]+@[^@ ]+\\.[^@ ]{2,}$/) || (auth != null && auth.uid === '6yfIa8J33eScEaH6yxwNqStKkyD3' && auth.token.firebase.sign_in_provider !== 'anonymous'))"
         },
         "address": {
           ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 100"
@@ -87,7 +87,7 @@
           ".validate": "newData.isString() && newData.val().matches(/^[a-f0-9]{64}$/)"
         },
         "consent": {
-          ".validate": "newData.hasChildren(['accepted','ts','version']) && (newData.child('accepted').val() === true || (auth != null && auth.uid === 'PASTE_ADMIN_UID_HERE' && auth.token.firebase.sign_in_provider !== 'anonymous'))",
+          ".validate": "newData.hasChildren(['accepted','ts','version']) && (newData.child('accepted').val() === true || (auth != null && auth.uid === '6yfIa8J33eScEaH6yxwNqStKkyD3' && auth.token.firebase.sign_in_provider !== 'anonymous'))",
           "accepted": {
             ".validate": "newData.isBoolean()"
           },
@@ -98,7 +98,7 @@
             ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 20"
           },
           "source": {
-            ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 60 && (auth != null && auth.uid === 'PASTE_ADMIN_UID_HERE' && auth.token.firebase.sign_in_provider !== 'anonymous')"
+            ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 60 && (auth != null && auth.uid === '6yfIa8J33eScEaH6yxwNqStKkyD3' && auth.token.firebase.sign_in_provider !== 'anonymous')"
           },
           "$other": {
             ".validate": false
@@ -132,7 +132,7 @@
           ".validate": "newData.isNumber() && newData.val() >= 10 && newData.val() <= 100000"
         },
         "status": {
-          ".validate": "newData.isString() && (newData.val() === 'pending' || newData.val() === 'pledge' || newData.val() === 'paid') && (newData.val() !== 'paid' || (auth != null && auth.uid === 'PASTE_ADMIN_UID_HERE' && auth.token.firebase.sign_in_provider !== 'anonymous'))"
+          ".validate": "newData.isString() && (newData.val() === 'pending' || newData.val() === 'pledge' || newData.val() === 'paid') && (newData.val() !== 'paid' || (auth != null && auth.uid === '6yfIa8J33eScEaH6yxwNqStKkyD3' && auth.token.firebase.sign_in_provider !== 'anonymous'))"
         },
         "$other": {
           ".validate": false
@@ -140,15 +140,15 @@
       }
     },
     "contact_index": {
-      ".read": "(auth != null && auth.uid === 'PASTE_ADMIN_UID_HERE' && auth.token.firebase.sign_in_provider !== 'anonymous')",
+      ".read": "(auth != null && auth.uid === '6yfIa8J33eScEaH6yxwNqStKkyD3' && auth.token.firebase.sign_in_provider !== 'anonymous')",
       "$k": {
-        ".write": "auth != null && ((!data.exists() && newData.exists()) || (auth != null && auth.uid === 'PASTE_ADMIN_UID_HERE' && auth.token.firebase.sign_in_provider !== 'anonymous'))",
+        ".write": "auth != null && ((!data.exists() && newData.exists()) || (auth != null && auth.uid === '6yfIa8J33eScEaH6yxwNqStKkyD3' && auth.token.firebase.sign_in_provider !== 'anonymous'))",
         ".validate": "$k.matches(/^[ep][a-f0-9]{64}$/) && newData.isString() && newData.val().length <= 40"
       }
     },
     "pins": {
-      ".read": "(auth != null && auth.uid === 'PASTE_ADMIN_UID_HERE' && auth.token.firebase.sign_in_provider !== 'anonymous')",
-      ".write": "(auth != null && auth.uid === 'PASTE_ADMIN_UID_HERE' && auth.token.firebase.sign_in_provider !== 'anonymous')"
+      ".read": "(auth != null && auth.uid === '6yfIa8J33eScEaH6yxwNqStKkyD3' && auth.token.firebase.sign_in_provider !== 'anonymous')",
+      ".write": "(auth != null && auth.uid === '6yfIa8J33eScEaH6yxwNqStKkyD3' && auth.token.firebase.sign_in_provider !== 'anonymous')"
     }
   }
 }
