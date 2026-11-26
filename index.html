@@ -3,11 +3,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>University Estate CCTV Initiative</title>
+    <meta name="description" content="Independent community initiative by University Estate neighbours in Cape Town: register your interest in hosting a security camera or contributing, and see where support is strongest.">
+    <meta name="theme-color" content="#0d1b2a">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="University Estate CCTV Initiative">
+    <meta property="og:description" content="Independent community initiative by University Estate neighbours in Cape Town: register your interest in hosting a security camera or contributing, and see where support is strongest.">
+    <meta property="og:url" content="https://rohdyl.github.io/CameraUE/">
+    <meta property="og:locale" content="en_ZA">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="University Estate CCTV Initiative">
+    <meta name="twitter:description" content="Independent community initiative by University Estate neighbours in Cape Town: register your interest in hosting a security camera or contributing, and see where support is strongest.">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%2300c853'/%3E%3Ctext x='50' y='68' font-size='56' text-anchor='middle'%3E%F0%9F%93%B9%3C/text%3E%3C/svg%3E">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-
     <style>
         :root {
             --navy:       #0d1b2a;
@@ -213,7 +222,7 @@
             border:1px solid var(--border); border-radius:7px; color:var(--text);
             font-size:13px; font-family:'Inter',sans-serif; transition:border-color 0.2s;
         }
-        input:focus, select:focus, textarea:focus { outline:none; border-color:var(--green); }
+        input:focus, select:focus, textarea:focus { border-color:var(--green); }
         select option { background:var(--navy); }
         .hint { font-size:10px; color:var(--muted); margin-top:3px; }
         .loc-box {
@@ -320,186 +329,239 @@
             pointer-events:none; white-space:nowrap;
         }
         .toast.show { opacity:1; }
-        .admin-secret {
-            position:fixed; bottom:8px; left:8px;
-            width:36px; height:36px; cursor:pointer;
-            z-index:100; opacity:0;
-        }
         ::-webkit-scrollbar { width:4px; }
         ::-webkit-scrollbar-track { background:transparent; }
         ::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.15); border-radius:2px; }
         .hidden { display:none !important; }
-        @media (max-width:700px) {
-            .sidebar { display:none; }
-            .header h1 { font-size:14px; }
-            .stats-bar { gap:10px; padding:6px 10px; }
+        /* ── added: accessibility, mobile, new components ── */
+        :focus-visible { outline:2px solid var(--green); outline-offset:2px; }
+        input:focus-visible, select:focus-visible, textarea:focus-visible { outline:2px solid var(--green); outline-offset:1px; }
+        button.tab { background:transparent; border:none; border-bottom:2px solid transparent; font-family:'Inter',sans-serif; color:var(--muted); }
+        button.tab.active { color:var(--text); border-bottom-color:var(--green); }
+        .skip-link { position:absolute; left:-999px; top:0; background:var(--green); color:#000; padding:8px 12px; z-index:5000; font-weight:700; }
+        .skip-link:focus { left:8px; top:8px; }
+        .header-right { display:flex; align-items:center; gap:8px; }
+        .btn-ghost {
+            display:flex; align-items:center; gap:6px; padding:9px 12px; background:transparent;
+            color:var(--text); border:1px solid var(--border); border-radius:8px; cursor:pointer;
+            font-size:13px; font-weight:600; font-family:'Inter',sans-serif; white-space:nowrap;
         }
+        .btn-ghost:hover { border-color:rgba(255,255,255,0.4); }
+        .mode-banner { background:rgba(255,214,0,0.12); color:var(--gold); font-size:11px; padding:5px 18px; flex-shrink:0; border-bottom:1px solid rgba(255,214,0,0.25); }
+        .confirm-bar {
+            position:absolute; left:50%; bottom:18px; transform:translateX(-50%); z-index:450;
+            background:rgba(13,27,42,0.96); border:1px solid var(--green); border-radius:14px;
+            padding:10px 12px; display:none; align-items:center; gap:10px; flex-wrap:wrap;
+            justify-content:center; width:min(92%, 520px); font-size:12px;
+        }
+        .confirm-bar.show { display:flex; }
+        .confirm-bar span { flex:1 1 200px; color:var(--text); }
+        .confirm-bar .btn-sub { width:auto; margin:0; padding:9px 14px; }
+        .link-btn { background:none; border:none; color:var(--blue); cursor:pointer; padding:0; font:inherit; text-decoration:underline; }
+        .consent { display:flex; gap:9px; align-items:flex-start; font-size:11px; color:var(--muted); line-height:1.45; }
+        .consent input { width:auto; margin-top:2px; accent-color:var(--green); flex-shrink:0; }
+        .consent span { text-transform:none; letter-spacing:0; }
+        .notice-box { background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:8px; padding:9px 11px; font-size:11px; color:var(--muted); line-height:1.5; margin-bottom:10px; }
+        .prose h3 { font-size:13px; margin:14px 0 4px; color:var(--text); }
+        .prose h3:first-child { margin-top:0; }
+        .prose p, .prose li { font-size:12px; color:#c3cfdb; line-height:1.55; }
+        .prose ol, .prose ul { padding-left:18px; }
+        .prose a { color:var(--blue); }
+        .tbc { color:var(--gold); font-style:italic; }
+        .admin-auth-row { display:flex; flex-direction:column; gap:10px; }
+        .form-error { color:#ff8a80; font-size:12px; min-height:16px; }
+        .admin-table td, .admin-table th { text-align:left; }
+        .admin-table td.wrap { white-space:normal; min-width:120px; }
+        #sheet-toggle { display:none; }
+        .sr-only { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+        @media (max-width:700px) {
+            .header { padding:8px 10px; }
+            .header h1 { font-size:14px; }
+            .header p { display:none; }
+            .btn-ghost .lbl { display:none; }
+            .btn-add-header { padding:9px 11px; }
+            .stats-bar { gap:10px; padding:6px 10px; }
+            .armed-summary { padding:0 10px 6px; }
+            .mode-banner { padding:5px 10px; }
+            .map-hint { display:none; }
+            .map-legend { padding:8px 10px; font-size:10px; top:6px; right:6px; }
+            .frow { grid-template-columns:1fr; }
+            .modal { max-height:96vh; }
+            .sidebar {
+                display:flex; position:fixed; left:0; right:0; bottom:0; width:auto; height:58vh;
+                z-index:1200; border-right:none; border-top:1px solid var(--border);
+                border-radius:16px 16px 0 0; transform:translateY(100%); visibility:hidden;
+                transition:transform .25s ease, visibility .25s;
+            }
+            .sidebar.open { transform:none; visibility:visible; box-shadow:0 -8px 30px rgba(0,0,0,.5); }
+            #sheet-toggle {
+                display:flex; align-items:center; gap:7px; position:fixed; left:50%; bottom:14px;
+                transform:translateX(-50%); z-index:1100; background:var(--navy-light);
+                color:var(--text); border:1px solid var(--border); border-radius:22px;
+                padding:10px 16px; font-size:12px; font-weight:600; font-family:'Inter',sans-serif; cursor:pointer;
+                box-shadow:0 4px 16px rgba(0,0,0,.45);
+            }
+            .tab-content { padding-bottom:64px; }
+            #sheet-toggle { z-index:1300; }
+            .confirm-bar { bottom:70px; }
+            .toast { bottom:120px; white-space:normal; max-width:90vw; text-align:center; }
+        }
+
     </style>
 </head>
 <body>
 
-<div class="header">
+<a class="skip-link" href="#map">Skip to map</a>
+
+<header class="header">
     <div class="header-left">
-        <div class="logo" onclick="adminTrigger()" title="University Estate CCTV">📹</div>
+        <div class="logo" aria-hidden="true">📹</div>
         <div>
             <h1>University Estate <span>CCTV</span> Initiative</h1>
-            <p id="header-sub">Cape Town Community Security · Sign up to host a camera or register your interest</p>
+            <p id="header-sub">A community project by University Estate neighbours · Sign up to host a camera or register your interest</p>
         </div>
     </div>
-    <button class="btn-add-header" onclick="openAddModal()">
-        <i class="fas fa-plus"></i> Add Your Pin
-    </button>
-</div>
+    <div class="header-right">
+        <button class="btn-ghost" onclick="openModal('modal-about')" aria-label="About and how it works"><i class="fas fa-circle-info" aria-hidden="true"></i><span class="lbl">About</span></button>
+        <button class="btn-add-header" id="btn-add" onclick="beginPlacing()">
+            <i class="fas fa-plus" aria-hidden="true"></i> <span>Add Your Pin</span>
+        </button>
+    </div>
+</header>
 
 <div class="stats-wrap">
-<div class="stats-bar">
+<div class="stats-bar" id="stats-bar">
     <div class="stat">
-        <div class="stat-icon si-green"><i class="fas fa-camera"></i></div>
+        <div class="stat-icon si-green"><i class="fas fa-camera" aria-hidden="true"></i></div>
         <div class="stat-info"><label>Camera Hosts</label><strong id="s-hosts">0</strong></div>
     </div>
     <div class="stat">
-        <div class="stat-icon si-blue"><i class="fas fa-hand-holding-heart"></i></div>
+        <div class="stat-icon si-blue"><i class="fas fa-hand-holding-heart" aria-hidden="true"></i></div>
         <div class="stat-info"><label id="stat-contribs-label">Interested</label><strong id="s-contribs">0</strong></div>
     </div>
-    <div class="stat">
-        <div class="stat-icon si-red"><i class="fas fa-shield-halved"></i></div>
+    <div class="stat hidden" id="stat-armed">
+        <div class="stat-icon si-red"><i class="fas fa-shield-halved" aria-hidden="true"></i></div>
         <div class="stat-info"><label>Armed response</label><strong id="s-armed">0</strong></div>
     </div>
     <div class="stat">
-        <div class="stat-icon si-gold"><i class="fas fa-bolt"></i></div>
+        <div class="stat-icon si-gold"><i class="fas fa-bolt" aria-hidden="true"></i></div>
         <div class="stat-info"><label>Backup Power</label><strong id="s-backup">0</strong></div>
     </div>
     <div class="stat">
-        <div class="stat-icon si-blue"><i class="fas fa-wifi"></i></div>
+        <div class="stat-icon si-blue"><i class="fas fa-wifi" aria-hidden="true"></i></div>
         <div class="stat-info"><label>Fast Internet</label><strong id="s-fast">0</strong></div>
     </div>
     <div class="stat">
-        <div class="stat-icon si-green"><i class="fas fa-road"></i></div>
+        <div class="stat-icon si-green"><i class="fas fa-road" aria-hidden="true"></i></div>
         <div class="stat-info"><label>Streets</label><strong id="s-streets">0</strong></div>
     </div>
 </div>
-<div class="armed-summary" id="armed-summary"></div>
+<div class="armed-summary" id="armed-summary" aria-live="polite"></div>
 </div>
+<div class="mode-banner hidden" id="mode-banner" role="status"></div>
 
 <div class="main">
-    <div class="sidebar">
+    <aside class="sidebar" id="sidebar" aria-label="Signups and priority streets">
         <div class="sidebar-top">
             <h3>Community Signups</h3>
-            <p>Click any card to locate on map</p>
+            <p>Select a card to locate it on the map. Only first names and street names are shown publicly.</p>
         </div>
-        <div class="tabs">
-            <div class="tab active" onclick="switchTab('entries',this)">
-                <i class="fas fa-list"></i> Entries
-            </div>
-            <div class="tab" onclick="switchTab('priority',this)">
-                <i class="fas fa-trophy"></i> Priority Streets
-            </div>
+        <div class="tabs" role="tablist">
+            <button class="tab active" role="tab" aria-selected="true" id="tabbtn-entries" onclick="switchTab('entries',this)">
+                <i class="fas fa-list" aria-hidden="true"></i> Entries
+            </button>
+            <button class="tab" role="tab" aria-selected="false" id="tabbtn-priority" onclick="switchTab('priority',this)">
+                <i class="fas fa-trophy" aria-hidden="true"></i> Priority Streets
+            </button>
         </div>
         <div class="tab-content">
             <div id="tab-entries" class="entries-wrap">
                 <div class="empty-state" id="entries-empty">
-                    <i class="fas fa-map-marker-alt"></i>
-                    No entries yet.<br>Click the map to add a pin.
+                    <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+                    No entries yet.<br>Tap “Add Your Pin” or tap the map.
                 </div>
                 <div id="entries-list"></div>
             </div>
             <div id="tab-priority" class="priority-wrap hidden">
                 <p class="priority-note" id="priority-note">Streets ranked by registered interest — used to prioritise camera placement</p>
-                <div id="priority-list">
-                    <div class="empty-state"><i class="fas fa-trophy"></i>No data yet</div>
-                </div>
+                <div id="priority-list"></div>
+            </div>
+            <div style="padding:10px 14px 16px;font-size:11px;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap;">
+                <button class="link-btn" onclick="openModal('modal-privacy')">Privacy notice</button>
+                <button class="link-btn" onclick="openAdmin()">Organiser sign-in</button>
             </div>
         </div>
-    </div>
+    </aside>
 
     <div class="map-wrap">
-        <div id="map"></div>
+        <div id="map" role="application" aria-label="Map of University Estate. Tap to place your pin."></div>
         <div class="map-legend">
             <h4>Legend</h4>
-            <div class="leg-item">
-                <div class="leg-dot" style="background:var(--green)"></div>
-                <span>Camera Host pin</span>
-            </div>
-            <div class="leg-item">
-                <div class="leg-ring" style="border-color:var(--green)"></div>
-                <span>30m coverage ring</span>
-            </div>
+            <div class="leg-item"><div class="leg-dot" style="background:var(--green)"></div><span>Camera Host (approx. location)</span></div>
+            <div class="leg-item"><div class="leg-ring" style="border-color:var(--green)"></div><span>30m coverage ring</span></div>
             <hr class="leg-sep">
-            <div class="leg-item">
-                <div class="leg-dot" style="background:var(--blue)"></div>
-                <span id="legend-contrib">Interested resident</span>
-            </div>
-            <div class="leg-item">
-                <div class="leg-ring" style="border-color:var(--blue)"></div>
-                <span>30m area ring</span>
-            </div>
-            <hr class="leg-sep">
-            <div class="leg-item" style="color:var(--muted);font-size:10px;">
-                <i class="fas fa-mouse-pointer" style="color:var(--green);"></i>
-                &nbsp;Click map to add pin
-            </div>
+            <div class="leg-item"><div class="leg-dot" style="background:var(--blue)"></div><span id="legend-contrib">Interested resident</span></div>
+            <div class="leg-item"><div class="leg-ring" style="border-color:var(--blue)"></div><span>30m area ring</span></div>
         </div>
-        <div class="map-hint">
-            <i class="fas fa-hand-pointer"></i>
-            Click anywhere on the map to register your location
+        <div class="map-hint"><i class="fas fa-hand-pointer" aria-hidden="true"></i> Tap the map to place your pin, or use “Add Your Pin”</div>
+        <div class="confirm-bar" id="confirm-bar" role="region" aria-label="Confirm your location">
+            <span>📍 Drag the pin (or tap the map) to your property, then confirm. Public viewers only see an approximate spot.</span>
+            <button class="btn-back" onclick="cancelPlacing()">Cancel</button>
+            <button class="btn-sub green" onclick="confirmPlacing()">Confirm location</button>
         </div>
     </div>
 </div>
+<button id="sheet-toggle" onclick="toggleSheet()" aria-expanded="false" aria-controls="sidebar"><i class="fas fa-list" aria-hidden="true"></i> <span id="sheet-label">Entries &amp; streets</span></button>
 
 <!-- ADD PIN MODAL -->
-<div class="overlay" id="modal-add">
+<div class="overlay" id="modal-add" role="dialog" aria-modal="true" aria-labelledby="add-title">
     <div class="modal">
         <div class="modal-head">
-            <h2>📍 Add Your Pin</h2>
-            <button class="btn-close" onclick="closeModal()">✕</button>
+            <h2 id="add-title">📍 Add Your Pin</h2>
+            <button class="btn-close" onclick="closeModal()" aria-label="Close">✕</button>
         </div>
         <div class="modal-body">
 
             <div id="step-type">
-                <p style="font-size:12px;color:var(--muted);margin-bottom:14px;">
-                    How would you like to support University Estate's security?
-                </p>
+                <p style="font-size:12px;color:var(--muted);margin-bottom:14px;">How would you like to support University Estate's security?</p>
                 <div class="type-grid">
-                    <div class="type-opt type-host" id="opt-host" onclick="selectType('host')">
-                        <i class="fas fa-camera"></i>
+                    <div class="type-opt type-host" id="opt-host" role="button" tabindex="0" onclick="selectType('host')">
+                        <i class="fas fa-camera" aria-hidden="true"></i>
                         <h3>Camera Host</h3>
                         <p>I can install &amp; host a camera at my property</p>
                     </div>
-                    <div class="type-opt type-contrib" id="opt-contrib" onclick="selectType('contributor')">
-                        <i class="fas fa-hand-holding-usd"></i>
+                    <div class="type-opt type-contrib" id="opt-contrib" role="button" tabindex="0" onclick="selectType('contributor')">
+                        <i class="fas fa-hand-holding-usd" aria-hidden="true"></i>
                         <h3 id="opt-contrib-title">I'd contribute</h3>
                         <p id="opt-contrib-desc">I'd be willing to contribute towards cameras in my street</p>
                     </div>
                 </div>
-                <button class="btn-sub green" id="btn-next" onclick="goToForm()" disabled="">
-                    Continue <i class="fas fa-arrow-right"></i>
-                </button>
+                <button class="btn-sub green" id="btn-next" onclick="goToForm()" disabled>Continue <i class="fas fa-arrow-right" aria-hidden="true"></i></button>
             </div>
 
             <!-- HOST FORM -->
             <div id="step-host" class="hidden">
-                <div class="form-title">
-                    <i class="fas fa-camera" style="color:var(--green)"></i>
-                    Camera Host Registration
-                </div>
-                <div class="loc-box">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span class="loc-text" id="loc-host-txt">Location pinned on map ✓</span>
+                <div class="form-title"><i class="fas fa-camera" style="color:var(--green)" aria-hidden="true"></i> Camera Host Registration</div>
+                <div class="loc-box"><i class="fas fa-map-marker-alt" aria-hidden="true"></i><span class="loc-text">Location set ✓ — shown publicly only as an approximate spot</span></div>
+                <div class="frow">
+                    <div class="fg"><label for="h-fn">First Name *</label><input id="h-fn" maxlength="40" autocomplete="given-name"></div>
+                    <div class="fg"><label for="h-ln">Last Name *</label><input id="h-ln" maxlength="40" autocomplete="family-name"></div>
                 </div>
                 <div class="frow">
-                    <div class="fg"><label>First Name *</label><input id="h-fn" placeholder="John"></div>
-                    <div class="fg"><label>Last Name *</label><input id="h-ln" placeholder="Smith"></div>
+                    <div class="fg"><label for="h-ph">Phone *</label><input id="h-ph" type="tel" inputmode="tel" placeholder="082 123 4567" autocomplete="tel"></div>
+                    <div class="fg"><label for="h-em">Email *</label><input id="h-em" type="email" maxlength="100" placeholder="name@example.com" autocomplete="email"></div>
                 </div>
                 <div class="frow">
-                    <div class="fg"><label>Phone *</label><input id="h-ph" type="tel" placeholder="071 234 5678"></div>
-                    <div class="fg"><label>Email *</label><input id="h-em" type="email" placeholder="john@mail.com"></div>
+                    <div class="fg"><label for="h-street">Street *</label><select id="h-street" onchange="toggleStreetOther('h')"></select></div>
+                    <div class="fg"><label for="h-num">House / unit no. *</label><input id="h-num" maxlength="12" placeholder="12" autocomplete="off"></div>
                 </div>
-                <div class="fg">
-                    <label>Street Address *</label>
-                    <input id="h-addr" placeholder="e.g. 12 University Road, University Estate">
+                <div class="fg hidden" id="h-street-other-wrap">
+                    <label for="h-street-other">Street name *</label>
+                    <input id="h-street-other" maxlength="60" placeholder="Street name" autocomplete="off">
                 </div>
+                <p class="hint" style="margin:-6px 0 12px;">🔒 Your house number and contact details stay private. The public map shows only your first name, street name and an approximate pin.</p>
                 <div class="fg">
-                    <label>Internet Upload Speed *</label>
+                    <label for="h-net">Internet Upload Speed *</label>
                     <select id="h-net">
                         <option value="">Select speed…</option>
                         <option value="under5">Under 5 Mbps ⚠️ (too slow)</option>
@@ -511,7 +573,7 @@
                     <p class="hint">💡 Check at speedtest.net — minimum 10 Mbps upload needed</p>
                 </div>
                 <div class="fg">
-                    <label>Backup Power (Loadshedding) *</label>
+                    <label for="h-bak">Backup Power (Loadshedding) *</label>
                     <select id="h-bak">
                         <option value="">Select option…</option>
                         <option value="none">None — grid power only ⚠️</option>
@@ -523,7 +585,7 @@
                 </div>
                 <div class="frow">
                     <div class="fg">
-                        <label>Camera Placement *</label>
+                        <label for="h-place">Camera Placement *</label>
                         <select id="h-place">
                             <option value="">Select…</option>
                             <option value="street-facing">Street-facing (front)</option>
@@ -534,7 +596,7 @@
                         </select>
                     </div>
                     <div class="fg">
-                        <label>WiFi at Location?</label>
+                        <label for="h-wifi">WiFi at Location?</label>
                         <select id="h-wifi">
                             <option value="">Select…</option>
                             <option value="yes">Yes — good signal ✓</option>
@@ -544,80 +606,79 @@
                     </div>
                 </div>
                 <div class="fg" id="h-armed-wrap">
-                    <label>Are you signed up with an armed response company? *</label>
-                    <div class="choice-row">
+                    <label id="h-armed-label">Are you signed up with an armed response company? *</label>
+                    <div class="choice-row" role="radiogroup" aria-labelledby="h-armed-label">
                         <label class="choice"><input type="radio" name="h-armed" value="yes" onchange="toggleArmedFields('h')"> Yes</label>
                         <label class="choice"><input type="radio" name="h-armed" value="no" onchange="toggleArmedFields('h')"> No</label>
                         <label class="choice"><input type="radio" name="h-armed" value="prefer-not" onchange="toggleArmedFields('h')"> Prefer not to say</label>
                     </div>
                     <div id="h-armed-provider-wrap" class="hidden" style="margin-top:10px;">
-                        <label>Provider *</label>
-                        <select id="h-armed-provider" onchange="toggleArmedOther('h')">
-                            <option value="">Select provider…</option>
-                        </select>
-                        <input id="h-armed-other" class="hidden" placeholder="Provider name" style="margin-top:8px;" autocomplete="off">
+                        <label for="h-armed-provider">Provider *</label>
+                        <select id="h-armed-provider" onchange="toggleArmedOther('h')"></select>
+                        <input id="h-armed-other" class="hidden" maxlength="60" placeholder="Provider name" aria-label="Other provider name" style="margin-top:8px;" autocomplete="off">
                     </div>
+                    <p class="hint">Kept private — never shown on the public map.</p>
                 </div>
                 <div class="fg">
-                    <label>Notes (optional)</label>
-                    <textarea id="h-notes" rows="2" placeholder="Anything else about your property or location…"></textarea>
+                    <label for="h-notes">Notes (optional)</label>
+                    <textarea id="h-notes" rows="2" maxlength="500" placeholder="Anything else about your property or location… (kept private)"></textarea>
+                </div>
+                <div class="notice-box">This is an independent community project run by University Estate neighbours. We collect your name, contact details, address and map location to plan camera placement and to contact you about the project. Your details are not shared with third parties and are never shown publicly in full. You can ask the organiser to delete your details at any time. <button type="button" class="link-btn" onclick="openModal('modal-privacy', true)">Read the full privacy notice</button>.</div>
+                <div class="fg">
+                    <label class="consent" for="h-consent"><input type="checkbox" id="h-consent"> <span>I have read the privacy notice and consent to my personal information being processed for this purpose (POPIA). *</span></label>
                 </div>
                 <div style="display:flex;gap:8px;">
                     <button class="btn-back" onclick="backToType()">← Back</button>
-                    <button class="btn-sub green" onclick="submitHostPin()" style="flex:1;">
-                        <i class="fas fa-camera"></i> Register as Camera Host
-                    </button>
+                    <button class="btn-sub green" id="btn-host-submit" onclick="submitPin('host')" style="flex:1;"><i class="fas fa-camera" aria-hidden="true"></i> Register as Camera Host</button>
                 </div>
             </div>
 
-            <!-- CONTRIBUTOR FORM -->
+            <!-- CONTRIBUTOR / INTEREST FORM -->
             <div id="step-contributor" class="hidden">
-                <div class="form-title" id="contrib-form-title">
-                    <i class="fas fa-hand-holding-usd" style="color:var(--blue)"></i>
-                    <span id="contrib-form-title-text">Register your interest in contributing</span>
-                </div>
-                <div class="loc-box blue-loc">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span class="loc-text" id="loc-contrib-txt">Location pinned on map ✓</span>
+                <div class="form-title"><i class="fas fa-hand-holding-usd" style="color:var(--blue)" aria-hidden="true"></i> <span id="contrib-form-title-text">Register your interest in contributing</span></div>
+                <div class="loc-box blue-loc"><i class="fas fa-map-marker-alt" aria-hidden="true"></i><span class="loc-text">Location set ✓ — shown publicly only as an approximate spot</span></div>
+                <div class="frow">
+                    <div class="fg"><label for="c-fn">First Name *</label><input id="c-fn" maxlength="40" autocomplete="given-name"></div>
+                    <div class="fg"><label for="c-ln">Last Name *</label><input id="c-ln" maxlength="40" autocomplete="family-name"></div>
                 </div>
                 <div class="frow">
-                    <div class="fg"><label>First Name *</label><input id="c-fn" placeholder="Jane"></div>
-                    <div class="fg"><label>Last Name *</label><input id="c-ln" placeholder="Doe"></div>
+                    <div class="fg"><label for="c-ph">Phone *</label><input id="c-ph" type="tel" inputmode="tel" placeholder="082 123 4567" autocomplete="tel"></div>
+                    <div class="fg"><label for="c-em">Email *</label><input id="c-em" type="email" maxlength="100" placeholder="name@example.com" autocomplete="email"></div>
                 </div>
                 <div class="frow">
-                    <div class="fg"><label>Phone *</label><input id="c-ph" type="tel" placeholder="071 234 5678"></div>
-                    <div class="fg"><label>Email *</label><input id="c-em" type="email" placeholder="jane@mail.com"></div>
+                    <div class="fg"><label for="c-street">Street *</label><select id="c-street" onchange="toggleStreetOther('c')"></select></div>
+                    <div class="fg"><label for="c-num">House / unit no. *</label><input id="c-num" maxlength="12" placeholder="12" autocomplete="off"></div>
                 </div>
-                <div class="fg">
-                    <label>Street Address *</label>
-                    <input id="c-addr" placeholder="e.g. 15 Liesbeeck Road">
-                    <p class="hint">📍 Helps us prioritise camera placement on your street</p>
+                <div class="fg hidden" id="c-street-other-wrap">
+                    <label for="c-street-other">Street name *</label>
+                    <input id="c-street-other" maxlength="60" placeholder="Street name" autocomplete="off">
                 </div>
+                <p class="hint" style="margin:-6px 0 12px;">🔒 Your house number and contact details stay private. The public map shows only your first name, street name and an approximate pin.</p>
                 <div class="fg" id="c-armed-wrap">
-                    <label>Are you signed up with an armed response company? *</label>
-                    <div class="choice-row">
+                    <label id="c-armed-label">Are you signed up with an armed response company? *</label>
+                    <div class="choice-row" role="radiogroup" aria-labelledby="c-armed-label">
                         <label class="choice"><input type="radio" name="c-armed" value="yes" onchange="toggleArmedFields('c')"> Yes</label>
                         <label class="choice"><input type="radio" name="c-armed" value="no" onchange="toggleArmedFields('c')"> No</label>
                         <label class="choice"><input type="radio" name="c-armed" value="prefer-not" onchange="toggleArmedFields('c')"> Prefer not to say</label>
                     </div>
                     <div id="c-armed-provider-wrap" class="hidden" style="margin-top:10px;">
-                        <label>Provider *</label>
-                        <select id="c-armed-provider" onchange="toggleArmedOther('c')">
-                            <option value="">Select provider…</option>
-                        </select>
-                        <input id="c-armed-other" class="hidden" placeholder="Provider name" style="margin-top:8px;" autocomplete="off">
+                        <label for="c-armed-provider">Provider *</label>
+                        <select id="c-armed-provider" onchange="toggleArmedOther('c')"></select>
+                        <input id="c-armed-other" class="hidden" maxlength="60" placeholder="Provider name" aria-label="Other provider name" style="margin-top:8px;" autocomplete="off">
                     </div>
+                    <p class="hint">Kept private — never shown on the public map.</p>
                 </div>
                 <div class="fg">
-                    <label>Message (optional)</label>
-                    <textarea id="c-notes" rows="2" placeholder="Any message for the organising committee…"></textarea>
+                    <label for="c-notes">Message (optional)</label>
+                    <textarea id="c-notes" rows="2" maxlength="500" placeholder="Any message for the organiser… (kept private)"></textarea>
                 </div>
-                <!-- ✅ FIX B: Correct button restored -->
+                <div class="notice-box">This is an independent community project run by University Estate neighbours. We collect your name, contact details, address and map location to plan camera placement and to contact you about the project. Your details are not shared with third parties and are never shown publicly in full. You can ask the organiser to delete your details at any time. <button type="button" class="link-btn" onclick="openModal('modal-privacy', true)">Read the full privacy notice</button>.</div>
+                <div class="fg">
+                    <label class="consent" for="c-consent"><input type="checkbox" id="c-consent"> <span>I have read the privacy notice and consent to my personal information being processed for this purpose (POPIA). *</span></label>
+                </div>
                 <div style="display:flex;gap:8px;">
                     <button class="btn-back" onclick="backToType()">← Back</button>
-                    <button class="btn-sub blue" id="btn-contrib-submit" onclick="submitContribPin()" style="flex:1;">
-                        <i class="fas fa-hand-paper"></i> Register interest
-                    </button>
+                    <button class="btn-sub blue" id="btn-contrib-submit" onclick="submitPin('contributor')" style="flex:1;"><i class="fas fa-hand-paper" aria-hidden="true"></i> Register interest</button>
                 </div>
             </div>
 
@@ -625,62 +686,87 @@
     </div>
 </div>
 
-<!-- ADMIN PANEL -->
-<div class="overlay" id="modal-admin">
-    <div class="modal" style="max-width:780px;">
+<!-- ABOUT MODAL -->
+<div class="overlay" id="modal-about" role="dialog" aria-modal="true" aria-labelledby="about-title">
+    <div class="modal">
         <div class="modal-head">
-            <h2>🔒 Admin — Management Panel</h2>
-            <button class="btn-close" onclick="document.getElementById('modal-admin').classList.remove('active')">✕</button>
+            <h2 id="about-title">About this initiative</h2>
+            <button class="btn-close" onclick="closeModals()" aria-label="Close">✕</button>
+        </div>
+        <div class="modal-body prose" id="about-body"></div>
+    </div>
+</div>
+
+<!-- PRIVACY MODAL -->
+<div class="overlay" id="modal-privacy" role="dialog" aria-modal="true" aria-labelledby="privacy-title">
+    <div class="modal">
+        <div class="modal-head">
+            <h2 id="privacy-title">🔒 Privacy notice (POPIA)</h2>
+            <button class="btn-close" onclick="closeModals()" aria-label="Close">✕</button>
+        </div>
+        <div class="modal-body prose" id="privacy-body"></div>
+    </div>
+</div>
+
+<!-- ADMIN MODAL -->
+<div class="overlay" id="modal-admin" role="dialog" aria-modal="true" aria-labelledby="admin-title">
+    <div class="modal" style="max-width:1120px;">
+        <div class="modal-head">
+            <h2 id="admin-title">🔒 Organiser area</h2>
+            <button class="btn-close" onclick="closeModals()" aria-label="Close">✕</button>
         </div>
         <div class="modal-body">
-            <div class="admin-bar">
-                <button class="admin-filter active" onclick="filterAdmin('all',this)">All</button>
-                <button class="admin-filter" onclick="filterAdmin('hosts',this)">📹 Hosts</button>
-                <button class="admin-filter canvas-only" onclick="filterAdmin('interested',this)">Interested</button>
-                <button class="admin-filter donations-only" onclick="filterAdmin('paid',this)">✅ Paid</button>
-                <button class="admin-filter donations-only" onclick="filterAdmin('pending',this)">⏳ Pending</button>
-                <button class="admin-filter donations-only" onclick="filterAdmin('pledge',this)">🤝 Pledge</button>
-                <button class="btn-export" onclick="exportCSV()">⬇ Export CSV</button>
+            <form id="admin-signin" class="admin-auth-row" onsubmit="adminSignIn(event)" autocomplete="on">
+                <p style="font-size:12px;color:var(--muted);">Sign in with the organiser account. Residents' full details are only visible after sign-in.</p>
+                <div class="fg"><label for="adm-email">Email</label><input id="adm-email" type="email" autocomplete="username" required></div>
+                <div class="fg"><label for="adm-pw">Password</label><input id="adm-pw" type="password" autocomplete="current-password" required></div>
+                <div class="form-error" id="adm-error" role="alert"></div>
+                <button class="btn-sub blue" type="submit" id="adm-btn">Sign in</button>
+            </form>
+            <div id="admin-panel" class="hidden">
+                <div class="admin-bar">
+                    <button class="admin-filter active" data-filter="all">All</button>
+                    <button class="admin-filter" data-filter="hosts">📹 Hosts</button>
+                    <button class="admin-filter" data-filter="interested" id="adm-f-int">Interested</button>
+                    <span class="donations-only-wrap"></span>
+                    <button class="btn-export" onclick="exportCSV()">⬇ Export CSV</button>
+                    <button class="admin-filter" id="btn-signout" onclick="adminSignOut()">Sign out</button>
+                </div>
+                <div id="legacy-box" class="notice-box hidden"></div>
+                <div style="overflow-x:auto;">
+                    <table class="admin-table">
+                        <thead><tr>
+                            <th>Type</th><th>Name</th><th>Contact</th><th>Address</th><th>Details</th><th>Armed response</th><th>Consent</th><th>Actions</th>
+                        </tr></thead>
+                        <tbody id="admin-tbody"></tbody>
+                    </table>
+                </div>
+                <div id="admin-total" style="text-align:right;margin-top:10px;font-size:12px;color:var(--muted);"></div>
             </div>
-            <div style="overflow-x:auto;">
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Street</th>
-                            <th>Amount</th>
-                            <th>Method</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="admin-tbody"></tbody>
-                </table>
-            </div>
-            <div id="admin-total" style="text-align:right;margin-top:10px;font-size:12px;color:var(--muted);"></div>
         </div>
     </div>
 </div>
 
-<div class="toast" id="toast"></div>
-<div class="admin-secret" onclick="adminTrigger()"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 
 <script>
 'use strict';
 
-const ORGANISER_WHATSAPP   = '27829222648';
-const ORGANISER_EMAIL      = 'dylan.rohleder@gmail.com';
+// ════════════════════════════════════════════════════════════
+//  CONFIG
+// ════════════════════════════════════════════════════════════
 
 // Canvas mode: set to true to restore contribution amounts, the EFT panel
-// and paid/pledged totals. Also uncomment BANK_DETAILS below.
+// and paid/pledged totals. Also uncomment the DONATION block below.
 const DONATIONS_ENABLED = false;
 
-// Uncomment this object when setting DONATIONS_ENABLED to true.
-// It is not inserted into the page unless donations are enabled.
+// Uncomment this block when setting DONATIONS_ENABLED to true.
+// Nothing in it is inserted into the page unless donations are enabled.
 /*
 const BANK_DETAILS = {
     accountName:   'Dylan Rohleder',
@@ -689,16 +775,33 @@ const BANK_DETAILS = {
     branchCode:    '679000',
     accountType:   'Savings Account'
 };
+const DONATION_CONFIG = {
+    emailjsPublicKey:  '-lGj2Ou-ZHA8Hqdf6',
+    emailjsServiceId:  'service_qjoyyal',
+    emailjsTemplateId: 'template_epddnxf'
+};
 */
 
-const EMAILJS_PUBLIC_KEY  = '-lGj2Ou-ZHA8Hqdf6';
-const EMAILJS_SERVICE_ID  = 'service_qjoyyal';
-const EMAILJS_CONTRIB_TPL = 'template_epddnxf';
-const USE_EMAILJS          = true;
+// TODO(Dyl): organiser / data-holder details shown in the privacy notice and About panel.
+// Leave a field empty and the page says "to be confirmed".
+const ORGANISER = {
+    name:    '',   // e.g. 'Dylan Rohleder'
+    contact: ''    // e.g. an email address or phone number for deletion requests
+};
 
-const ADMIN_PASSWORD = 'cctv2026';
+// TODO(Dyl): fill these in. Do NOT guess: empty fields show "to be confirmed" on the page.
+const ABOUT = {
+    cameraHow:     '',   // how the cameras work (type, where footage is stored, who can view it)
+    monitoring:    '',   // who monitors the cameras (name the provider once agreed)
+    costPerCamera: '',   // cost per camera (e.g. 'R2 500 incl. install') once quotes are in
+    learnMoreUrl:  ''    // optional link to more information (leave empty to hide)
+};
 
-const USE_FIREBASE = true;
+const PRIVACY_VERSION = '2026-11';
+
+// Firebase web config (public by design; protection comes from database.rules.json).
+// Add ?local=1 to the page URL to run in local-test mode with Firebase off.
+const USE_FIREBASE = !new URLSearchParams(location.search).has('local');
 const FIREBASE_CONFIG = {
     apiKey:            'AIzaSyD49eFozw1R_ILIzx4yLXlyCWQQ1jOs9SA',
     authDomain:        'university-estate-camera-fund.firebaseapp.com',
@@ -708,6 +811,30 @@ const FIREBASE_CONFIG = {
     messagingSenderId: '302600698349',
     appId:             '1:302600698349:web:4bc8c039e7516470970fe4'
 };
+
+// Named streets inside the University Estate boundary in OpenStreetMap
+// (relation 12622096, residential/service/primary roads; footpaths omitted).
+const UE_STREETS = [
+    'Baris Road', 'Beatty Road', 'Cloete Road', 'Coronation Road', 'Fryde Road',
+    'Garrick Road', 'Hackney Lane', 'Haig Road', 'Kylemore Road', 'Lorraine Avenue',
+    'Philip Kgosana Drive', 'Rhodes Avenue', 'Rhodes Road', 'Ritchie Street',
+    'Selbourne Road', 'Tooting Lane', 'Upper Roodebloem Road', 'Westfort Road'
+];
+
+const UE_CENTER = [-33.93776, 18.45283];
+const MAP_BOUNDS = L.latLngBounds([-33.9455, 18.4430], [-33.9310, 18.4630]);
+
+// Armed-response providers that serve Cape Town's southern suburbs / near University Estate.
+// Anyone else can use "Other".
+const ARMED_PROVIDERS = [
+    { id: 'adt-fidelity',        label: 'ADT / Fidelity ADT' },
+    { id: 'ballistic',           label: 'Ballistic' },
+    { id: 'bidvest-protea-coin', label: 'Bidvest Protea Coin' },
+    { id: 'compass',             label: 'Compass Tactical' },
+    { id: 'premier',             label: 'Premier Security' },
+    { id: 'princeton',           label: 'Princeton Security' }
+];
+const ARMED_STATUS_LABELS = { yes: 'Yes', no: 'No', 'prefer-not': 'Prefer not to say' };
 
 const NET_LABELS = {
     'under5':'< 5 Mbps ⚠️','5-10':'5–10 Mbps',
@@ -721,1082 +848,985 @@ const PLACE_LABELS = {
     'street-facing':'Street-facing','entrance':'Gate / Entrance',
     'corner':'Corner — dual view ⭐','elevated':'Elevated (2nd floor+)','perimeter':'Perimeter wall'
 };
-const PAY_LABELS = { 'eft':'EFT','cash':'Cash' };
 
-// Providers common in Cape Town's southern suburbs / near University Estate.
-// ADT and Fidelity ADT are listed as one option (same group). CSS Tactical,
-// Vision Tactical and Hi-Tech were not included: the first two are Gauteng-based
-// and Hi-Tech's main operation is in Durban. 'Other' covers anyone else.
-const ARMED_PROVIDERS = [
-    { id: 'adt-fidelity',        label: 'ADT / Fidelity ADT' },
-    { id: 'ballistic',           label: 'Ballistic' },
-    { id: 'bidvest-protea-coin', label: 'Bidvest Protea Coin' },
-    { id: 'compass',             label: 'Compass Tactical' },
-    { id: 'premier',             label: 'Premier Security' },
-    { id: 'princeton',           label: 'Princeton Security' }
-];
-const ARMED_STATUS_LABELS = {
-    yes: 'Yes',
-    no: 'No',
-    'prefer-not': 'Prefer not to say'
-};
+// ════════════════════════════════════════════════════════════
+//  HELPERS
+// ════════════════════════════════════════════════════════════
+const $ = id => document.getElementById(id);
+const v = id => $(id)?.value?.trim() || '';
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => (
+    { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+const money = n => 'R' + (Number(n) || 0).toLocaleString('en-ZA');
 
-// ── MAP ─────────────────────────────────────────────────────
+function toast(msg) {
+    const el = $('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => el.classList.remove('show'), 4000);
+}
+
+// SA phone → "+27XXXXXXXXX", or '' if it is not a valid SA number.
+function normalizePhone(raw) {
+    let s = String(raw || '').replace(/[\s\-().]/g, '');
+    if (/^\+27[1-9]\d{8}$/.test(s)) return s;
+    if (/^27[1-9]\d{8}$/.test(s))   return '+' + s;
+    if (/^0[1-9]\d{8}$/.test(s))    return '+27' + s.slice(1);
+    return '';
+}
+const validEmail = e => /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(e) && e.length <= 100;
+
+function randomId() {
+    const a = new Uint8Array(10);
+    crypto.getRandomValues(a);
+    return Array.from(a, b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function sha256Hex(str) {
+    if (window.crypto?.subtle) {
+        const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+        return Array.from(new Uint8Array(buf), b => b.toString(16).padStart(2, '0')).join('');
+    }
+    // Fallback for very old browsers (not cryptographic; only used for duplicate detection).
+    let h = 5381, out = '';
+    for (let r = 0; r < 8; r++) {
+        for (let i = 0; i < str.length; i++) h = ((h * 33) ^ str.charCodeAt(i) ^ r) >>> 0;
+        out += h.toString(16).padStart(8, '0');
+    }
+    return out;
+}
+
+// Deterministic "blur": nudges a point up to ~15 m so the public map never shows the exact house.
+function generalise(lat, lng, id) {
+    let h = 2166136261;
+    for (const ch of String(id)) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619) >>> 0; }
+    const a = ((h & 0xffff) / 0xffff) * 2 - 1;
+    const b = (((h >>> 16) & 0xffff) / 0xffff) * 2 - 1;
+    return {
+        lat: +(lat + (a * 15) / 111320).toFixed(5),
+        lng: +(lng + (b * 15) / 92300).toFixed(5)
+    };
+}
+
+const armedProviderLabel = (id, other) =>
+    id === 'other' ? (other ? 'Other: ' + other : 'Other')
+                   : (ARMED_PROVIDERS.find(p => p.id === id)?.label || id || '');
+function armedDisplay(p) {
+    if (!p.armedResponse) return '—';
+    if (p.armedResponse !== 'yes') return ARMED_STATUS_LABELS[p.armedResponse] || p.armedResponse;
+    return armedProviderLabel(p.armedProvider, p.armedProviderOther) || 'Yes';
+}
+const clean = o => Object.fromEntries(Object.entries(o).filter(([, x]) => x !== undefined && x !== ''));
+
+// ════════════════════════════════════════════════════════════
+//  STATE + MAP
+// ════════════════════════════════════════════════════════════
+const publicPins  = new Map();   // id → public record (what everyone sees)
+const privatePins = new Map();   // id → full record (organiser only, or local test mode)
+const markers = {}, circles = {};
+let pendingLoc = null, tempMarker = null, chosenType = null;
+let db = null, auth = null;
+let LOCAL = !USE_FIREBASE;       // true = Firebase off, data lives in this browser only
+let adminUser = null, adminVerified = false, adminFilter = 'all';
+let privateListeners = false;
+
 const map = L.map('map', {
-    center: [-33.93823, 18.45270],
-    zoom: 17,
-    zoomControl: true
+    center: UE_CENTER, zoom: 17, minZoom: 15, maxZoom: 19,
+    maxBounds: MAP_BOUNDS, maxBoundsViscosity: 1.0, zoomControl: true
 });
-
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap contributors',
-    maxZoom: 19
+    attribution: '© OpenStreetMap contributors', maxZoom: 19
 }).addTo(map);
 
 function makeIcon(type) {
-    const col = type === 'host' ? '#00c853' : '#2196f3';
-    const ico = type === 'host' ? '📹' : '💰';
+    const col = type === 'host' ? '#00c853' : type === 'new' ? '#ffd600' : '#2196f3';
+    const ico = type === 'host' ? '📹' : type === 'new' ? '📍' : (DONATIONS_ENABLED ? '💰' : '🤝');
     return L.divIcon({
         className: '',
-        html: `<div style="
-            background:${col};width:34px;height:34px;
-            border-radius:50% 50% 50% 0;transform:rotate(-45deg);
-            border:3px solid white;box-shadow:0 3px 10px rgba(0,0,0,0.45);
-            display:flex;align-items:center;justify-content:center;">
-            <span style="transform:rotate(45deg);font-size:13px;">${ico}</span>
-        </div>`,
-        iconSize:    [34, 34],
-        iconAnchor:  [17, 34],
-        popupAnchor: [0, -37]
+        html: `<div style="background:${col};width:34px;height:34px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:3px solid white;box-shadow:0 3px 10px rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;"><span style="transform:rotate(45deg);font-size:13px;">${ico}</span></div>`,
+        iconSize: [34, 34], iconAnchor: [17, 34], popupAnchor: [0, -37]
     });
 }
 
-// ── STATE ───────────────────────────────────────────────────
-let pins = USE_FIREBASE ? [] : JSON.parse(localStorage.getItem('ue_cctv_pins') || '[]');
-let markers       = {};
-let circles       = {};
-let pendingLoc    = null;
-let chosenType    = null;
-let currentPayPin = null;
-let adminClicks   = 0;
-let adminFilter_  = 'all';
-let db            = null;
+// ════════════════════════════════════════════════════════════
+//  STORAGE LAYER  (Firebase when available, else localStorage)
+// ════════════════════════════════════════════════════════════
+const LS_PUB = 'ue_cctv_public_v2', LS_PRIV = 'ue_cctv_private_v2';
+const lsRead  = k => { try { return JSON.parse(localStorage.getItem(k) || '{}'); } catch (e) { return {}; } };
+const lsWrite = (k, o) => localStorage.setItem(k, JSON.stringify(o));
 
-// ── FIREBASE ─────────────────────────────────────────────────
-if (USE_FIREBASE) {
-    try {
-        firebase.initializeApp(FIREBASE_CONFIG);
-        db = firebase.database();
-    } catch (e) {
-        console.warn('Firebase init failed — using localStorage:', e);
-    }
+function showBanner(msg) {
+    const b = $('mode-banner');
+    b.textContent = msg;
+    b.classList.toggle('hidden', !msg);
 }
 
-// ── MAP CLICK ────────────────────────────────────────────────
-map.on('click', e => {
-    pendingLoc = e.latlng;
-    const txt = `${e.latlng.lat.toFixed(5)}, ${e.latlng.lng.toFixed(5)}`;
-    document.getElementById('loc-host-txt').textContent    = `📍 Pinned: ${txt}`;
-    document.getElementById('loc-contrib-txt').textContent = `📍 Pinned: ${txt}`;
-    openAddModal();
-});
-
-// ── MODAL CONTROLS ───────────────────────────────────────────
-function openAddModal() {
-    resetAddModal();
-    document.getElementById('modal-add').classList.add('active');
-}
-
-function closeModal() {
-    document.getElementById('modal-add').classList.remove('active');
-    pendingLoc = null;
-    chosenType = null;
-}
-
-function resetAddModal() {
-    showStep('type');
-    chosenType = null;
-    document.getElementById('opt-host').classList.remove('sel-host','sel-contrib');
-    document.getElementById('opt-contrib').classList.remove('sel-host','sel-contrib');
-    const btn = document.getElementById('btn-next');
-    btn.disabled  = true;
-    btn.className = 'btn-sub green';
-}
-
-function showStep(s) {
-    ['type','host','contributor'].forEach(id =>
-        document.getElementById('step-' + id).classList.toggle('hidden', id !== s)
-    );
-}
-
-function selectType(t) {
-    chosenType = t;
-    document.getElementById('opt-host').classList.remove('sel-host','sel-contrib');
-    document.getElementById('opt-contrib').classList.remove('sel-host','sel-contrib');
-    document.getElementById(t === 'host' ? 'opt-host' : 'opt-contrib')
-        .classList.add(t === 'host' ? 'sel-host' : 'sel-contrib');
-    const btn     = document.getElementById('btn-next');
-    btn.disabled  = false;
-    btn.className = 'btn-sub ' + (t === 'host' ? 'green' : 'blue');
-}
-
-function goToForm() {
-    if (!chosenType) return;
-    if (!pendingLoc) {
-        closeModal();
-        toast('⚠️ Click your location on the map first — the form will open automatically.');
-        return;
-    }
-    showStep(chosenType);
-}
-
-function backToType() { showStep('type'); }
-
-function switchTab(name, el) {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    el.classList.add('active');
-    document.getElementById('tab-entries').classList.toggle('hidden',  name !== 'entries');
-    document.getElementById('tab-priority').classList.toggle('hidden', name !== 'priority');
-}
-
-// ── SUBMIT HOST ──────────────────────────────────────────────
-function submitHostPin() {
-    if (!pendingLoc) { toast('⚠️ No location selected.'); return; }
-
-    const fn    = v('h-fn'), ln    = v('h-ln'),
-          addr  = v('h-addr'), net = v('h-net'),
-          bak   = v('h-bak'), place = v('h-place');
-
-    if (!fn || !ln) { toast('⚠️ Please enter your name');            return; }
-    if (!addr)      { toast('⚠️ Please enter your street address');  return; }
-    if (!net)       { toast('⚠️ Please select your internet speed'); return; }
-    if (!bak)       { toast('⚠️ Please select backup power option'); return; }
-    if (!place)     { toast('⚠️ Please select camera placement');    return; }
-    const armed = validateArmed('h');
-    if (!armed) return;
-
-    const pin = {
-        id:        Date.now().toString(),
-        type:      'host',
-        lat:       pendingLoc.lat,
-        lng:       pendingLoc.lng,
-        timestamp: new Date().toISOString(),
-        fn, ln, phone: v('h-ph'), email: v('h-em'),
-        address: addr, street: streetFrom(addr),
-        internet: net, backup: bak,
-        placement: place, wifi: v('h-wifi'), notes: v('h-notes'),
-        ...armed
-    };
-
-    savePin(pin);
-    closeModal();
-    clearHostForm();
-    toast('✅ Camera host registered! Your 30m coverage ring is visible on the map.');
-}
-
-// ── SUBMIT CONTRIBUTOR ───────────────────────────────────────
-function submitContribPin() {
-    if (!pendingLoc) { toast('⚠️ No location selected.'); return; }
-
-    const fn  = v('c-fn'), addr = v('c-addr'),
-          amt = parseFloat(v('c-amt'));
-
-    if (!fn)           { toast('⚠️ Please enter your name');             return; }
-    if (!addr)         { toast('⚠️ Please enter your street address');   return; }
-    if (DONATIONS_ENABLED && (!amt || amt<1)) {
-        toast('⚠️ Please enter a contribution amount');
-        return;
-    }
-    const armed = validateArmed('c');
-    if (!armed) return;
-
-    const pin = {
-        id:        Date.now().toString(),
-        type:      'contributor',
-        lat:       pendingLoc.lat,
-        lng:       pendingLoc.lng,
-        timestamp: new Date().toISOString(),
-        status:    DONATIONS_ENABLED ? 'pending' : 'interest',
-        fn, ln: v('c-ln'), phone: v('c-ph'), email: v('c-em'),
-        address: addr, street: streetFrom(addr),
-        notes: v('c-notes'),
-        ...armed
-    };
-    if (DONATIONS_ENABLED) {
-        pin.amount    = amt;
-        pin.frequency = 'once';
-        pin.payment   = 'eft';
-    }
-
-    savePin(pin);
-    closeModal();
-    clearContribForm();
-    if (DONATIONS_ENABLED) openPaymentModal(pin);
-    else toast('✅ Thank you — your interest has been recorded. We\'ll be in touch.');
-}
-
-// ── HELPERS ──────────────────────────────────────────────────
-const v = id => document.getElementById(id)?.value?.trim() || '';
-
-function streetFrom(addr) {
-    return addr.replace(/^\d+\s*/,'').split(',')[0].trim().split(' ').slice(0,4).join(' ');
-}
-
-function radioVal(name) {
-    return document.querySelector(`input[name="${name}"]:checked`)?.value || '';
-}
-
-function fillArmedProviderSelects() {
-    const opts = '<option value="">Select provider…</option>' +
-        ARMED_PROVIDERS.map(p => `<option value="${p.id}">${p.label}</option>`).join('') +
-        '<option value="other">Other</option>';
-    ['h-armed-provider','c-armed-provider'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.innerHTML = opts;
-    });
-}
-
-function toggleArmedFields(prefix) {
-    const yes = radioVal(prefix + '-armed') === 'yes';
-    document.getElementById(prefix + '-armed-provider-wrap')?.classList.toggle('hidden', !yes);
-    if (!yes) {
-        const sel = document.getElementById(prefix + '-armed-provider');
-        const other = document.getElementById(prefix + '-armed-other');
-        if (sel) sel.value = '';
-        if (other) { other.value = ''; other.classList.add('hidden'); }
-    }
-}
-
-function toggleArmedOther(prefix) {
-    const isOther = v(prefix + '-armed-provider') === 'other';
-    const other = document.getElementById(prefix + '-armed-other');
-    if (!other) return;
-    other.classList.toggle('hidden', !isOther);
-    if (!isOther) other.value = '';
-}
-
-function collectArmed(prefix) {
-    const armedResponse = radioVal(prefix + '-armed');
-    const armedProvider = armedResponse === 'yes' ? v(prefix + '-armed-provider') : '';
-    const armedProviderOther = armedProvider === 'other' ? v(prefix + '-armed-other') : '';
-    return { armedResponse, armedProvider, armedProviderOther };
-}
-
-function validateArmed(prefix) {
-    const armed = collectArmed(prefix);
-    if (!armed.armedResponse) {
-        toast('⚠️ Please say whether you have armed response');
-        return null;
-    }
-    if (armed.armedResponse === 'yes' && !armed.armedProvider) {
-        toast('⚠️ Please select your armed response provider');
-        return null;
-    }
-    if (armed.armedProvider === 'other' && !armed.armedProviderOther) {
-        toast('⚠️ Please enter the provider name');
-        return null;
-    }
-    return armed;
-}
-
-function armedProviderLabel(id, other) {
-    if (id === 'other') return other ? `Other: ${other}` : 'Other';
-    return ARMED_PROVIDERS.find(p => p.id === id)?.label || id || '';
-}
-
-function armedDisplay(pin) {
-    if (!pin.armedResponse) return '—';
-    if (pin.armedResponse !== 'yes') return ARMED_STATUS_LABELS[pin.armedResponse] || pin.armedResponse;
-    return armedProviderLabel(pin.armedProvider, pin.armedProviderOther) || 'Yes';
-}
-
-function resetArmedFields(prefix) {
-    document.querySelectorAll(`input[name="${prefix}-armed"]`).forEach(r => { r.checked = false; });
-    const sel = document.getElementById(prefix + '-armed-provider');
-    const other = document.getElementById(prefix + '-armed-other');
-    if (sel) sel.selectedIndex = 0;
-    if (other) { other.value = ''; other.classList.add('hidden'); }
-    document.getElementById(prefix + '-armed-provider-wrap')?.classList.add('hidden');
-}
-
-function clearHostForm() {
-    ['h-fn','h-ln','h-ph','h-em','h-addr','h-notes'].forEach(id =>
-        document.getElementById(id).value = '');
-    ['h-net','h-bak','h-place','h-wifi'].forEach(id =>
-        document.getElementById(id).selectedIndex = 0);
-    resetArmedFields('h');
-}
-
-function clearContribForm() {
-    ['c-fn','c-ln','c-ph','c-em','c-addr','c-amt','c-notes'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.value = '';
-    });
-    resetArmedFields('c');
-}
-
-// ── SAVE & LOAD ──────────────────────────────────────────────
-function savePin(pin) {
-    if (pins.find(p => p.id === pin.id)) return;
-    pins.push(pin);
-    renderPin(pin);
-    updateUI();
-    if (USE_FIREBASE && db) {
-        db.ref('pins/' + pin.id).set(pin)
-            .catch(e => console.warn('Firebase save failed:', e));
+function initBackend() {
+    if (USE_FIREBASE) {
+        try {
+            if (typeof firebase === 'undefined') throw new Error('Firebase SDK not loaded');
+            firebase.initializeApp(FIREBASE_CONFIG);
+            db = firebase.database();
+            auth = firebase.auth();
+            auth.onAuthStateChanged(u => {
+                if (u && !u.isAnonymous) { adminUser = u; verifyAdmin(false); }
+                else if (!u) { adminUser = null; }
+            });
+        } catch (e) {
+            console.warn('Firebase unavailable — local mode:', e);
+            LOCAL = true; db = null; auth = null;
+            showBanner('Offline mode: Firebase could not be reached, so entries are saved on this device only and are not shared.');
+        }
     } else {
-        localStorage.setItem('ue_cctv_pins', JSON.stringify(pins));
+        showBanner('Local test mode: nothing is sent anywhere; entries stay in this browser.');
     }
-}
-
-function loadPins() {
-    if (USE_FIREBASE && db) {
-        db.ref('pins').on('child_added', snap => {
-            const pin = snap.val();
-            if (!pins.find(p => p.id === pin.id)) {
-                pins.push(pin);
-                renderPin(pin);
-                updateUI();
-            }
-        });
-        db.ref('pins').on('child_changed', snap => {
-            const pin = snap.val();
-            const idx = pins.findIndex(p => p.id === pin.id);
-            if (idx > -1) {
-                pins[idx] = pin;
-                markers[pin.id]?.setPopupContent(buildPopup(pin));
-                updateUI();
-            }
-        });
-        db.ref('pins').on('child_removed', snap => {
-            const id = snap.val().id;
-            const idx = pins.findIndex(p => p.id === id);
-            if (idx > -1) {
-                pins.splice(idx, 1);
-                if (markers[id]) { map.removeLayer(markers[id]); delete markers[id]; }
-                if (circles[id]) { map.removeLayer(circles[id]); delete circles[id]; }
-                updateUI();
-            }
-        });
-    } else {
-        pins.forEach(renderPin);
+    if (LOCAL) {
+        Object.entries(lsRead(LS_PUB)).forEach(([id, p]) => publicPins.set(id, { ...p, id }));
+        Object.entries(lsRead(LS_PRIV)).forEach(([id, p]) => privatePins.set(id, { ...p, id }));
+        publicPins.forEach(renderPin);
         updateUI();
+    } else {
+        listenPublic();
     }
 }
 
-// ── RENDER PIN ───────────────────────────────────────────────
+function listenPublic() {
+    const ref = db.ref('pins_public');
+    ref.on('child_added', snap => upsertPublic(snap.key, snap.val()));
+    ref.on('child_changed', snap => upsertPublic(snap.key, snap.val()));
+    ref.on('child_removed', snap => removePublic(snap.key));
+    ref.once('value').catch(e => {
+        console.warn('Could not read public pins', e);
+        showBanner('Could not load the map data right now. Please refresh in a moment.');
+    });
+}
+
+function upsertPublic(id, data) {
+    if (!data) return;
+    const had = publicPins.has(id);
+    publicPins.set(id, { ...data, id });
+    if (had) { clearPinLayers(id); }
+    renderPin(publicPins.get(id));
+    updateUI();
+}
+function removePublic(id) {
+    publicPins.delete(id);
+    clearPinLayers(id);
+    updateUI();
+}
+function clearPinLayers(id) {
+    if (markers[id]) { map.removeLayer(markers[id]); delete markers[id]; }
+    if (circles[id]) { map.removeLayer(circles[id]); delete circles[id]; }
+}
+
+// Build the two records (public / private) from a validated form.
+async function buildRecords(f) {
+    const id = randomId();
+    const exact = f.latlng;
+    const g = generalise(exact.lat, exact.lng, id);
+    const ts = LOCAL ? Date.now() : firebase.database.ServerValue.TIMESTAMP;
+    const [emailHash, phoneHash] = await Promise.all([sha256Hex(f.email), sha256Hex(f.phone)]);
+    const isHost = f.type === 'host';
+
+    const pub = clean({
+        type: f.type, fn: f.fn, street: f.street, lat: g.lat, lng: g.lng, ts,
+        fast: isHost ? ['10-25', '25-50', '50+'].includes(f.internet) : undefined,
+        backup: isHost ? (f.backup !== 'none') : undefined,
+        corner: isHost ? (f.placement === 'corner') : undefined,
+        amount: DONATIONS_ENABLED && !isHost ? f.amount : undefined,
+        status: DONATIONS_ENABLED && !isHost ? 'pending' : undefined
+    });
+    const priv = clean({
+        type: f.type, fn: f.fn, ln: f.ln, phone: f.phone, email: f.email,
+        address: `${f.num} ${f.street}`, street: f.street,
+        lat: +exact.lat.toFixed(6), lng: +exact.lng.toFixed(6), ts,
+        emailHash, phoneHash,
+        consent: { accepted: true, ts, version: PRIVACY_VERSION },
+        armedResponse: f.armedResponse, armedProvider: f.armedProvider,
+        armedProviderOther: f.armedProviderOther,
+        internet: f.internet, backup: f.backup, placement: f.placement, wifi: f.wifi,
+        notes: f.notes,
+        amount: DONATIONS_ENABLED && !isHost ? f.amount : undefined,
+        status: DONATIONS_ENABLED && !isHost ? 'pending' : undefined
+    });
+    return { id, pub, priv, emailHash, phoneHash };
+}
+
+// Resolves only when the write has really succeeded; throws a friendly Error otherwise.
+async function savePin(rec) {
+    if (LOCAL) {
+        const dup = [...privatePins.values()].find(p => p.emailHash === rec.emailHash || p.phoneHash === rec.phoneHash);
+        if (dup && !confirm('This email or phone number already looks registered. Register again anyway?')) {
+            throw Object.assign(new Error('cancelled'), { silent: true });
+        }
+        const pub = lsRead(LS_PUB), priv = lsRead(LS_PRIV);
+        pub[rec.id] = rec.pub; priv[rec.id] = rec.priv;
+        lsWrite(LS_PUB, pub); lsWrite(LS_PRIV, priv);
+        publicPins.set(rec.id, { ...rec.pub, id: rec.id });
+        privatePins.set(rec.id, { ...rec.priv, id: rec.id });
+        renderPin(publicPins.get(rec.id));
+        updateUI();
+        return;
+    }
+    try {
+        if (!auth.currentUser) await auth.signInAnonymously();
+        const updates = {};
+        updates['pins_public/' + rec.id]  = rec.pub;
+        updates['pins_private/' + rec.id] = rec.priv;
+        updates['contact_index/e' + rec.emailHash] = rec.id;
+        updates['contact_index/p' + rec.phoneHash] = rec.id;
+        await db.ref().update(updates);
+    } catch (e) {
+        console.warn('Save failed', e);
+        if (e.code === 'PERMISSION_DENIED' || /permission_denied/i.test(e.message || '')) {
+            throw new Error('We could not save this. That email or phone number may already be registered. If this is a mistake, please contact the organiser.');
+        }
+        if (e.code === 'auth/operation-not-allowed' || e.code === 'auth/admin-restricted-operation') {
+            throw new Error('Sign-ups are temporarily unavailable. Please try again later.');
+        }
+        throw new Error('We could not save your details — please check your connection and try again.');
+    }
+}
+
+// ════════════════════════════════════════════════════════════
+//  PUBLIC RENDERING  (everything user-supplied goes through esc())
+// ════════════════════════════════════════════════════════════
+const contribWord = () => DONATIONS_ENABLED ? 'Contributor' : 'Interested';
+
 function renderPin(pin) {
+    if (!pin || typeof pin.lat !== 'number' || typeof pin.lng !== 'number') return;
     const isHost = pin.type === 'host';
-    const col    = isHost ? '#00c853' : '#2196f3';
-
-    const circle = L.circle([pin.lat, pin.lng], {
-        radius:      30,
-        color:       col,
-        fillColor:   col,
-        fillOpacity: isHost ? 0.13 : 0.07,
-        weight:      isHost ? 2.5 : 1.5,
-        dashArray:   isHost ? '6 4' : '3 8',
-        interactive: false
+    const col = isHost ? '#00c853' : '#2196f3';
+    circles[pin.id] = L.circle([pin.lat, pin.lng], {
+        radius: 30, color: col, fillColor: col,
+        fillOpacity: isHost ? 0.13 : 0.07, weight: isHost ? 2.5 : 1.5,
+        dashArray: isHost ? '6 4' : '3 8', interactive: false
     }).addTo(map);
-    circles[pin.id] = circle;
-
-    const marker = L.marker([pin.lat, pin.lng], { icon: makeIcon(pin.type) })
+    markers[pin.id] = L.marker([pin.lat, pin.lng], { icon: makeIcon(pin.type), keyboard: true, title: (pin.fn || '') + ' — ' + (pin.street || '') })
         .bindPopup(buildPopup(pin), { maxWidth: 270 })
         .addTo(map);
-    markers[pin.id] = marker;
 }
 
-// ── BUILD POPUP ──────────────────────────────────────────────
 function buildPopup(pin) {
-    const col   = pin.type === 'host' ? '#00c853' : '#2196f3';
-    const label = pin.type === 'host' ? '📹 Camera Host' : (DONATIONS_ENABLED ? '💰 Contributor' : '🤝 Interested');
-    const name  = `${pin.fn || ''} ${pin.ln ? pin.ln.charAt(0) + '.' : ''}`.trim();
-
-    let rows = `<div class="pu-row"><i class="fas fa-home"></i><span>${pin.address || '—'}</span></div>`;
-
-    if (pin.type === 'host') {
-        rows += `
-        <div class="pu-row"><i class="fas fa-wifi"></i>
-            <span>Internet: <strong>${NET_LABELS[pin.internet] || pin.internet || '—'}</strong></span></div>
-        <div class="pu-row"><i class="fas fa-bolt"></i>
-            <span>Backup: <strong>${BAK_LABELS[pin.backup] || pin.backup || '—'}</strong></span></div>
-        <div class="pu-row"><i class="fas fa-map-marker-alt"></i>
-            <span>Camera: <strong>${PLACE_LABELS[pin.placement] || pin.placement || '—'}</strong></span></div>
-        ${pin.wifi ? `<div class="pu-row"><i class="fas fa-broadcast-tower"></i>
-            <span>WiFi on-site: <strong>${pin.wifi}</strong></span></div>` : ''}
-        ${pin.notes ? `<div class="pu-row" style="font-style:italic;color:#8899aa;">"${pin.notes}"</div>` : ''}
-        <div class="pu-row" style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.08);">
-            <i class="fas fa-circle" style="color:#00c853;font-size:8px;margin-top:3px;"></i>
-            <span style="color:#556677;font-size:10px;">30m camera coverage ring on map</span>
-        </div>`;
-    } else if (!DONATIONS_ENABLED) {
-        rows += `
-        <div class="pu-row"><i class="fas fa-hand-paper"></i>
-            <span><strong>Registered interest in contributing</strong></span></div>
-        ${pin.notes ? `<div class="pu-row" style="font-style:italic;color:#8899aa;">"${pin.notes}"</div>` : ''}
-        <div class="pu-row" style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.08);">
-            <i class="fas fa-circle" style="color:#2196f3;font-size:8px;margin-top:3px;"></i>
-            <span style="color:#556677;font-size:10px;">30m area ring on map</span>
-        </div>`;
+    const isHost = pin.type === 'host';
+    const col = isHost ? '#00c853' : '#2196f3';
+    const label = isHost ? '📹 Camera Host' : (DONATIONS_ENABLED ? '💰 Contributor' : '🤝 Interested');
+    let rows = `<div class="pu-row"><i class="fas fa-road" aria-hidden="true"></i><span>${esc(pin.street || '—')}</span></div>`;
+    if (isHost) {
+        const badges = [];
+        if (pin.fast)   badges.push('Fast internet');
+        if (pin.backup) badges.push('Backup power');
+        if (pin.corner) badges.push('Corner plot ⭐');
+        if (badges.length) rows += `<div class="pu-row"><i class="fas fa-check" aria-hidden="true"></i><span>${badges.map(esc).join(' · ')}</span></div>`;
+    } else if (DONATIONS_ENABLED && pin.amount) {
+        const st = { paid: '✅ Paid', pending: '⏳ EFT pending', pledge: '🤝 Pledge only' }[pin.status] || '';
+        rows += `<div class="pu-row"><i class="fas fa-coins" aria-hidden="true"></i><span>Once-off: <strong style="color:#ffd600">${esc(money(pin.amount))}</strong> ${esc(st)}</span></div>`;
     } else {
-        const stCol = { paid:'#00c853', pending:'#ffd600', pledge:'#8899aa' };
-        const stLbl = { paid:'✅ Paid', pending:'⏳ EFT pending', pledge:'🤝 Pledge only' };
-        const st    = pin.status || 'pending';
-        rows += `
-        <div class="pu-row"><i class="fas fa-coins"></i>
-            <span>Once-off: <strong style="color:#ffd600">R${(pin.amount || 0).toLocaleString()}</strong></span></div>
-        <div class="pu-row"><i class="fas fa-university"></i>
-            <span>Payment: <strong>EFT</strong></span></div>
-        <div class="pu-row"><i class="fas fa-circle" style="color:${stCol[st]||'#8899aa'};font-size:8px;margin-top:3px;"></i>
-            <span><strong style="color:${stCol[st]||'#8899aa'}">${stLbl[st] || st}</strong></span></div>
-        ${pin.notes ? `<div class="pu-row" style="font-style:italic;color:#8899aa;">"${pin.notes}"</div>` : ''}
-        <div class="pu-row" style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.08);">
-            <i class="fas fa-circle" style="color:#2196f3;font-size:8px;margin-top:3px;"></i>
-            <span style="color:#556677;font-size:10px;">30m area ring on map</span>
-        </div>`;
+        rows += `<div class="pu-row"><i class="fas fa-hand-paper" aria-hidden="true"></i><span><strong>Registered interest in contributing</strong></span></div>`;
     }
-
-    return `
-        <span class="pu-badge" style="background:${col}22;color:${col};border:1px solid ${col}44;">${label}</span>
-        <div class="pu-name">${name}</div>
-        ${rows}
-        <div class="pu-date">Added ${new Date(pin.timestamp).toLocaleDateString('en-ZA')}</div>`;
+    rows += `<div class="pu-row" style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.08);"><i class="fas fa-circle" style="color:${col};font-size:8px;margin-top:3px;" aria-hidden="true"></i><span style="color:#8899aa;font-size:10px;">Approximate location · 30m ring</span></div>`;
+    const date = pin.ts ? new Date(pin.ts).toLocaleDateString('en-ZA') : '';
+    return `<span class="pu-badge" style="background:${col}22;color:${col};border:1px solid ${col}44;">${label}</span>
+        <div class="pu-name">${esc(pin.fn || '')}</div>${rows}
+        ${date ? `<div class="pu-date">Added ${esc(date)}</div>` : ''}`;
 }
 
-// ── UPDATE UI ────────────────────────────────────────────────
-function updateUI() {
-    updateStats();
-    renderEntriesList();
-    renderPriorityList();
-}
+function updateUI() { updateStats(); renderEntriesList(); renderPriorityList(); }
 
 function updateStats() {
-    const hosts    = pins.filter(p => p.type === 'host');
-    const contribs = pins.filter(p => p.type === 'contributor');
-    const pledged  = contribs.reduce((s,p) => s + (p.amount || 0), 0);
-    const paid     = contribs.filter(p => p.status === 'paid').reduce((s,p) => s + (p.amount || 0), 0);
-    const backup   = hosts.filter(p => p.backup && p.backup !== 'none').length;
-    const fast     = hosts.filter(p => ['10-25','25-50','50+'].includes(p.internet)).length;
-    const streets  = new Set(pins.map(p => p.street).filter(Boolean)).size;
-    const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
-    set('s-hosts',   hosts.length);
-    set('s-contribs',contribs.length);
+    const all      = [...publicPins.values()];
+    const hosts    = all.filter(p => p.type === 'host');
+    const contribs = all.filter(p => p.type === 'contributor');
+    const set = (id, val) => { const el = $(id); if (el) el.textContent = val; };
+    set('s-hosts',    hosts.length);
+    set('s-contribs', contribs.length);
+    set('s-backup',   hosts.filter(p => p.backup).length);
+    set('s-fast',     hosts.filter(p => p.fast).length);
+    set('s-streets',  new Set(all.map(p => p.street).filter(Boolean)).size);
     if (DONATIONS_ENABLED) {
-        set('s-funds',   'R' + pledged.toLocaleString());
-        set('s-paid',    'R' + paid.toLocaleString());
+        set('s-funds', money(contribs.reduce((s, p) => s + (p.amount || 0), 0)));
+        set('s-paid',  money(contribs.filter(p => p.status === 'paid').reduce((s, p) => s + (p.amount || 0), 0)));
     }
-    set('s-backup',  backup);
-    set('s-fast',    fast);
-    set('s-streets', streets);
+    updateArmedStats();
+}
 
-    const signedUp = pins.filter(p => p.armedResponse === 'yes');
-    set('s-armed', signedUp.length);
-    const summary = document.getElementById('armed-summary');
-    if (summary) {
-        const counts = {};
-        signedUp.forEach(p => {
-            const label = armedProviderLabel(p.armedProvider, p.armedProviderOther) || 'Unspecified';
-            counts[label] = (counts[label] || 0) + 1;
-        });
-        const parts = Object.entries(counts).sort((a,b) => b[1]-a[1] || a[0].localeCompare(b[0]));
-        if (parts.length) {
-            summary.innerHTML = 'Providers: ' + parts.map(([name, n]) =>
-                `<strong>${escapeHtml(name)}</strong> ${n}`
-            ).join(' · ');
-            summary.classList.add('show');
-        } else {
-            summary.textContent = '';
-            summary.classList.remove('show');
-        }
-    }
+// Armed-response numbers come from private data, so they only appear for the signed-in organiser.
+function updateArmedStats() {
+    const show = LOCAL || adminVerified;
+    $('stat-armed').classList.toggle('hidden', !show);
+    const box = $('armed-summary');
+    if (!show) { box.textContent = ''; box.classList.remove('show'); return; }
+    const signed = [...privatePins.values()].filter(p => p.armedResponse === 'yes');
+    $('s-armed').textContent = signed.length;
+    const counts = {};
+    signed.forEach(p => {
+        const l = armedProviderLabel(p.armedProvider, p.armedProviderOther) || 'Unspecified';
+        counts[l] = (counts[l] || 0) + 1;
+    });
+    const parts = Object.entries(counts).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+    if (parts.length) {
+        box.innerHTML = 'Providers: ' + parts.map(([n, c]) => `<strong>${esc(n)}</strong> ${c}`).join(' · ');
+        box.classList.add('show');
+    } else { box.textContent = ''; box.classList.remove('show'); }
 }
 
 function renderEntriesList() {
-    const empty = document.getElementById('entries-empty');
-    const list  = document.getElementById('entries-list');
-    if (!pins.length) { empty.style.display = ''; list.innerHTML = ''; return; }
-    empty.style.display = 'none';
-
-    list.innerHTML = [...pins]
-        .sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp))
-        .map(pin => {
-            const isHost = pin.type === 'host';
-            const init   = `${pin.fn?.charAt(0)||''}${pin.ln?.charAt(0)||''}`;
-            let badges   = '';
-            if (isHost) {
-                if (['10-25','25-50','50+'].includes(pin.internet)) badges += `<span class="badge bg-green">Fast Internet</span>`;
-                if (pin.backup && pin.backup !== 'none')            badges += `<span class="badge bg-gold">Backup Power</span>`;
-                if (pin.placement === 'corner')                     badges += `<span class="badge bg-blue">Corner Plot ⭐</span>`;
-            } else if (!DONATIONS_ENABLED) {
-                badges += `<span class="badge bg-blue">Interested</span>`;
-            } else {
-                const stClass = { paid:'bg-green', pending:'bg-gold', pledge:'bg-red' };
-                const stLabel = { paid:'✅ Paid', pending:'⏳ Pending', pledge:'🤝 Pledge' };
-                const st = pin.status || 'pending';
-                badges += `<span class="badge bg-gold">R${(pin.amount||0).toLocaleString()}</span>`;
-                badges += `<span class="badge ${stClass[st]||''}">${stLabel[st]||st}</span>`;
-            }
-            return `
-            <div class="entry-card" onclick="focusPin('${pin.id}')">
-                <div class="ec-header">
-                    <div class="avatar ${isHost ? 'av-host' : 'av-contrib'}">${init}</div>
-                    <div>
-                        <div class="ec-name">${pin.fn||''} ${pin.ln ? pin.ln.charAt(0)+'.' : ''}</div>
-                        <div class="ec-street">${pin.street || pin.address?.split(',')[0] || '—'}</div>
-                    </div>
-                    <div style="margin-left:auto;font-size:14px;">${isHost ? '📹' : (DONATIONS_ENABLED ? '💰' : '🤝')}</div>
-                </div>
-                <div class="badges">${badges}</div>
-            </div>`;
-        }).join('');
+    const empty = $('entries-empty'), list = $('entries-list');
+    const all = [...publicPins.values()].sort((a, b) => (b.ts || 0) - (a.ts || 0));
+    empty.style.display = all.length ? 'none' : '';
+    list.innerHTML = all.map(pin => {
+        const isHost = pin.type === 'host';
+        let badges = '';
+        if (isHost) {
+            if (pin.fast)   badges += '<span class="badge bg-green">Fast Internet</span>';
+            if (pin.backup) badges += '<span class="badge bg-gold">Backup Power</span>';
+            if (pin.corner) badges += '<span class="badge bg-blue">Corner Plot ⭐</span>';
+        } else if (DONATIONS_ENABLED && pin.amount) {
+            badges += `<span class="badge bg-gold">${esc(money(pin.amount))}</span>`;
+        } else {
+            badges += '<span class="badge bg-blue">Interested</span>';
+        }
+        return `<div class="entry-card" role="button" tabindex="0" data-id="${esc(pin.id)}">
+            <div class="ec-header">
+                <div class="avatar ${isHost ? 'av-host' : 'av-contrib'}" aria-hidden="true">${esc((pin.fn || '?').charAt(0).toUpperCase())}</div>
+                <div><div class="ec-name">${esc(pin.fn || '')}</div><div class="ec-street">${esc(pin.street || '—')}</div></div>
+                <div style="margin-left:auto;font-size:14px;" aria-hidden="true">${isHost ? '📹' : (DONATIONS_ENABLED ? '💰' : '🤝')}</div>
+            </div>
+            <div class="badges">${badges}</div>
+        </div>`;
+    }).join('');
 }
 
 function renderPriorityList() {
-    const el       = document.getElementById('priority-list');
-    const contribs = pins.filter(p => p.type === 'contributor');
-    if (!contribs.length && !pins.some(p => p.type === 'host')) {
-        el.innerHTML = DONATIONS_ENABLED
-            ? '<div class="empty-state"><i class="fas fa-trophy"></i>No contributions yet</div>'
-            : '<div class="empty-state"><i class="fas fa-trophy"></i>No interest registered yet</div>';
+    const el = $('priority-list');
+    const data = {};
+    publicPins.forEach(p => {
+        const s = p.street || 'Unknown';
+        data[s] = data[s] || { total: 0, count: 0, hosts: 0 };
+        if (p.type === 'host') data[s].hosts++;
+        else { data[s].count++; data[s].total += p.amount || 0; }
+    });
+    const rows = Object.entries(data);
+    if (!rows.length) {
+        el.innerHTML = `<div class="empty-state"><i class="fas fa-trophy" aria-hidden="true"></i>${DONATIONS_ENABLED ? 'No contributions yet' : 'No interest registered yet'}</div>`;
         return;
     }
-    const data = {};
-    contribs.forEach(p => {
-        const s = p.street || 'Unknown';
-        if (!data[s]) data[s] = { total:0, count:0, hosts:0, paid:0 };
-        data[s].total += p.amount || 0;
-        data[s].count += 1;
-        if (p.status === 'paid') data[s].paid += p.amount || 0;
-    });
-    pins.filter(p => p.type === 'host').forEach(p => {
-        const s = p.street || 'Unknown';
-        if (!data[s]) data[s] = { total:0, count:0, hosts:0, paid:0 };
-        data[s].hosts += 1;
-    });
-    const sorted = Object.entries(data).sort((a,b) => DONATIONS_ENABLED
-        ? (b[1].total - a[1].total) || (b[1].count - a[1].count) || (b[1].hosts - a[1].hosts)
-        : (b[1].count - a[1].count) || (b[1].hosts - a[1].hosts)
-    );
-    const maxAmt  = sorted[0]?.[1].total || 1;
-    const maxInterest = Math.max(1, ...sorted.map(([,d]) => d.count + d.hosts));
-    const rClass = ['r1','r2','r3'];
-    el.innerHTML = sorted.map(([street, d], i) => {
-        const barPct = DONATIONS_ENABLED
-            ? (d.total / maxAmt * 100).toFixed(0)
-            : ((d.count + d.hosts) / maxInterest * 100).toFixed(0);
-        const right = DONATIONS_ENABLED
-            ? `R${d.total.toLocaleString()}`
-            : `${d.count + d.hosts}`;
+    rows.sort((a, b) => DONATIONS_ENABLED
+        ? (b[1].total - a[1].total) || (b[1].count - a[1].count)
+        : (b[1].count + b[1].hosts) - (a[1].count + a[1].hosts) || (b[1].hosts - a[1].hosts));
+    const maxAmt = Math.max(1, ...rows.map(([, d]) => d.total));
+    const maxInt = Math.max(1, ...rows.map(([, d]) => d.count + d.hosts));
+    const rClass = ['r1', 'r2', 'r3'];
+    el.innerHTML = rows.map(([street, d], i) => {
+        const pct = DONATIONS_ENABLED ? d.total / maxAmt * 100 : (d.count + d.hosts) / maxInt * 100;
+        const right = DONATIONS_ENABLED ? money(d.total) : String(d.count + d.hosts);
         const meta = DONATIONS_ENABLED
-            ? `${d.count} contributor${d.count!==1?'s':''}${d.hosts ? ` · ${d.hosts} host${d.hosts!==1?'s':''}` : ''}${d.paid ? ` · <span style="color:var(--green)">R${d.paid} confirmed</span>` : ''}`
-            : `${d.count} interested${d.hosts ? ` · ${d.hosts} host${d.hosts!==1?'s':''}` : ''}`;
-        return `
-        <div class="priority-item">
-            <div class="p-rank ${rClass[i]||'rx'}">${i+1}</div>
-            <div class="p-info">
-                <div class="p-street">${street}</div>
-                <div class="p-meta">${meta}</div>
-                <div class="p-bar">
-                    <div class="p-fill" style="width:${barPct}%"></div>
-                </div>
-            </div>
-            <div class="p-amount">${right}</div>
-        </div>`;
+            ? `${d.count} contributor${d.count !== 1 ? 's' : ''}${d.hosts ? ` · ${d.hosts} host${d.hosts !== 1 ? 's' : ''}` : ''}`
+            : `${d.count} interested${d.hosts ? ` · ${d.hosts} host${d.hosts !== 1 ? 's' : ''}` : ''}`;
+        return `<div class="priority-item">
+            <div class="p-rank ${rClass[i] || 'rx'}">${i + 1}</div>
+            <div class="p-info"><div class="p-street">${esc(street)}</div><div class="p-meta">${esc(meta)}</div>
+            <div class="p-bar"><div class="p-fill" style="width:${pct.toFixed(0)}%"></div></div></div>
+            <div class="p-amount">${esc(right)}</div></div>`;
     }).join('');
 }
 
 function focusPin(id) {
-    const pin = pins.find(p => p.id === id);
+    const pin = publicPins.get(id);
     if (!pin) return;
-    map.setView([pin.lat, pin.lng], 18, { animate:true });
-    setTimeout(() => markers[id]?.openPopup(), 550);
+    if (window.matchMedia('(max-width:700px)').matches) setSheet(false);
+    map.setView([pin.lat, pin.lng], 18, { animate: true });
+    setTimeout(() => markers[id]?.openPopup(), 450);
 }
 
-// ── PAYMENT MODAL ────────────────────────────────────────────
-function openPaymentModal(pin) {
-    if (!DONATIONS_ENABLED) return;
-    const modal = document.getElementById('modal-payment');
-    if (!modal) return;
-    injectBankDetails();
-    currentPayPin = pin;
-    const ref = `${pin.ln || pin.fn || 'Resident'} ${pin.street || pin.address || ''}`.trim();
-    document.getElementById('ps-name').textContent   = `${pin.fn||''} ${pin.ln||''}`.trim();
-    document.getElementById('ps-street').textContent = pin.street || pin.address;
-    document.getElementById('ps-amount').textContent = `R${(pin.amount||0).toLocaleString()}`;
-    const refEl = document.getElementById('eft-ref');
-    if (refEl) refEl.textContent = ref;
-    modal.classList.add('active');
+// ════════════════════════════════════════════════════════════
+//  TABS / MOBILE SHEET / MODALS
+// ════════════════════════════════════════════════════════════
+function switchTab(name, el) {
+    document.querySelectorAll('.tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
+    el.classList.add('active'); el.setAttribute('aria-selected', 'true');
+    $('tab-entries').classList.toggle('hidden', name !== 'entries');
+    $('tab-priority').classList.toggle('hidden', name !== 'priority');
 }
-
-function closePaymentModal() {
-    document.getElementById('modal-payment')?.classList.remove('active');
-    currentPayPin = null;
+function setSheet(open) {
+    $('sidebar').classList.toggle('open', open);
+    $('sheet-toggle').setAttribute('aria-expanded', String(open));
+    $('sheet-label').textContent = open ? 'Close list' : 'Entries & streets';
 }
+const toggleSheet = () => setSheet(!$('sidebar').classList.contains('open'));
 
-function markPaid() {
-    if (!currentPayPin) return;
-    updatePinStatus(currentPayPin.id, 'pending');
-    closePaymentModal();
-    toast('✅ EFT details noted — we\'ll confirm once payment is received. Thank you! 🏘️');
+let lastFocus = null;
+function openModal(id, keepOthers) {
+    if (!keepOthers) closeModals(true);
+    lastFocus = document.activeElement;
+    const m = $(id);
+    m.classList.add('active');
+    if (id === 'modal-about') renderAbout();
+    if (id === 'modal-privacy') renderPrivacy();
+    setTimeout(() => m.querySelector('input:not([type=hidden]),select,button:not(.btn-close),textarea')?.focus(), 30);
 }
-
-function pledgeOnly() {
-    if (!currentPayPin) return;
-    const pin = currentPayPin;
-    updatePinStatus(pin.id, 'pledge');
-    sendFollowUpEmail('pledge');
-    closePaymentModal();
-    toast('🤝 Pledge recorded! We\'ll be in touch with payment details.');
-    if (pin.phone) {
-        setTimeout(() => {
-            if (confirm(`Send WhatsApp follow-up to ${pin.fn}?`))
-                window.open(buildWhatsAppLink(pin), '_blank');
-        }, 600);
+function closeModals(silent) {
+    document.querySelectorAll('.overlay.active').forEach(o => o.classList.remove('active'));
+    if (!silent && lastFocus?.focus) lastFocus.focus();
+}
+document.querySelectorAll('.overlay').forEach(o => o.addEventListener('click', e => {
+    if (e.target === o) { o.id === 'modal-add' ? closeModal() : o.classList.remove('active'); }
+}));
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+        if ($('modal-add').classList.contains('active')) closeModal(); else closeModals();
+        cancelPlacing();
     }
+});
+
+const tbd = txt => txt ? esc(txt) : '<span class="tbc">To be confirmed</span>';
+function renderAbout() {
+    $('about-body').innerHTML = `
+        <h3>What is this?</h3>
+        <p>An independent community initiative by University Estate neighbours, in Cape Town, to explore a shared network of security cameras for our streets. Right now we are only gauging interest — no payments are being collected.</p>
+        <h3>How it works</h3>
+        <ol>
+            <li>Tap “Add Your Pin” and drop a pin on your property.</li>
+            <li>Choose <strong>Camera Host</strong> (you can host a camera) or <strong>I'd contribute</strong> (you'd be willing to chip in).</li>
+            <li>The map and street ranking show where interest is strongest, so cameras can be planned where they help most.</li>
+            <li>The organiser contacts you before anything is installed or any money is discussed.</li>
+        </ol>
+        <h3>How the cameras work</h3><p>${tbd(ABOUT.cameraHow)}</p>
+        <h3>Who monitors them</h3><p>${tbd(ABOUT.monitoring)}</p>
+        <h3>Cost per camera</h3><p>${tbd(ABOUT.costPerCamera)}</p>
+        <h3>Your privacy</h3>
+        <p>Only your first name, street name and an approximate pin are shown publicly. Your contact details and house number are visible only to the organiser. <button type="button" class="link-btn" onclick="openModal('modal-privacy', true)">Privacy notice</button></p>
+        <h3>Contact the organiser</h3><p>${tbd(ORGANISER.contact)}</p>
+        ${/^https:\/\//.test(ABOUT.learnMoreUrl) ? `<p><a href="${esc(ABOUT.learnMoreUrl)}" target="_blank" rel="noopener noreferrer">More information ↗</a></p>` : ''}`;
+}
+function renderPrivacy() {
+    $('privacy-body').innerHTML = `
+        <h3>Who is responsible for your information?</h3>
+        <p>This is an independent community project run by University Estate neighbours. The organiser (${tbd(ORGANISER.name)}) is the responsible party that holds your information. Contact: ${tbd(ORGANISER.contact)}.</p>
+        <h3>What we collect and why</h3>
+        <p>Your name, phone number, email address, street address, map location and whether you use armed response. We use it only to plan where cameras could go, and to contact you about this project.</p>
+        <h3>What the public sees</h3>
+        <p>Only your first name, street name and an approximate pin (blurred by about 15 m). Your surname, contact details, house number, exact location and armed-response answers are never shown publicly.</p>
+        <h3>Sharing</h3>
+        <p>We do not share your information with third parties.</p>
+        <h3>Keeping and deleting your information</h3>
+        <p>We keep it while the project is active. You can ask the organiser at any time to access, correct or delete your information, and we will do so.</p>
+        <h3>Your consent</h3>
+        <p>You are asked to tick a box before submitting. We record that you consented, and when. You may withdraw consent at any time by contacting the organiser.</p>
+        <p style="color:var(--muted);">Notice version ${esc(PRIVACY_VERSION)} · Protection of Personal Information Act (POPIA)</p>`;
 }
 
-function updatePinStatus(id, status) {
-    const idx = pins.findIndex(p => p.id === id);
-    if (idx < 0) return;
-    pins[idx].status    = status;
-    pins[idx].paymentTs = new Date().toISOString();
-    localStorage.setItem('ue_cctv_pins', JSON.stringify(pins));
-    if (USE_FIREBASE && db) db.ref('pins/' + id).update({ status, paymentTs: pins[idx].paymentTs });
-    markers[id]?.setPopupContent(buildPopup(pins[idx]));
-    updateUI();
-}
-
-// ── EMAILJS ──────────────────────────────────────────────────
-function sendFollowUpEmail(method) {
-    if (!DONATIONS_ENABLED || !USE_EMAILJS || !currentPayPin) return;
-    if (window.emailjs) {
-        _doSendEmails(method);
-    }
-}
-
-// ✅ FIX A: Clean function — no orphaned code, no extra closing brace
-function _doSendEmails(method) {
-    const pin = currentPayPin;
-    if (!pin) return;
-    const ref = `${pin.ln || pin.fn || 'Resident'} ${pin.street || ''}`.trim();
-
-    if (pin.email) {
-        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_CONTRIB_TPL, {
-            to_name:   pin.fn,
-            to_email:  pin.email,
-            amount:    `R${pin.amount.toLocaleString()}`,
-            reference: ref
-        })
-        .then(() => toast('📧 Banking details sent to ' + pin.email))
-        .catch(e => {
-            console.warn('Email failed:', e);
-            toast('⚠️ Email could not be sent — please screenshot the details');
+// ════════════════════════════════════════════════════════════
+//  PLACING A PIN  →  FORM
+// ════════════════════════════════════════════════════════════
+function beginPlacing(latlng) {
+    closeModals(true);
+    latlng = latlng || map.getCenter();
+    if (!MAP_BOUNDS.contains(latlng)) { toast('⚠️ Please place your pin inside University Estate.'); return; }
+    pendingLoc = latlng;
+    if (!tempMarker) {
+        tempMarker = L.marker(latlng, { draggable: true, icon: makeIcon('new'), zIndexOffset: 1000, keyboard: true, title: 'Your pin — drag to move' }).addTo(map);
+        tempMarker.on('dragend', () => {
+            const p = tempMarker.getLatLng();
+            if (MAP_BOUNDS.contains(p)) pendingLoc = p;
+            else { tempMarker.setLatLng(pendingLoc); toast('⚠️ Please keep the pin inside University Estate.'); }
         });
-    } else {
-        toast('⚠️ No email address provided — please screenshot the details');
+    } else tempMarker.setLatLng(latlng);
+    $('confirm-bar').classList.add('show');
+    $('btn-add').disabled = false;
+}
+function cancelPlacing() {
+    $('confirm-bar').classList.remove('show');
+    if (tempMarker) { map.removeLayer(tempMarker); tempMarker = null; }
+    if (!$('modal-add').classList.contains('active')) pendingLoc = null;
+}
+function confirmPlacing() {
+    if (!pendingLoc) return;
+    $('confirm-bar').classList.remove('show');
+    openAddModal();
+}
+let popupClosedAt = 0;
+map.on('popupclose', () => { popupClosedAt = Date.now(); });
+map.on('click', e => { if (Date.now() - popupClosedAt < 400) return; beginPlacing(e.latlng); });
+
+function openAddModal() { resetAddModal(); openModal('modal-add'); }
+function closeModal() {
+    $('modal-add').classList.remove('active');
+    cancelPlacing();
+    pendingLoc = null; chosenType = null;
+}
+function resetAddModal() {
+    showStep('type'); chosenType = null;
+    ['opt-host', 'opt-contrib'].forEach(i => $(i).classList.remove('sel-host', 'sel-contrib'));
+    const b = $('btn-next'); b.disabled = true; b.className = 'btn-sub green';
+}
+function showStep(s) { ['type', 'host', 'contributor'].forEach(id => $('step-' + id).classList.toggle('hidden', id !== s)); }
+function selectType(t) {
+    chosenType = t;
+    ['opt-host', 'opt-contrib'].forEach(i => $(i).classList.remove('sel-host', 'sel-contrib'));
+    $(t === 'host' ? 'opt-host' : 'opt-contrib').classList.add(t === 'host' ? 'sel-host' : 'sel-contrib');
+    const b = $('btn-next'); b.disabled = false; b.className = 'btn-sub ' + (t === 'host' ? 'green' : 'blue');
+}
+function goToForm() { if (chosenType && pendingLoc) showStep(chosenType); }
+function backToType() { showStep('type'); }
+document.addEventListener('keydown', e => {
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.matches?.('.type-opt,.entry-card')) {
+        e.preventDefault(); e.target.click();
     }
+});
+$('entries-list').addEventListener('click', e => {
+    const c = e.target.closest('.entry-card'); if (c) focusPin(c.dataset.id);
+});
+
+// ── form helpers ─────────────────────────────────────────────
+function fillSelects() {
+    const streets = '<option value="">Select street…</option>' +
+        UE_STREETS.map(s => `<option value="${esc(s)}">${esc(s)}</option>`).join('') +
+        '<option value="__other">Other</option>';
+    const prov = '<option value="">Select provider…</option>' +
+        ARMED_PROVIDERS.map(p => `<option value="${esc(p.id)}">${esc(p.label)}</option>`).join('') +
+        '<option value="other">Other</option>';
+    ['h', 'c'].forEach(p => { $(p + '-street').innerHTML = streets; $(p + '-armed-provider').innerHTML = prov; });
+}
+function toggleStreetOther(p) {
+    const other = v(p + '-street') === '__other';
+    $(p + '-street-other-wrap').classList.toggle('hidden', !other);
+    if (!other) $(p + '-street-other').value = '';
+}
+const radioVal = name => document.querySelector(`input[name="${name}"]:checked`)?.value || '';
+function toggleArmedFields(p) {
+    const yes = radioVal(p + '-armed') === 'yes';
+    $(p + '-armed-provider-wrap').classList.toggle('hidden', !yes);
+    if (!yes) { $(p + '-armed-provider').value = ''; $(p + '-armed-other').value = ''; $(p + '-armed-other').classList.add('hidden'); }
+}
+function toggleArmedOther(p) {
+    const o = v(p + '-armed-provider') === 'other';
+    $(p + '-armed-other').classList.toggle('hidden', !o);
+    if (!o) $(p + '-armed-other').value = '';
+}
+function resetForm(p) {
+    [`${p}-fn`, `${p}-ln`, `${p}-ph`, `${p}-em`, `${p}-num`, `${p}-street-other`, `${p}-notes`, `${p}-armed-other`, `${p}-amt`, `${p}-armed-provider`, `${p}-street`,
+     'h-net', 'h-bak', 'h-place', 'h-wifi'].forEach(id => { const el = $(id); if (el && (p === 'h' || !id.startsWith('h-'))) el.value = ''; });
+    document.querySelectorAll(`input[name="${p}-armed"]`).forEach(r => { r.checked = false; });
+    $(p + '-consent').checked = false;
+    toggleStreetOther(p); toggleArmedFields(p); toggleArmedOther(p);
 }
 
-function buildWhatsAppLink(pin) {
-    const num = (pin.phone||'').replace(/\D/g,'').replace(/^0/,'27') || ORGANISER_WHATSAPP;
-    const ref = `${pin.ln||pin.fn||'Resident'} ${pin.street||''}`.trim();
-    const msg = DONATIONS_ENABLED
-        ? encodeURIComponent(
-            `Hi ${pin.fn}! Thank you for your pledge of R${pin.amount} towards University Estate CCTV cameras. ` +
-            `Please make an EFT to the UE Camera Fund account using reference *${ref}*. ` +
-            `Reply here if you need the banking details. Thank you! 🏘️📹`
-          )
-        : encodeURIComponent(
-            `Hi ${pin.fn}! Thank you for registering your interest in the University Estate CCTV initiative. ` +
-            `We'll be in touch soon. 🏘️📹`
-          );
-    return `https://wa.me/${num}?text=${msg}`;
-}
-
-function copyText(id) {
-    const text = document.getElementById(id).textContent.replace(/\s/g,'');
-    navigator.clipboard?.writeText(text)
-        .then(() => toast('📋 Copied!'))
-        .catch(() => {
-            const ta = Object.assign(document.createElement('textarea'), { value: text });
-            document.body.appendChild(ta); ta.select();
-            document.execCommand('copy'); document.body.removeChild(ta);
-            toast('📋 Copied!');
-        });
-}
-
-// ── ADMIN PANEL ──────────────────────────────────────────────
-function adminTrigger() {
-    adminClicks++;
-    if (adminClicks >= 5) {
-        adminClicks = 0;
-        const pw = prompt('🔒 Admin password:');
-        if (pw === ADMIN_PASSWORD) openAdmin();
-        else if (pw !== null) toast('❌ Incorrect password');
+function readForm(type) {
+    const p = type === 'host' ? 'h' : 'c';
+    const fail = m => { toast('⚠️ ' + m); return null; };
+    const fn = v(p + '-fn'), ln = v(p + '-ln');
+    if (!fn) return fail('Please enter your first name');
+    if (!ln) return fail('Please enter your last name');
+    const phone = normalizePhone(v(p + '-ph'));
+    if (!phone) return fail('Please enter a valid South African phone number, e.g. 082 123 4567');
+    const email = v(p + '-em').toLowerCase();
+    if (!validEmail(email)) return fail('Please enter a valid email address');
+    let street = v(p + '-street');
+    if (!street) return fail('Please choose your street');
+    if (street === '__other') {
+        street = v(p + '-street-other');
+        if (street.length < 2) return fail('Please enter your street name');
     }
-    setTimeout(() => { adminClicks = 0; }, 2500);
+    const num = v(p + '-num');
+    if (!/^[0-9A-Za-z\/\- ]{1,12}$/.test(num)) return fail('Please enter your house or unit number');
+    const f = { type, fn, ln, phone, email, street, num, latlng: pendingLoc, notes: v(p + '-notes') };
+    if (type === 'host') {
+        f.internet = v('h-net'); f.backup = v('h-bak'); f.placement = v('h-place'); f.wifi = v('h-wifi');
+        if (!f.internet) return fail('Please select your internet speed');
+        if (!f.backup)   return fail('Please select a backup power option');
+        if (!f.placement) return fail('Please select camera placement');
+    } else if (DONATIONS_ENABLED) {
+        f.amount = parseFloat(v('c-amt'));
+        if (!(f.amount >= 10)) return fail('Please enter a contribution amount (minimum R10)');
+    }
+    f.armedResponse = radioVal(p + '-armed');
+    if (!f.armedResponse) return fail('Please say whether you have armed response');
+    if (f.armedResponse === 'yes') {
+        f.armedProvider = v(p + '-armed-provider');
+        if (!f.armedProvider) return fail('Please select your armed response provider');
+        if (f.armedProvider === 'other') {
+            f.armedProviderOther = v(p + '-armed-other');
+            if (!f.armedProviderOther) return fail('Please enter the provider name');
+        }
+    }
+    if (!$(p + '-consent').checked) return fail('Please tick the consent box to continue');
+    if (!pendingLoc) return fail('Please place your pin on the map first');
+    return f;
 }
 
+let submitting = false;
+async function submitPin(type) {
+    if (submitting) return;
+    const f = readForm(type);
+    if (!f) return;
+    const btn = $(type === 'host' ? 'btn-host-submit' : 'btn-contrib-submit');
+    submitting = true; btn.disabled = true;
+    try {
+        const rec = await buildRecords(f);
+        await savePin(rec);                       // resolves only when the write succeeded
+        const p = type === 'host' ? 'h' : 'c';
+        const pin = { ...rec.priv, id: rec.id };
+        closeModal(); resetForm(p);
+        if (type === 'host') toast('✅ Camera host registered! Thank you — we will be in touch.');
+        else if (DONATIONS_ENABLED) openPaymentModal(pin);
+        else toast('✅ Thank you — your interest has been recorded. We\'ll be in touch.');
+    } catch (e) {
+        if (!e.silent) toast('⚠️ ' + e.message);
+    } finally { submitting = false; btn.disabled = false; }
+}
+
+// ════════════════════════════════════════════════════════════
+//  ORGANISER AREA  (Firebase Auth email/password; rules enforce access)
+// ════════════════════════════════════════════════════════════
 function openAdmin() {
-    renderAdminTable('all');
-    document.getElementById('modal-admin').classList.add('active');
+    openModal('modal-admin');
+    if (LOCAL || adminVerified) { showAdminPanel(); }
+    else { $('admin-signin').classList.remove('hidden'); $('admin-panel').classList.add('hidden'); }
+}
+function showAdminPanel() {
+    $('admin-signin').classList.add('hidden');
+    $('admin-panel').classList.remove('hidden');
+    $('btn-signout').classList.toggle('hidden', LOCAL);
+    renderAdmin();
+    checkLegacy();
 }
 
-function filterAdmin(filter, el) {
-    adminFilter_ = filter;
-    document.querySelectorAll('.admin-filter').forEach(b => b.classList.remove('active'));
-    el.classList.add('active');
-    renderAdminTable(filter);
+async function adminSignIn(ev) {
+    ev.preventDefault();
+    const err = $('adm-error'), btn = $('adm-btn');
+    err.textContent = '';
+    if (LOCAL) { showAdminPanel(); return; }
+    btn.disabled = true;
+    try {
+        await auth.signInWithEmailAndPassword(v('adm-email'), $('adm-pw').value);
+        $('adm-pw').value = '';
+        const ok = await verifyAdmin(true);
+        if (!ok) err.textContent = 'This account is not an authorised organiser.';
+    } catch (e) {
+        err.textContent = (e.code === 'auth/operation-not-allowed')
+            ? 'Email/password sign-in is not enabled in Firebase yet.'
+            : 'Sign-in failed. Check your email and password.';
+    } finally { btn.disabled = false; }
 }
 
-function renderAdminTable(filter) {
-    const tbody = document.getElementById('admin-tbody');
+// An organiser is simply an account the database rules let read pins_private.
+async function verifyAdmin(openPanel) {
+    if (LOCAL || !db || !auth.currentUser || auth.currentUser.isAnonymous) return false;
+    try {
+        await db.ref('pins_private').limitToFirst(1).once('value');
+    } catch (e) {
+        adminVerified = false;
+        if (openPanel) await auth.signOut();
+        return false;
+    }
+    adminVerified = true;
+    attachPrivateListeners();
+    updateArmedStats();
+    if (openPanel) showAdminPanel();
+    return true;
+}
+function attachPrivateListeners() {
+    if (privateListeners) return;
+    privateListeners = true;
+    const ref = db.ref('pins_private');
+    const up = snap => { privatePins.set(snap.key, { ...snap.val(), id: snap.key }); afterPrivateChange(); };
+    ref.on('child_added', up);
+    ref.on('child_changed', up);
+    ref.on('child_removed', snap => { privatePins.delete(snap.key); afterPrivateChange(); });
+}
+function afterPrivateChange() {
+    updateArmedStats();
+    if ($('modal-admin').classList.contains('active') && !$('admin-panel').classList.contains('hidden')) renderAdmin();
+}
+async function adminSignOut() {
+    if (LOCAL) { closeModals(); return; }
+    if (privateListeners) { db.ref('pins_private').off(); privateListeners = false; }
+    privatePins.clear(); adminVerified = false; adminUser = null;
+    await auth.signOut();
+    updateArmedStats();
+    closeModals();
+    toast('Signed out');
+}
 
-    if (filter === 'hosts') {
-        const hosts = pins.filter(p => p.type === 'host');
-        document.querySelector('.admin-table thead tr').innerHTML = `
-            <th>Name</th><th>Street</th><th>Internet</th>
-            <th>Backup Power</th><th>Placement</th><th>Armed response</th><th>Actions</th>`;
-        if (!hosts.length) {
-            tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--muted);">No camera hosts registered yet</td></tr>`;
-            document.getElementById('admin-total').textContent = '';
-            return;
-        }
-        tbody.innerHTML = hosts.map(pin => {
-            const waLink  = pin.phone
-                ? `https://wa.me/${pin.phone.replace(/\D/g,'').replace(/^0/,'27')}?text=${encodeURIComponent(`Hi ${pin.fn}! Thank you for registering as a camera host for University Estate CCTV. We'll be in touch soon. 📹`)}`
-                : '#';
-            const emlLink = pin.email
-                ? `mailto:${pin.email}?subject=University Estate CCTV — Camera Host&body=Hi ${pin.fn},%0A%0AThank you for registering as a camera host. We will be in touch soon.%0A%0AThank you!`
-                : '#';
-            return `<tr>
-                <td><strong>${pin.fn||''} ${pin.ln||''}</strong><br>
-                    <span style="font-size:10px;color:var(--muted);">${pin.phone||'No phone'}</span></td>
-                <td>${pin.street||'—'}</td>
-                <td>${NET_LABELS[pin.internet]||pin.internet||'—'}</td>
-                <td>${BAK_LABELS[pin.backup]||pin.backup||'—'}</td>
-                <td>${PLACE_LABELS[pin.placement]||pin.placement||'—'}</td>
-                <td>${escapeHtml(armedDisplay(pin))}</td>
-                <td><div class="follow-btns">
-                    <a class="fbtn wa" href="${waLink}" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-                    <a class="fbtn em" href="${emlLink}" title="Email"><i class="fas fa-envelope"></i></a>
-                    <button class="fbtn del" onclick="adminDelete('${pin.id}')" title="Delete"><i class="fas fa-trash"></i></button>
-                </div></td>
-            </tr>`;
-        }).join('');
-        document.getElementById('admin-total').innerHTML =
-            `${hosts.length} camera host${hosts.length!==1?'s':''} registered`;
+document.querySelector('.admin-bar').addEventListener('click', e => {
+    const b = e.target.closest('[data-filter]');
+    if (!b) return;
+    adminFilter = b.dataset.filter;
+    document.querySelectorAll('.admin-filter[data-filter]').forEach(x => x.classList.toggle('active', x === b));
+    renderAdmin();
+});
+$('admin-tbody').addEventListener('click', e => {
+    const b = e.target.closest('[data-act]');
+    if (!b) return;
+    if (b.dataset.act === 'delete') adminDelete(b.dataset.id);
+    if (b.dataset.act === 'paid') adminMarkPaid(b.dataset.id);
+});
+
+function adminRows() {
+    let rows = [...privatePins.values()].sort((a, b) => (b.ts || 0) - (a.ts || 0));
+    if (adminFilter === 'hosts') rows = rows.filter(p => p.type === 'host');
+    else if (adminFilter === 'interested') rows = rows.filter(p => p.type === 'contributor');
+    else if (['paid', 'pending', 'pledge'].includes(adminFilter)) rows = rows.filter(p => p.type === 'contributor' && (p.status || 'pending') === adminFilter);
+    return rows;
+}
+const safeTel = p => String(p || '').replace(/[^\d]/g, '');
+
+function renderAdmin() {
+    const rows = adminRows();
+    const tbody = $('admin-tbody');
+    if (!rows.length) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:20px;color:var(--muted);">No entries match this filter</td></tr>';
+        $('admin-total').textContent = '';
         return;
     }
-
-    if (!DONATIONS_ENABLED) {
-        const data = pins.filter(p =>
-            filter === 'interested' ? p.type === 'contributor'
-            : filter === 'all' ? true
-            : p.type === 'contributor'
-        );
-        document.querySelector('.admin-table thead tr').innerHTML = `
-            <th>Type</th><th>Name</th><th>Street</th><th>Armed response</th><th>Actions</th>`;
-        if (!data.length) {
-            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--muted);">No entries match this filter</td></tr>`;
-            document.getElementById('admin-total').textContent = '';
-            return;
-        }
-        tbody.innerHTML = data.map(pin => {
-            const isHost  = pin.type === 'host';
-            const waLink  = pin.phone
-                ? `https://wa.me/${pin.phone.replace(/\D/g,'').replace(/^0/,'27')}?text=${encodeURIComponent(`Hi ${pin.fn}! Thank you for registering your interest in the University Estate CCTV initiative. We'll be in touch soon.`)}`
-                : '#';
-            const emlLink = pin.email
-                ? `mailto:${pin.email}?subject=University Estate CCTV&body=Hi ${pin.fn},%0A%0AThank you for registering your interest. We will be in touch soon.%0A%0AThank you!`
-                : '#';
-            return `<tr>
-                <td>${isHost ? '📹 Host' : '🤝 Interested'}</td>
-                <td><strong>${pin.fn||''} ${pin.ln||''}</strong><br>
-                    <span style="font-size:10px;color:var(--muted);">${pin.phone||'No phone'}</span></td>
-                <td>${pin.street||'—'}</td>
-                <td>${escapeHtml(armedDisplay(pin))}</td>
-                <td><div class="follow-btns">
-                    <a class="fbtn wa" href="${waLink}" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-                    <a class="fbtn em" href="${emlLink}" title="Email"><i class="fas fa-envelope"></i></a>
-                    <button class="fbtn del" onclick="adminDelete('${pin.id}')" title="Delete"><i class="fas fa-trash"></i></button>
-                </div></td>
-            </tr>`;
-        }).join('');
-        const nInt = data.filter(p => p.type === 'contributor').length;
-        const nHost = data.filter(p => p.type === 'host').length;
-        document.getElementById('admin-total').innerHTML =
-            `${data.length} entr${data.length!==1?'ies':'y'}` +
-            (filter === 'all' ? ` &nbsp;·&nbsp; ${nHost} host${nHost!==1?'s':''} &nbsp;·&nbsp; ${nInt} interested` : '');
-        return;
-    }
-
-    document.querySelector('.admin-table thead tr').innerHTML = `
-        <th>Name</th><th>Street</th><th>Amount</th>
-        <th>Method</th><th>Status</th><th>Armed response</th><th>Actions</th>`;
-
-    const data  = pins.filter(p =>
-        p.type === 'contributor' && (filter === 'all' || (p.status||'pending') === filter)
-    );
-    const total = data.reduce((s,p) => s + (p.amount||0), 0);
-    const paid  = data.filter(p => p.status === 'paid').reduce((s,p) => s + (p.amount||0), 0);
-
-    if (!data.length) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--muted);">No entries match this filter</td></tr>`;
-        document.getElementById('admin-total').textContent = '';
-        return;
-    }
-
-    const stClass = { paid:'st-paid', pending:'st-pending', pledge:'st-pledge' };
-    const stLabel = { paid:'✅ Paid', pending:'⏳ Pending', pledge:'🤝 Pledge' };
-
-    tbody.innerHTML = data.map(pin => {
-        const st      = pin.status || 'pending';
-        const ref     = `${pin.ln||pin.fn||'Resident'} ${pin.street||''}`.trim();
-        const waLink  = buildWhatsAppLink(pin);
-        const emlLink = pin.email
-            ? `mailto:${pin.email}?subject=CCTV Contribution — ${ref}` +
-              `&body=Hi ${pin.fn},%0A%0AThank you for pledging R${pin.amount} towards University Estate CCTV.` +
-              `%0A%0APlease make an EFT using reference: ${ref}.%0A%0AThank you!`
-            : '#';
+    tbody.innerHTML = rows.map(p => {
+        const isHost = p.type === 'host';
+        const tel = safeTel(p.phone);
+        const wa = tel ? `https://wa.me/${tel}?text=${encodeURIComponent(`Hi ${p.fn || ''}! Thank you for registering your interest in the University Estate CCTV initiative. We'll be in touch soon.`)}` : '#';
+        const mail = p.email ? `mailto:${encodeURIComponent(p.email)}?subject=${encodeURIComponent('University Estate CCTV')}&body=${encodeURIComponent(`Hi ${p.fn || ''},\n\nThank you for registering your interest. We will be in touch soon.\n`)}` : '#';
+        let details;
+        if (isHost) details = `${esc(NET_LABELS[p.internet] || p.internet || '—')}<br>${esc(BAK_LABELS[p.backup] || p.backup || '—')}<br>${esc(PLACE_LABELS[p.placement] || p.placement || '—')}`;
+        else if (DONATIONS_ENABLED) details = `${esc(money(p.amount))} · ${esc(p.status || 'pending')}`;
+        else details = '—';
+        const consent = p.consent?.accepted ? '✓ ' + esc(new Date(p.consent.ts).toLocaleDateString('en-ZA')) : '<span class="tbc">none (pre-notice)</span>';
+        const pay = DONATIONS_ENABLED && !isHost ? `<button class="fbtn pay" data-act="paid" data-id="${esc(p.id)}" title="Mark as paid" aria-label="Mark as paid"><i class="fas fa-check"></i></button>` : '';
         return `<tr>
-            <td><strong>${pin.fn||''} ${pin.ln||''}</strong><br>
-                <span style="font-size:10px;color:var(--muted);">${pin.phone||'No phone'}</span></td>
-            <td>${pin.street||'—'}</td>
-            <td style="color:var(--gold);font-weight:700;">R${(pin.amount||0).toLocaleString()}</td>
-            <td>EFT</td>
-            <td><span class="status-badge ${stClass[st]||'st-pledge'}">${stLabel[st]||st}</span></td>
-            <td>${escapeHtml(armedDisplay(pin))}</td>
+            <td>${isHost ? '📹 Host' : '🤝 ' + contribWord()}</td>
+            <td class="wrap"><strong>${esc(p.fn)} ${esc(p.ln)}</strong></td>
+            <td class="wrap">${esc(p.phone || 'No phone')}<br><span style="font-size:10px;color:var(--muted);">${esc(p.email || '')}</span></td>
+            <td class="wrap">${esc(p.address || p.street || '—')}</td>
+            <td class="wrap">${details}${p.notes ? `<br><em style="color:var(--muted)">“${esc(p.notes)}”</em>` : ''}</td>
+            <td class="wrap">${esc(armedDisplay(p))}</td>
+            <td>${consent}</td>
             <td><div class="follow-btns">
-                <a class="fbtn wa"  href="${waLink}"  target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-                <a class="fbtn em"  href="${emlLink}" title="Email"><i class="fas fa-envelope"></i></a>
-                <button class="fbtn pay" onclick="adminMarkPaid('${pin.id}')" title="Mark as paid"><i class="fas fa-check"></i></button>
-                <button class="fbtn del" onclick="adminDelete('${pin.id}')"   title="Delete"><i class="fas fa-trash"></i></button>
-            </div></td>
-        </tr>`;
+                <a class="fbtn wa" href="${esc(wa)}" target="_blank" rel="noopener noreferrer" title="WhatsApp" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                <a class="fbtn em" href="${esc(mail)}" title="Email" aria-label="Email"><i class="fas fa-envelope"></i></a>
+                ${pay}
+                <button class="fbtn del" data-act="delete" data-id="${esc(p.id)}" title="Delete" aria-label="Delete"><i class="fas fa-trash"></i></button>
+            </div></td></tr>`;
     }).join('');
-
-    document.getElementById('admin-total').innerHTML =
-        `${data.length} entries &nbsp;·&nbsp; Pledged: <strong style="color:var(--gold)">R${total.toLocaleString()}</strong>` +
-        (paid ? ` &nbsp;·&nbsp; Confirmed: <strong style="color:var(--green)">R${paid.toLocaleString()}</strong>` : '');
+    const nHost = rows.filter(p => p.type === 'host').length;
+    $('admin-total').textContent = `${rows.length} entr${rows.length !== 1 ? 'ies' : 'y'} · ${nHost} host${nHost !== 1 ? 's' : ''} · ${rows.length - nHost} ${contribWord().toLowerCase()}`;
 }
 
-function adminMarkPaid(id) {
-    if (!DONATIONS_ENABLED) return;
-    updatePinStatus(id, 'paid');
-    renderAdminTable(adminFilter_);
-    toast('✅ Marked as paid');
-}
-
-function adminDelete(id) {
+async function adminDelete(id) {
     if (!confirm('Remove this entry from the map and records?')) return;
-    const idx = pins.findIndex(p => p.id === id);
-    if (idx > -1) {
-        pins.splice(idx, 1);
-        localStorage.setItem('ue_cctv_pins', JSON.stringify(pins));
-        if (USE_FIREBASE && db) db.ref('pins/' + id).remove();
-        if (markers[id]) { map.removeLayer(markers[id]); delete markers[id]; }
-        if (circles[id]) { map.removeLayer(circles[id]); delete circles[id]; }
-        updateUI();
-        renderAdminTable(adminFilter_);
-        toast('🗑️ Entry removed');
-    }
-}
-
-function exportCSV() {
-    const hdr  = DONATIONS_ENABLED
-        ? ['Type','Name','Phone','Email','Address','Street','Amount (R)','Status','Armed response','Provider','Date']
-        : ['Type','Name','Phone','Email','Address','Street','Armed response','Provider','Date'];
-    const rows = pins.map(p => {
-        const base = [
-            p.type === 'host' ? 'Camera Host' : (DONATIONS_ENABLED ? 'Contributor' : 'Interested'),
-            `${p.fn||''} ${p.ln||''}`.trim(),
-            p.phone || '', p.email || '', p.address || '', p.street || ''
-        ];
-        if (DONATIONS_ENABLED) {
-            base.push(p.type === 'contributor' ? (p.amount||0) : '—');
-            base.push(p.type === 'contributor' ? (p.status||'pending') : '—');
+    const p = privatePins.get(id);
+    try {
+        if (LOCAL) {
+            const pub = lsRead(LS_PUB), priv = lsRead(LS_PRIV);
+            delete pub[id]; delete priv[id]; lsWrite(LS_PUB, pub); lsWrite(LS_PRIV, priv);
+            privatePins.delete(id); removePublic(id);
+        } else {
+            const u = { ['pins_public/' + id]: null, ['pins_private/' + id]: null };
+            if (p?.emailHash) u['contact_index/e' + p.emailHash] = null;
+            if (p?.phoneHash) u['contact_index/p' + p.phoneHash] = null;
+            await db.ref().update(u);
         }
-        base.push(p.armedResponse ? (ARMED_STATUS_LABELS[p.armedResponse] || p.armedResponse) : '');
-        base.push(p.armedResponse === 'yes' ? (armedProviderLabel(p.armedProvider, p.armedProviderOther) || '') : '');
-        base.push(new Date(p.timestamp).toLocaleDateString('en-ZA'));
-        return base.map(val => `"${String(val).replace(/"/g,'""')}"`).join(',');
+        renderAdmin();
+        toast('🗑️ Entry removed');
+    } catch (e) { toast('⚠️ Could not remove entry: ' + (e.code || e.message)); }
+}
+async function adminMarkPaid(id) {
+    if (!DONATIONS_ENABLED) return;
+    try {
+        if (LOCAL) {
+            const pub = lsRead(LS_PUB), priv = lsRead(LS_PRIV);
+            if (pub[id]) pub[id].status = 'paid'; if (priv[id]) priv[id].status = 'paid';
+            lsWrite(LS_PUB, pub); lsWrite(LS_PRIV, priv);
+            publicPins.get(id).status = 'paid'; privatePins.get(id).status = 'paid';
+            clearPinLayers(id); renderPin(publicPins.get(id)); updateUI();
+        } else {
+            await db.ref().update({ ['pins_public/' + id + '/status']: 'paid', ['pins_private/' + id + '/status']: 'paid' });
+        }
+        renderAdmin(); toast('✅ Marked as paid');
+    } catch (e) { toast('⚠️ Could not update: ' + (e.code || e.message)); }
+}
+
+// CSV: spreadsheet-formula characters are neutralised so a malicious name cannot run as a formula.
+const csvCell = (val, isPhone) => {
+    let s = String(val ?? '');
+    if (!isPhone && /^[=+\-@\t\r]/.test(s)) s = "'" + s;
+    return `"${s.replace(/"/g, '""')}"`;
+};
+function exportCSV() {
+    const hdr = ['Type', 'First name', 'Last name', 'Phone', 'Email', 'Address', 'Street', 'Exact lat', 'Exact lng']
+        .concat(DONATIONS_ENABLED ? ['Amount (R)', 'Status'] : [])
+        .concat(['Armed response', 'Provider', 'Internet', 'Backup power', 'Placement', 'Notes', 'Consent given', 'Consent date', 'Date added']);
+    const rows = [...privatePins.values()].sort((a, b) => (a.ts || 0) - (b.ts || 0)).map(p => {
+        const c = [p.type === 'host' ? 'Camera Host' : contribWord(), p.fn, p.ln, p.phone, p.email, p.address, p.street, p.lat, p.lng];
+        const out = c.map((x, i) => csvCell(x, i === 3));
+        if (DONATIONS_ENABLED) { out.push(csvCell(p.type === 'contributor' ? (p.amount || 0) : ''), csvCell(p.type === 'contributor' ? (p.status || 'pending') : '')); }
+        out.push(
+            csvCell(p.armedResponse ? (ARMED_STATUS_LABELS[p.armedResponse] || p.armedResponse) : ''),
+            csvCell(p.armedResponse === 'yes' ? armedProviderLabel(p.armedProvider, p.armedProviderOther) : ''),
+            csvCell(NET_LABELS[p.internet] || p.internet || ''), csvCell(BAK_LABELS[p.backup] || p.backup || ''),
+            csvCell(PLACE_LABELS[p.placement] || p.placement || ''), csvCell(p.notes || ''),
+            csvCell(p.consent?.accepted ? 'Yes' : 'No'),
+            csvCell(p.consent?.ts ? new Date(p.consent.ts).toLocaleDateString('en-ZA') : ''),
+            csvCell(p.ts ? new Date(p.ts).toLocaleDateString('en-ZA') : ''));
+        return out.join(',');
     });
-    const blob = new Blob([[hdr.join(','), ...rows].join('\n')], { type:'text/csv;charset=utf-8;' });
-    const url  = URL.createObjectURL(blob);
-    Object.assign(document.createElement('a'), {
-        href: url,
-        download: `UE-CCTV-${new Date().toISOString().split('T')[0]}.csv`
-    }).click();
-    URL.revokeObjectURL(url);
+    const blob = new Blob(['\ufeff' + [hdr.map(h => csvCell(h, true)).join(','), ...rows].join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = Object.assign(document.createElement('a'), { href: url, download: `UE-CCTV-${new Date().toISOString().split('T')[0]}.csv` });
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-// ── TOAST ────────────────────────────────────────────────────
-function toast(msg) {
-    const el = document.getElementById('toast');
-    el.textContent = msg;
-    el.classList.add('show');
-    setTimeout(() => el.classList.remove('show'), 3500);
+// ── one-off import of the old public "pins" node (organiser only) ─────────
+async function checkLegacy() {
+    const box = $('legacy-box');
+    box.classList.add('hidden');
+    if (LOCAL || !adminVerified) return;
+    try {
+        const snap = await db.ref('pins').once('value');
+        const n = snap.numChildren();
+        if (!n) return;
+        box.innerHTML = `Found <strong>${n}</strong> entr${n !== 1 ? 'ies' : 'y'} in the old “pins” node (from before the privacy upgrade). ` +
+            `<button class="link-btn" onclick="importLegacy()">Import them into the new private/public structure</button>. ` +
+            `Afterwards delete the old “pins” node in the Firebase console. Imported entries are recorded as <em>no consent captured</em>.`;
+        box.classList.remove('hidden');
+    } catch (e) { /* old node already locked or removed — nothing to import */ }
+}
+async function importLegacy() {
+    if (!confirm('Import the old entries now? (This only writes to the new nodes; the old node is left untouched.)')) return;
+    const snap = await db.ref('pins').once('value');
+    const updates = {}; let n = 0;
+    for (const [oldKey, o] of Object.entries(snap.val() || {})) {
+        const id = randomId();
+        const g = generalise(o.lat, o.lng, id);
+        const ts = Date.parse(o.timestamp) || Date.now();
+        const phone = normalizePhone(o.phone) || String(o.phone || '').trim() || '+27000000000';
+        const email = String(o.email || '').trim().toLowerCase() || 'unknown@invalid.example';
+        const [eh, ph] = await Promise.all([sha256Hex(email), sha256Hex(phone)]);
+        const street = o.street || String(o.address || '').replace(/^\d+\s*/, '').split(',')[0] || 'Unknown';
+        const isHost = o.type === 'host';
+        updates['pins_public/' + id] = clean({
+            type: o.type, fn: o.fn || 'Resident', street, lat: g.lat, lng: g.lng, ts,
+            fast: isHost ? ['10-25', '25-50', '50+'].includes(o.internet) : undefined,
+            backup: isHost ? (!!o.backup && o.backup !== 'none') : undefined,
+            corner: isHost ? o.placement === 'corner' : undefined,
+            amount: DONATIONS_ENABLED && !isHost ? o.amount : undefined,
+            status: DONATIONS_ENABLED && !isHost ? (o.status || 'pending') : undefined
+        });
+        updates['pins_private/' + id] = clean({
+            type: o.type, fn: o.fn || 'Resident', ln: o.ln || '-', phone, email,
+            address: o.address || street, street, lat: o.lat, lng: o.lng, ts,
+            emailHash: eh, phoneHash: ph,
+            consent: { accepted: false, source: 'legacy-before-privacy-notice', ts: Date.now(), version: 'legacy' },
+            internet: o.internet, backup: o.backup, placement: o.placement, wifi: o.wifi, notes: o.notes,
+            amount: o.amount, status: o.status
+        });
+        updates['contact_index/e' + eh] = id; updates['contact_index/p' + ph] = id;
+        n++;
+    }
+    try { await db.ref().update(updates); toast(`✅ Imported ${n} entr${n !== 1 ? 'ies' : 'y'}. Now delete the old “pins” node in the console.`); $('legacy-box').classList.add('hidden'); }
+    catch (e) { toast('⚠️ Import failed: ' + (e.code || e.message)); }
 }
 
-// ── BACKDROP CLOSE ───────────────────────────────────────────
-function escapeHtml(s) {
-    return String(s ?? '').replace(/[&<>"']/g, c => ({
-        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-    }[c]));
-}
-
+// ════════════════════════════════════════════════════════════
+//  DONATIONS (only active when DONATIONS_ENABLED is true)
+// ════════════════════════════════════════════════════════════
 function ensurePaymentModal() {
-    if (!DONATIONS_ENABLED || document.getElementById('modal-payment')) return;
+    if (!DONATIONS_ENABLED || $('modal-payment')) return;
     const wrap = document.createElement('div');
-    wrap.className = 'overlay';
-    wrap.id = 'modal-payment';
-    wrap.innerHTML = `
-        <div class="modal">
-            <div class="modal-head">
-                <h2>🏦 EFT Payment Details</h2>
-                <button class="btn-close" onclick="closePaymentModal()">✕</button>
-            </div>
-            <div class="modal-body">
-                <div class="pay-summary">
-                    <div class="ps-row"><span>Contributor</span><strong id="ps-name">—</strong></div>
-                    <div class="ps-row"><span>Street</span><strong id="ps-street">—</strong></div>
-                    <hr class="ps-div">
-                    <div class="ps-row">
-                        <span>Once-off Amount</span>
-                        <strong id="ps-amount" style="color:var(--gold);font-size:16px;">—</strong>
-                    </div>
-                </div>
-                <p style="font-size:12px;color:var(--muted);margin-bottom:10px;">
-                    Please use your <strong>surname and street</strong> as the payment reference:
-                </p>
-                <div class="eft-box" id="eft-box"></div>
-                <button class="btn-sub blue" onclick="sendFollowUpEmail('eft');markPaid()" style="width:100%;margin-top:4px;">
-                    📧 Email Me These Details
-                </button>
-                <button class="btn-sub green" onclick="markPaid()" style="width:100%;margin-top:8px;">
-                    ✅ I Understand — I'll Make the EFT
-                </button>
-                <button class="btn-back" onclick="pledgeOnly()" style="width:100%;margin-top:8px;text-align:center;">
-                    🤝 Pledge Only — Contact Me Later
-                </button>
-            </div>
-        </div>`;
+    wrap.className = 'overlay'; wrap.id = 'modal-payment';
+    wrap.setAttribute('role', 'dialog'); wrap.setAttribute('aria-modal', 'true');
+    wrap.innerHTML = `<div class="modal"><div class="modal-head"><h2>🏦 EFT Payment Details</h2>
+        <button class="btn-close" onclick="closePaymentModal()" aria-label="Close">✕</button></div>
+        <div class="modal-body">
+        <div class="pay-summary">
+            <div class="ps-row"><span>Contributor</span><strong id="ps-name">—</strong></div>
+            <div class="ps-row"><span>Street</span><strong id="ps-street">—</strong></div>
+            <hr class="ps-div">
+            <div class="ps-row"><span>Once-off Amount</span><strong id="ps-amount" style="color:var(--gold);font-size:16px;">—</strong></div>
+        </div>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:10px;">Please use your <strong>surname and street</strong> as the payment reference:</p>
+        <div class="eft-box" id="eft-box"></div>
+        <button class="btn-sub blue" onclick="sendFollowUpEmail()" style="width:100%;margin-top:4px;">📧 Email Me These Details</button>
+        <button class="btn-sub green" onclick="closePaymentModal();toast('✅ Thank you! We will confirm once payment is received.')" style="width:100%;margin-top:8px;">✅ I Understand — I'll Make the EFT</button>
+        </div></div>`;
     document.body.appendChild(wrap);
-    wrap.addEventListener('click', function(e) {
-        if (e.target === this) closePaymentModal();
-    });
+    wrap.addEventListener('click', e => { if (e.target === wrap) closePaymentModal(); });
 }
-
 function injectBankDetails() {
-    if (!DONATIONS_ENABLED || typeof BANK_DETAILS === 'undefined' || !BANK_DETAILS) return;
+    if (!DONATIONS_ENABLED || typeof BANK_DETAILS === 'undefined') return;
     ensurePaymentModal();
-    const box = document.getElementById('eft-box');
+    const box = $('eft-box');
     if (!box || box.dataset.injected) return;
     const d = BANK_DETAILS;
     box.innerHTML = `
-        <div class="eft-row"><span>Account Name</span><strong>${escapeHtml(d.accountName)}</strong></div>
-        <div class="eft-row"><span>Bank</span><strong>${escapeHtml(d.bank)}</strong></div>
-        <div class="eft-row">
-            <span>Account No.</span>
-            <span style="display:flex;align-items:center;">
-                <strong id="eft-acc">${escapeHtml(d.accountNumber)}</strong>
-                <button class="btn-copy" onclick="copyText('eft-acc')">Copy</button>
-            </span>
-        </div>
-        <div class="eft-row"><span>Branch Code</span><strong>${escapeHtml(d.branchCode)}</strong></div>
-        <div class="eft-row"><span>Account Type</span><strong>${escapeHtml(d.accountType)}</strong></div>
-        <div class="eft-row" style="background:rgba(255,214,0,0.07);margin:4px -14px -14px;padding:8px 14px;border-radius:0 0 10px 10px;">
-            <span>⭐ Your Reference</span>
-            <span style="display:flex;align-items:center;">
-                <strong id="eft-ref" style="color:var(--gold);">—</strong>
-                <button class="btn-copy" onclick="copyText('eft-ref')">Copy</button>
-            </span>
-        </div>`;
+        <div class="eft-row"><span>Account Name</span><strong>${esc(d.accountName)}</strong></div>
+        <div class="eft-row"><span>Bank</span><strong>${esc(d.bank)}</strong></div>
+        <div class="eft-row"><span>Account No.</span><span style="display:flex;align-items:center;"><strong id="eft-acc">${esc(d.accountNumber)}</strong><button class="btn-copy" onclick="copyText('eft-acc')">Copy</button></span></div>
+        <div class="eft-row"><span>Branch Code</span><strong>${esc(d.branchCode)}</strong></div>
+        <div class="eft-row"><span>Account Type</span><strong>${esc(d.accountType)}</strong></div>
+        <div class="eft-row" style="background:rgba(255,214,0,0.07);margin:4px -14px -14px;padding:8px 14px;border-radius:0 0 10px 10px;"><span>⭐ Your Reference</span><span style="display:flex;align-items:center;"><strong id="eft-ref" style="color:var(--gold);">—</strong><button class="btn-copy" onclick="copyText('eft-ref')">Copy</button></span></div>`;
     box.dataset.injected = '1';
 }
-
+let currentPayPin = null;
+function openPaymentModal(pin) {
+    if (!DONATIONS_ENABLED) return;
+    injectBankDetails();
+    currentPayPin = pin;
+    $('ps-name').textContent = `${pin.fn || ''} ${pin.ln || ''}`.trim();
+    $('ps-street').textContent = pin.street || '';
+    $('ps-amount').textContent = money(pin.amount);
+    $('eft-ref').textContent = `${pin.ln || pin.fn || 'Resident'} ${pin.street || ''}`.trim();
+    $('modal-payment').classList.add('active');
+}
+function closePaymentModal() { $('modal-payment')?.classList.remove('active'); currentPayPin = null; }
+function copyText(id) {
+    const text = $(id).textContent.replace(/\s/g, '');
+    (navigator.clipboard?.writeText(text) || Promise.reject()).then(() => toast('📋 Copied!')).catch(() => toast('Copy failed — please select and copy manually'));
+}
+function sendFollowUpEmail() {
+    const pin = currentPayPin;
+    if (!DONATIONS_ENABLED || !pin || typeof DONATION_CONFIG === 'undefined' || !window.emailjs) { toast('⚠️ Email is not available — please screenshot the details'); return; }
+    emailjs.send(DONATION_CONFIG.emailjsServiceId, DONATION_CONFIG.emailjsTemplateId, {
+        to_name: pin.fn, to_email: pin.email, amount: money(pin.amount),
+        reference: `${pin.ln || pin.fn || 'Resident'} ${pin.street || ''}`.trim()
+    }).then(() => toast('📧 Banking details sent'))
+      .catch(() => toast('⚠️ Email could not be sent — please screenshot the details'));
+}
 function applyDonationsMode() {
-    if (!DONATIONS_ENABLED) {
-        document.getElementById('modal-payment')?.remove();
-        document.getElementById('stat-funds')?.remove();
-        document.getElementById('stat-paid')?.remove();
-        document.getElementById('c-amount-wrap')?.remove();
-        document.querySelectorAll('.donations-only').forEach(el => el.remove());
-        return;
-    }
-
-    document.querySelectorAll('.canvas-only').forEach(el => el.remove());
-
-    const sub = document.getElementById('header-sub');
-    if (sub) sub.textContent = 'Cape Town Community Security · Sign up to host a camera or contribute funds';
-
-    const title = document.getElementById('opt-contrib-title');
-    if (title) title.textContent = 'Contributor';
-    const desc = document.getElementById('opt-contrib-desc');
-    if (desc) desc.textContent = 'I want to help fund cameras in my street';
-
-    const formTitle = document.getElementById('contrib-form-title-text');
-    if (formTitle) formTitle.textContent = 'Financial Contributor Registration';
-
-    const btn = document.getElementById('btn-contrib-submit');
-    if (btn) btn.innerHTML = '<i class="fas fa-coins"></i> Continue to Payment Details';
-
-    const note = document.getElementById('priority-note');
-    if (note) note.textContent = 'Streets ranked by total contributions — used to prioritise camera placement';
-
-    const legend = document.getElementById('legend-contrib');
-    if (legend) legend.textContent = 'Contributor pin';
-
-    const contribLabel = document.getElementById('stat-contribs-label');
-    if (contribLabel) contribLabel.textContent = 'Contributors';
-
-    if (!document.getElementById('stat-funds')) {
-        const contribStat = document.getElementById('s-contribs')?.closest('.stat');
-        if (contribStat) {
-            contribStat.insertAdjacentHTML('afterend', `
-    <div class="stat" id="stat-funds">
-        <div class="stat-icon si-gold"><i class="fas fa-coins"></i></div>
-        <div class="stat-info"><label>Total Pledged</label><strong id="s-funds">R0</strong></div>
-    </div>
-    <div class="stat" id="stat-paid">
-        <div class="stat-icon si-green"><i class="fas fa-check-circle"></i></div>
-        <div class="stat-info"><label>Confirmed Paid</label><strong id="s-paid">R0</strong></div>
-    </div>`);
-        }
-    }
-
-    if (!document.getElementById('c-amount-wrap')) {
-        const notes = document.getElementById('c-notes')?.closest('.fg');
-        if (notes) {
-            notes.insertAdjacentHTML('beforebegin', `
-                <div class="fg" id="c-amount-wrap">
-                    <label>Once-off Contribution Amount (R) *</label>
-                    <input id="c-amt" type="number" placeholder="500" min="10">
-                </div>`);
-        }
-    }
-
+    if (!DONATIONS_ENABLED) return;
+    $('header-sub').textContent = 'A community project by University Estate neighbours · Sign up to host a camera or contribute funds';
+    $('opt-contrib-title').textContent = 'Contributor';
+    $('opt-contrib-desc').textContent = 'I want to help fund cameras in my street';
+    $('contrib-form-title-text').textContent = 'Financial Contributor Registration';
+    $('btn-contrib-submit').innerHTML = '<i class="fas fa-coins"></i> Continue to Payment Details';
+    $('priority-note').textContent = 'Streets ranked by total contributions — used to prioritise camera placement';
+    $('legend-contrib').textContent = 'Contributor pin';
+    $('stat-contribs-label').textContent = 'Contributors';
+    $('s-contribs').closest('.stat').insertAdjacentHTML('afterend', `
+        <div class="stat"><div class="stat-icon si-gold"><i class="fas fa-coins"></i></div><div class="stat-info"><label>Total Pledged</label><strong id="s-funds">R0</strong></div></div>
+        <div class="stat"><div class="stat-icon si-green"><i class="fas fa-check-circle"></i></div><div class="stat-info"><label>Confirmed Paid</label><strong id="s-paid">R0</strong></div></div>`);
+    $('c-notes').closest('.fg').insertAdjacentHTML('beforebegin', `
+        <div class="fg"><label for="c-amt">Once-off Contribution Amount (R) *</label><input id="c-amt" type="number" min="10" max="100000" placeholder="500"></div>`);
+    $('adm-f-int').textContent = 'Contributors';
+    $('adm-f-int').insertAdjacentHTML('afterend', `
+        <button class="admin-filter" data-filter="paid">✅ Paid</button>
+        <button class="admin-filter" data-filter="pending">⏳ Pending</button>
+        <button class="admin-filter" data-filter="pledge">🤝 Pledge</button>`);
+    const s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
+    s.onload = () => { if (typeof DONATION_CONFIG !== 'undefined') emailjs.init(DONATION_CONFIG.emailjsPublicKey); };
+    document.head.appendChild(s);
     ensurePaymentModal();
     injectBankDetails();
 }
 
-['modal-add','modal-payment','modal-admin'].forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.addEventListener('click', function(e) {
-        if (e.target === this) {
-            if (id === 'modal-payment') closePaymentModal();
-            else this.classList.remove('active');
-        }
-    });
-});
-
-// ── INIT ─────────────────────────────────────────────────────
-fillArmedProviderSelects();
+// ════════════════════════════════════════════════════════════
+//  INIT
+// ════════════════════════════════════════════════════════════
+fillSelects();
 applyDonationsMode();
-if (window.emailjs) emailjs.init(EMAILJS_PUBLIC_KEY);
-loadPins();
+initBackend();
+if (window.matchMedia('(max-width:700px)').matches) setSheet(false);
+
 </script>
 
 </body></html>
