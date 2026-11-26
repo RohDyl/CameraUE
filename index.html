@@ -51,10 +51,29 @@
             white-space:nowrap; font-family:'Inter',sans-serif;
         }
         .btn-add-header:hover { background:var(--green-dark); color:#fff; }
-        .stats-bar {
-            background:var(--navy-light); border-bottom:1px solid var(--border);
-            padding:7px 18px; display:flex; gap:18px; overflow-x:auto; flex-shrink:0;
+        .stats-wrap {
+            flex-shrink:0; background:var(--navy-light);
+            border-bottom:1px solid var(--border);
         }
+        .stats-bar {
+            padding:7px 18px; display:flex; gap:18px; overflow-x:auto;
+        }
+        .armed-summary {
+            display:none; padding:0 18px 8px; font-size:11px; color:var(--muted);
+            line-height:1.45;
+        }
+        .armed-summary.show { display:block; }
+        .armed-summary strong { color:var(--text); font-weight:600; }
+        .choice-row { display:flex; flex-wrap:wrap; gap:8px; }
+        .choice {
+            display:flex; align-items:center; gap:6px;
+            margin:0; text-transform:none; letter-spacing:0;
+            font-size:12px; font-weight:500; color:var(--text);
+            padding:7px 10px; border:1px solid var(--border); border-radius:7px;
+            cursor:pointer; background:rgba(255,255,255,0.04);
+        }
+        .choice:has(input:checked) { border-color:var(--green); background:rgba(0,200,83,0.08); }
+        .choice input { width:auto; margin:0; padding:0; accent-color:var(--green); }
         .stat { display:flex; align-items:center; gap:8px; white-space:nowrap; }
         .stat-icon {
             width:28px; height:28px; border-radius:6px;
@@ -332,6 +351,7 @@
     </button>
 </div>
 
+<div class="stats-wrap">
 <div class="stats-bar">
     <div class="stat">
         <div class="stat-icon si-green"><i class="fas fa-camera"></i></div>
@@ -340,6 +360,10 @@
     <div class="stat">
         <div class="stat-icon si-blue"><i class="fas fa-hand-holding-heart"></i></div>
         <div class="stat-info"><label id="stat-contribs-label">Interested</label><strong id="s-contribs">0</strong></div>
+    </div>
+    <div class="stat">
+        <div class="stat-icon si-red"><i class="fas fa-shield-halved"></i></div>
+        <div class="stat-info"><label>Armed response</label><strong id="s-armed">0</strong></div>
     </div>
     <div class="stat">
         <div class="stat-icon si-gold"><i class="fas fa-bolt"></i></div>
@@ -353,6 +377,8 @@
         <div class="stat-icon si-green"><i class="fas fa-road"></i></div>
         <div class="stat-info"><label>Streets</label><strong id="s-streets">0</strong></div>
     </div>
+</div>
+<div class="armed-summary" id="armed-summary"></div>
 </div>
 
 <div class="main">
@@ -517,6 +543,21 @@
                         </select>
                     </div>
                 </div>
+                <div class="fg" id="h-armed-wrap">
+                    <label>Are you signed up with an armed response company? *</label>
+                    <div class="choice-row">
+                        <label class="choice"><input type="radio" name="h-armed" value="yes" onchange="toggleArmedFields('h')"> Yes</label>
+                        <label class="choice"><input type="radio" name="h-armed" value="no" onchange="toggleArmedFields('h')"> No</label>
+                        <label class="choice"><input type="radio" name="h-armed" value="prefer-not" onchange="toggleArmedFields('h')"> Prefer not to say</label>
+                    </div>
+                    <div id="h-armed-provider-wrap" class="hidden" style="margin-top:10px;">
+                        <label>Provider *</label>
+                        <select id="h-armed-provider" onchange="toggleArmedOther('h')">
+                            <option value="">Select provider…</option>
+                        </select>
+                        <input id="h-armed-other" class="hidden" placeholder="Provider name" style="margin-top:8px;" autocomplete="off">
+                    </div>
+                </div>
                 <div class="fg">
                     <label>Notes (optional)</label>
                     <textarea id="h-notes" rows="2" placeholder="Anything else about your property or location…"></textarea>
@@ -551,6 +592,21 @@
                     <label>Street Address *</label>
                     <input id="c-addr" placeholder="e.g. 15 Liesbeeck Road">
                     <p class="hint">📍 Helps us prioritise camera placement on your street</p>
+                </div>
+                <div class="fg" id="c-armed-wrap">
+                    <label>Are you signed up with an armed response company? *</label>
+                    <div class="choice-row">
+                        <label class="choice"><input type="radio" name="c-armed" value="yes" onchange="toggleArmedFields('c')"> Yes</label>
+                        <label class="choice"><input type="radio" name="c-armed" value="no" onchange="toggleArmedFields('c')"> No</label>
+                        <label class="choice"><input type="radio" name="c-armed" value="prefer-not" onchange="toggleArmedFields('c')"> Prefer not to say</label>
+                    </div>
+                    <div id="c-armed-provider-wrap" class="hidden" style="margin-top:10px;">
+                        <label>Provider *</label>
+                        <select id="c-armed-provider" onchange="toggleArmedOther('c')">
+                            <option value="">Select provider…</option>
+                        </select>
+                        <input id="c-armed-other" class="hidden" placeholder="Provider name" style="margin-top:8px;" autocomplete="off">
+                    </div>
                 </div>
                 <div class="fg">
                     <label>Message (optional)</label>
@@ -666,6 +722,24 @@ const PLACE_LABELS = {
     'corner':'Corner — dual view ⭐','elevated':'Elevated (2nd floor+)','perimeter':'Perimeter wall'
 };
 const PAY_LABELS = { 'eft':'EFT','cash':'Cash' };
+
+// Providers common in Cape Town's southern suburbs / near University Estate.
+// ADT and Fidelity ADT are listed as one option (same group). CSS Tactical,
+// Vision Tactical and Hi-Tech were not included: the first two are Gauteng-based
+// and Hi-Tech's main operation is in Durban. 'Other' covers anyone else.
+const ARMED_PROVIDERS = [
+    { id: 'adt-fidelity',        label: 'ADT / Fidelity ADT' },
+    { id: 'ballistic',           label: 'Ballistic' },
+    { id: 'bidvest-protea-coin', label: 'Bidvest Protea Coin' },
+    { id: 'compass',             label: 'Compass Tactical' },
+    { id: 'premier',             label: 'Premier Security' },
+    { id: 'princeton',           label: 'Princeton Security' }
+];
+const ARMED_STATUS_LABELS = {
+    yes: 'Yes',
+    no: 'No',
+    'prefer-not': 'Prefer not to say'
+};
 
 // ── MAP ─────────────────────────────────────────────────────
 const map = L.map('map', {
@@ -798,6 +872,8 @@ function submitHostPin() {
     if (!net)       { toast('⚠️ Please select your internet speed'); return; }
     if (!bak)       { toast('⚠️ Please select backup power option'); return; }
     if (!place)     { toast('⚠️ Please select camera placement');    return; }
+    const armed = validateArmed('h');
+    if (!armed) return;
 
     const pin = {
         id:        Date.now().toString(),
@@ -808,7 +884,8 @@ function submitHostPin() {
         fn, ln, phone: v('h-ph'), email: v('h-em'),
         address: addr, street: streetFrom(addr),
         internet: net, backup: bak,
-        placement: place, wifi: v('h-wifi'), notes: v('h-notes')
+        placement: place, wifi: v('h-wifi'), notes: v('h-notes'),
+        ...armed
     };
 
     savePin(pin);
@@ -830,6 +907,8 @@ function submitContribPin() {
         toast('⚠️ Please enter a contribution amount');
         return;
     }
+    const armed = validateArmed('c');
+    if (!armed) return;
 
     const pin = {
         id:        Date.now().toString(),
@@ -840,7 +919,8 @@ function submitContribPin() {
         status:    DONATIONS_ENABLED ? 'pending' : 'interest',
         fn, ln: v('c-ln'), phone: v('c-ph'), email: v('c-em'),
         address: addr, street: streetFrom(addr),
-        notes: v('c-notes')
+        notes: v('c-notes'),
+        ...armed
     };
     if (DONATIONS_ENABLED) {
         pin.amount    = amt;
@@ -862,11 +942,89 @@ function streetFrom(addr) {
     return addr.replace(/^\d+\s*/,'').split(',')[0].trim().split(' ').slice(0,4).join(' ');
 }
 
+function radioVal(name) {
+    return document.querySelector(`input[name="${name}"]:checked`)?.value || '';
+}
+
+function fillArmedProviderSelects() {
+    const opts = '<option value="">Select provider…</option>' +
+        ARMED_PROVIDERS.map(p => `<option value="${p.id}">${p.label}</option>`).join('') +
+        '<option value="other">Other</option>';
+    ['h-armed-provider','c-armed-provider'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.innerHTML = opts;
+    });
+}
+
+function toggleArmedFields(prefix) {
+    const yes = radioVal(prefix + '-armed') === 'yes';
+    document.getElementById(prefix + '-armed-provider-wrap')?.classList.toggle('hidden', !yes);
+    if (!yes) {
+        const sel = document.getElementById(prefix + '-armed-provider');
+        const other = document.getElementById(prefix + '-armed-other');
+        if (sel) sel.value = '';
+        if (other) { other.value = ''; other.classList.add('hidden'); }
+    }
+}
+
+function toggleArmedOther(prefix) {
+    const isOther = v(prefix + '-armed-provider') === 'other';
+    const other = document.getElementById(prefix + '-armed-other');
+    if (!other) return;
+    other.classList.toggle('hidden', !isOther);
+    if (!isOther) other.value = '';
+}
+
+function collectArmed(prefix) {
+    const armedResponse = radioVal(prefix + '-armed');
+    const armedProvider = armedResponse === 'yes' ? v(prefix + '-armed-provider') : '';
+    const armedProviderOther = armedProvider === 'other' ? v(prefix + '-armed-other') : '';
+    return { armedResponse, armedProvider, armedProviderOther };
+}
+
+function validateArmed(prefix) {
+    const armed = collectArmed(prefix);
+    if (!armed.armedResponse) {
+        toast('⚠️ Please say whether you have armed response');
+        return null;
+    }
+    if (armed.armedResponse === 'yes' && !armed.armedProvider) {
+        toast('⚠️ Please select your armed response provider');
+        return null;
+    }
+    if (armed.armedProvider === 'other' && !armed.armedProviderOther) {
+        toast('⚠️ Please enter the provider name');
+        return null;
+    }
+    return armed;
+}
+
+function armedProviderLabel(id, other) {
+    if (id === 'other') return other ? `Other: ${other}` : 'Other';
+    return ARMED_PROVIDERS.find(p => p.id === id)?.label || id || '';
+}
+
+function armedDisplay(pin) {
+    if (!pin.armedResponse) return '—';
+    if (pin.armedResponse !== 'yes') return ARMED_STATUS_LABELS[pin.armedResponse] || pin.armedResponse;
+    return armedProviderLabel(pin.armedProvider, pin.armedProviderOther) || 'Yes';
+}
+
+function resetArmedFields(prefix) {
+    document.querySelectorAll(`input[name="${prefix}-armed"]`).forEach(r => { r.checked = false; });
+    const sel = document.getElementById(prefix + '-armed-provider');
+    const other = document.getElementById(prefix + '-armed-other');
+    if (sel) sel.selectedIndex = 0;
+    if (other) { other.value = ''; other.classList.add('hidden'); }
+    document.getElementById(prefix + '-armed-provider-wrap')?.classList.add('hidden');
+}
+
 function clearHostForm() {
     ['h-fn','h-ln','h-ph','h-em','h-addr','h-notes'].forEach(id =>
         document.getElementById(id).value = '');
     ['h-net','h-bak','h-place','h-wifi'].forEach(id =>
         document.getElementById(id).selectedIndex = 0);
+    resetArmedFields('h');
 }
 
 function clearContribForm() {
@@ -874,6 +1032,7 @@ function clearContribForm() {
         const el = document.getElementById(id);
         if (el) el.value = '';
     });
+    resetArmedFields('c');
 }
 
 // ── SAVE & LOAD ──────────────────────────────────────────────
@@ -1029,6 +1188,27 @@ function updateStats() {
     set('s-backup',  backup);
     set('s-fast',    fast);
     set('s-streets', streets);
+
+    const signedUp = pins.filter(p => p.armedResponse === 'yes');
+    set('s-armed', signedUp.length);
+    const summary = document.getElementById('armed-summary');
+    if (summary) {
+        const counts = {};
+        signedUp.forEach(p => {
+            const label = armedProviderLabel(p.armedProvider, p.armedProviderOther) || 'Unspecified';
+            counts[label] = (counts[label] || 0) + 1;
+        });
+        const parts = Object.entries(counts).sort((a,b) => b[1]-a[1] || a[0].localeCompare(b[0]));
+        if (parts.length) {
+            summary.innerHTML = 'Providers: ' + parts.map(([name, n]) =>
+                `<strong>${escapeHtml(name)}</strong> ${n}`
+            ).join(' · ');
+            summary.classList.add('show');
+        } else {
+            summary.textContent = '';
+            summary.classList.remove('show');
+        }
+    }
 }
 
 function renderEntriesList() {
@@ -1276,9 +1456,9 @@ function renderAdminTable(filter) {
         const hosts = pins.filter(p => p.type === 'host');
         document.querySelector('.admin-table thead tr').innerHTML = `
             <th>Name</th><th>Street</th><th>Internet</th>
-            <th>Backup Power</th><th>Placement</th><th>Actions</th>`;
+            <th>Backup Power</th><th>Placement</th><th>Armed response</th><th>Actions</th>`;
         if (!hosts.length) {
-            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--muted);">No camera hosts registered yet</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--muted);">No camera hosts registered yet</td></tr>`;
             document.getElementById('admin-total').textContent = '';
             return;
         }
@@ -1296,6 +1476,7 @@ function renderAdminTable(filter) {
                 <td>${NET_LABELS[pin.internet]||pin.internet||'—'}</td>
                 <td>${BAK_LABELS[pin.backup]||pin.backup||'—'}</td>
                 <td>${PLACE_LABELS[pin.placement]||pin.placement||'—'}</td>
+                <td>${escapeHtml(armedDisplay(pin))}</td>
                 <td><div class="follow-btns">
                     <a class="fbtn wa" href="${waLink}" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
                     <a class="fbtn em" href="${emlLink}" title="Email"><i class="fas fa-envelope"></i></a>
@@ -1315,9 +1496,9 @@ function renderAdminTable(filter) {
             : p.type === 'contributor'
         );
         document.querySelector('.admin-table thead tr').innerHTML = `
-            <th>Type</th><th>Name</th><th>Street</th><th>Actions</th>`;
+            <th>Type</th><th>Name</th><th>Street</th><th>Armed response</th><th>Actions</th>`;
         if (!data.length) {
-            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--muted);">No entries match this filter</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--muted);">No entries match this filter</td></tr>`;
             document.getElementById('admin-total').textContent = '';
             return;
         }
@@ -1334,6 +1515,7 @@ function renderAdminTable(filter) {
                 <td><strong>${pin.fn||''} ${pin.ln||''}</strong><br>
                     <span style="font-size:10px;color:var(--muted);">${pin.phone||'No phone'}</span></td>
                 <td>${pin.street||'—'}</td>
+                <td>${escapeHtml(armedDisplay(pin))}</td>
                 <td><div class="follow-btns">
                     <a class="fbtn wa" href="${waLink}" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
                     <a class="fbtn em" href="${emlLink}" title="Email"><i class="fas fa-envelope"></i></a>
@@ -1351,7 +1533,7 @@ function renderAdminTable(filter) {
 
     document.querySelector('.admin-table thead tr').innerHTML = `
         <th>Name</th><th>Street</th><th>Amount</th>
-        <th>Method</th><th>Status</th><th>Actions</th>`;
+        <th>Method</th><th>Status</th><th>Armed response</th><th>Actions</th>`;
 
     const data  = pins.filter(p =>
         p.type === 'contributor' && (filter === 'all' || (p.status||'pending') === filter)
@@ -1360,7 +1542,7 @@ function renderAdminTable(filter) {
     const paid  = data.filter(p => p.status === 'paid').reduce((s,p) => s + (p.amount||0), 0);
 
     if (!data.length) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--muted);">No entries match this filter</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--muted);">No entries match this filter</td></tr>`;
         document.getElementById('admin-total').textContent = '';
         return;
     }
@@ -1384,6 +1566,7 @@ function renderAdminTable(filter) {
             <td style="color:var(--gold);font-weight:700;">R${(pin.amount||0).toLocaleString()}</td>
             <td>EFT</td>
             <td><span class="status-badge ${stClass[st]||'st-pledge'}">${stLabel[st]||st}</span></td>
+            <td>${escapeHtml(armedDisplay(pin))}</td>
             <td><div class="follow-btns">
                 <a class="fbtn wa"  href="${waLink}"  target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
                 <a class="fbtn em"  href="${emlLink}" title="Email"><i class="fas fa-envelope"></i></a>
@@ -1422,8 +1605,8 @@ function adminDelete(id) {
 
 function exportCSV() {
     const hdr  = DONATIONS_ENABLED
-        ? ['Type','Name','Phone','Email','Address','Street','Amount (R)','Status','Date']
-        : ['Type','Name','Phone','Email','Address','Street','Date'];
+        ? ['Type','Name','Phone','Email','Address','Street','Amount (R)','Status','Armed response','Provider','Date']
+        : ['Type','Name','Phone','Email','Address','Street','Armed response','Provider','Date'];
     const rows = pins.map(p => {
         const base = [
             p.type === 'host' ? 'Camera Host' : (DONATIONS_ENABLED ? 'Contributor' : 'Interested'),
@@ -1434,6 +1617,8 @@ function exportCSV() {
             base.push(p.type === 'contributor' ? (p.amount||0) : '—');
             base.push(p.type === 'contributor' ? (p.status||'pending') : '—');
         }
+        base.push(p.armedResponse ? (ARMED_STATUS_LABELS[p.armedResponse] || p.armedResponse) : '');
+        base.push(p.armedResponse === 'yes' ? (armedProviderLabel(p.armedProvider, p.armedProviderOther) || '') : '');
         base.push(new Date(p.timestamp).toLocaleDateString('en-ZA'));
         return base.map(val => `"${String(val).replace(/"/g,'""')}"`).join(',');
     });
@@ -1608,6 +1793,7 @@ function applyDonationsMode() {
 });
 
 // ── INIT ─────────────────────────────────────────────────────
+fillArmedProviderSelects();
 applyDonationsMode();
 if (window.emailjs) emailjs.init(EMAILJS_PUBLIC_KEY);
 loadPins();
