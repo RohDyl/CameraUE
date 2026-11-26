@@ -49,7 +49,7 @@
       ".read": "(auth != null && auth.uid === '6yfIa8J33eScEaH6yxwNqStKkyD3' && auth.token.firebase.sign_in_provider !== 'anonymous')",
       "$id": {
         ".write": "auth != null && ((!data.exists() && newData.exists()) || (auth != null && auth.uid === '6yfIa8J33eScEaH6yxwNqStKkyD3' && auth.token.firebase.sign_in_provider !== 'anonymous'))",
-        ".validate": "$id.matches(/^[A-Za-z0-9_-]{8,40}$/) && newData.hasChildren(['type','fn','ln','phone','email','address','street','lat','lng','ts','emailHash','phoneHash','consent']) && (newData.child('type').val() !== 'existing' || newData.hasChildren(['camCount','camCovers','camRecording','camNight','camShare'])) && (newData.child('type').val() === 'existing' || !(newData.hasChild('camBrand') || newData.hasChild('camCount') || newData.hasChild('camCovers') || newData.hasChild('camCoversOther') || newData.hasChild('camRecording') || newData.hasChild('camNight') || newData.hasChild('camShare')))",
+        ".validate": "$id.matches(/^[A-Za-z0-9_-]{8,40}$/) && newData.hasChildren(['type','fn','ln','phone','email','address','street','lat','lng','ts','emailHash','phoneHash','consent']) && (newData.child('type').val() !== 'existing' || newData.hasChildren(['camCount','camCovers','camRecording','camNight','camShare'])) && (newData.child('type').val() === 'existing' || !(newData.hasChild('camBrand') || newData.hasChild('camCount') || newData.hasChild('camCovers') || newData.hasChild('camCoversOther') || newData.hasChild('camRecording') || newData.hasChild('camNight') || newData.hasChild('camShare'))) && (newData.child('type').val() === 'contributor' || newData.child('type').val() === 'both' || !newData.hasChild('pledge'))",
         "type": {
           ".validate": "newData.isString() && (newData.val() === 'host' || newData.val() === 'contributor' || newData.val() === 'both' || newData.val() === 'existing')"
         },
@@ -161,6 +161,9 @@
         "camShare": {
           ".validate": "newData.isString() && (newData.val() === 'yes' || newData.val() === 'maybe' || newData.val() === 'no')"
         },
+        "pledge": {
+          ".validate": "newData.isNumber() && newData.val() >= 50 && newData.val() <= 100000 && newData.val() % 1 === 0"
+        },
         "notes": {
           ".validate": "newData.isString() && newData.val().length >= 0 && newData.val().length <= 500"
         },
@@ -180,6 +183,25 @@
       "$k": {
         ".write": "auth != null && ((!data.exists() && newData.exists()) || (auth != null && auth.uid === '6yfIa8J33eScEaH6yxwNqStKkyD3' && auth.token.firebase.sign_in_provider !== 'anonymous'))",
         ".validate": "$k.matches(/^[ep][a-f0-9]{64}_(host|contributor|both|existing)$/) && newData.isString() && newData.val().length <= 40"
+      }
+    },
+    "stats": {
+      ".read": true,
+      "pledges": {
+        ".write": "(auth != null && auth.uid === '6yfIa8J33eScEaH6yxwNqStKkyD3' && auth.token.firebase.sign_in_provider !== 'anonymous')",
+        ".validate": "newData.hasChildren(['total','count','ts'])",
+        "total": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10000000 && newData.val() % 1 === 0"
+        },
+        "count": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000 && newData.val() % 1 === 0"
+        },
+        "ts": {
+          ".validate": "newData.isNumber()"
+        },
+        "$other": {
+          ".validate": false
+        }
       }
     },
     "pins": {

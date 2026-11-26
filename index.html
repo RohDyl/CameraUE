@@ -75,6 +75,16 @@
         .existing-summary { display:none; padding:0 18px 8px; font-size:11px; color:var(--muted); line-height:1.45; }
         .existing-summary.show { display:block; }
         .existing-summary strong { color:var(--text); font-weight:600; }
+        .pledge-box { border:1px solid rgba(255,214,0,0.3); background:rgba(255,214,0,0.06); border-radius:10px; padding:11px 12px; margin-bottom:12px; }
+        .pledge-box .pledge-title { font-size:12px; font-weight:600; margin-bottom:3px; }
+        .pledge-box .hint { margin:8px 0 0; line-height:1.45; }
+        .pledge-rand { display:flex; align-items:center; gap:6px; margin-top:8px; }
+        .pledge-rand span { font-size:13px; font-weight:600; color:var(--gold); }
+        .pledge-sum { display:flex; flex-wrap:wrap; gap:8px 22px; margin-bottom:8px; }
+        .pledge-sum div { font-size:11px; color:var(--muted); }
+        .pledge-sum strong { display:block; font-size:16px; color:var(--text); }
+        .pledge-streets { font-size:11px; color:var(--muted); line-height:1.6; }
+        .pledge-streets strong { color:var(--text); font-weight:600; }
         .armed-summary strong { color:var(--text); font-weight:600; }
         .choice-row { display:flex; flex-wrap:wrap; gap:8px; }
         .choice {
@@ -460,6 +470,10 @@
         <div class="stat-icon" style="background:rgba(0,188,212,0.15);color:#26c6da;"><i class="fas fa-video" aria-hidden="true"></i></div>
         <div class="stat-info"><label>Existing cameras</label><strong id="s-existing">0</strong></div>
     </div>
+    <div class="stat hidden" id="stat-pledge">
+        <div class="stat-icon si-gold"><i class="fas fa-piggy-bank" aria-hidden="true"></i></div>
+        <div class="stat-info"><label>Pledged (non-binding)</label><strong id="s-pledge">R0</strong></div>
+    </div>
     <div class="stat hidden" id="stat-armed">
         <div class="stat-icon si-red"><i class="fas fa-shield-halved" aria-hidden="true"></i></div>
         <div class="stat-info"><label>Armed response</label><strong id="s-armed">0</strong></div>
@@ -655,11 +669,12 @@
                     </div>
                     <p class="hint">Kept private — never shown on the public map.</p>
                 </div>
+                <div id="h-pledge-slot" class="hidden"></div>
                 <div class="fg">
                     <label for="h-notes">Notes (optional)</label>
                     <textarea id="h-notes" rows="2" maxlength="500" placeholder="Anything else about your property or location… (kept private)"></textarea>
                 </div>
-                <div class="notice-box">This is an independent community project run by University Estate neighbours. We collect your name, contact details, address and map location to plan camera placement and to contact you about the project. Your details are not shared with third parties and are never shown publicly in full. You can ask the organiser to delete your details at any time. <button type="button" class="link-btn" onclick="openModal('modal-privacy', true)">Read the full privacy notice</button>.</div>
+                <div class="notice-box">This is an independent community project run by University Estate neighbours. We collect your name, contact details, address and map location to plan camera placement and to contact you about the project. Your details are not shared with third parties and are never shown publicly in full. <span class="pledge-notice hidden"> If you add an optional pledge, we also record that amount and keep it private.</span> You can ask the organiser to delete your details at any time. <button type="button" class="link-btn" onclick="openModal('modal-privacy', true)">Read the full privacy notice</button>.</div>
                 <div class="fg">
                     <label class="consent" for="h-consent"><input type="checkbox" id="h-consent"> <span>I have read the privacy notice and consent to my personal information being processed for this purpose (POPIA). *</span></label>
                 </div>
@@ -704,11 +719,12 @@
                     </div>
                     <p class="hint">Kept private — never shown on the public map.</p>
                 </div>
+                <div id="c-pledge-slot"></div>
                 <div class="fg">
                     <label for="c-notes">Message (optional)</label>
                     <textarea id="c-notes" rows="2" maxlength="500" placeholder="Any message for the organiser… (kept private)"></textarea>
                 </div>
-                <div class="notice-box">This is an independent community project run by University Estate neighbours. We collect your name, contact details, address and map location to plan camera placement and to contact you about the project. Your details are not shared with third parties and are never shown publicly in full. You can ask the organiser to delete your details at any time. <button type="button" class="link-btn" onclick="openModal('modal-privacy', true)">Read the full privacy notice</button>.</div>
+                <div class="notice-box">This is an independent community project run by University Estate neighbours. We collect your name, contact details, address and map location to plan camera placement and to contact you about the project. Your details are not shared with third parties and are never shown publicly in full. <span class="pledge-notice hidden"> If you add an optional pledge, we also record that amount and keep it private.</span> You can ask the organiser to delete your details at any time. <button type="button" class="link-btn" onclick="openModal('modal-privacy', true)">Read the full privacy notice</button>.</div>
                 <div class="fg">
                     <label class="consent" for="c-consent"><input type="checkbox" id="c-consent"> <span>I have read the privacy notice and consent to my personal information being processed for this purpose (POPIA). *</span></label>
                 </div>
@@ -860,15 +876,17 @@
                     <button class="admin-filter" data-filter="interested" id="adm-f-int">Interested</button>
                     <button class="admin-filter" data-filter="both">📹🤝 Host + contribute</button>
                     <button class="admin-filter" data-filter="existing">🎥 Existing camera</button>
+                    <button class="admin-filter hidden" data-filter="pledged" id="adm-f-pledged">💰 Pledged</button>
                     <span class="donations-only-wrap"></span>
                     <button class="btn-export" onclick="exportCSV()">⬇ Export CSV</button>
                     <button class="admin-filter" id="btn-signout" onclick="adminSignOut()">Sign out</button>
                 </div>
                 <div id="legacy-box" class="notice-box hidden"></div>
+                <div id="pledge-summary" class="notice-box hidden" aria-live="polite"></div>
                 <div style="overflow-x:auto;">
                     <table class="admin-table">
                         <thead><tr>
-                            <th>Type</th><th>Name</th><th>Contact</th><th>Address</th><th>Details</th><th>Armed response</th><th>Consent</th><th>Actions</th>
+                            <th>Type</th><th>Name</th><th>Contact</th><th>Address</th><th>Details</th><th>Pledge</th><th>Armed response</th><th>Consent</th><th>Actions</th>
                         </tr></thead>
                         <tbody id="admin-tbody"></tbody>
                     </table>
@@ -931,7 +949,19 @@ const ABOUT = {
     learnMoreUrl:  ''    // optional link to more information (leave empty to hide)
 };
 
-const PRIVACY_VERSION = '2026-11-2';
+const PRIVACY_VERSION = '2026-11-3';
+
+// Non-binding pledges (separate from DONATIONS_ENABLED: no bank details, no EFT panel, no payments).
+// Turned off automatically if DONATIONS_ENABLED is true, because that flow asks for a real amount instead.
+const PLEDGES_ENABLED = true;
+const PLEDGE_MIN = 50, PLEDGE_MAX = 100000;           // whole rand; must match database.rules.json
+const PLEDGE_PRESETS = [250, 500, 1000, 2000];        // neutral quick-picks, plus "Other"
+// Public pledge total. OFF by default. When true, the page reads the organiser-published /stats/pledges node
+// (total + number of pledgers only, never individual amounts) and shows it once enough people have pledged.
+// The organiser publishes it from the admin panel; it is a snapshot, not live.
+const SHOW_PUBLIC_PLEDGE_TOTAL = false;
+const PUBLIC_PLEDGE_MIN_PLEDGERS = 5;                 // avoids revealing one person's amount
+const pledgesOn = () => PLEDGES_ENABLED && !DONATIONS_ENABLED;
 
 // Firebase web config (public by design; protection comes from database.rules.json).
 // Add ?local=1 to the page URL to run in local-test mode with Firebase off.
@@ -1079,6 +1109,32 @@ const typeInfo = t => TYPES[t] || TYPES.contributor;
 const coversList = p => Object.keys(p.camCovers || {}).filter(k => p.camCovers[k] && CAM_COVER_LABELS[k])
     .map(k => k === 'other' && p.camCoversOther ? 'Other: ' + p.camCoversOther : CAM_COVER_LABELS[k]);
 
+const pledgeType = t => t === 'contributor' || t === 'both';   // pledge field is only for these types
+function pledgeBlockHtml(p) {
+    const chips = PLEDGE_PRESETS.map(n => `<label class="choice"><input type="radio" name="${p}-pledge" value="${n}" onchange="togglePledgeOther('${p}')"> ${esc(money(n))}</label>`).join('');
+    return `<div class="pledge-box">
+        <div class="pledge-title" id="${p}-pledge-label">Optional pledge (Rand)</div>
+        <div class="choice-row" role="radiogroup" aria-labelledby="${p}-pledge-label">
+            <label class="choice"><input type="radio" name="${p}-pledge" value="none" checked onchange="togglePledgeOther('${p}')"> Not now</label>
+            ${chips}
+            <label class="choice"><input type="radio" name="${p}-pledge" value="other" onchange="togglePledgeOther('${p}')"> Other</label>
+        </div>
+        <div class="pledge-rand hidden" id="${p}-pledge-other-wrap"><span aria-hidden="true">R</span>
+            <input id="${p}-pledge-other" type="number" inputmode="numeric" min="${PLEDGE_MIN}" max="${PLEDGE_MAX}" step="1" placeholder="e.g. 300" aria-label="Pledge amount in Rand"></div>
+        <p class="hint">This is a non-binding pledge to help us plan. No payment is taken now; we'll only ask once the plan and costs are confirmed. Your amount is kept private.</p>
+    </div>`;
+}
+function initPledgeUi() {
+    const on = pledgesOn();
+    if (on) { $('c-pledge-slot').innerHTML = pledgeBlockHtml('c'); $('h-pledge-slot').innerHTML = pledgeBlockHtml('h'); }
+    document.querySelectorAll('.pledge-notice').forEach(el => el.classList.toggle('hidden', !on));
+    $('adm-f-pledged').classList.toggle('hidden', !on);
+}
+function togglePledgeOther(p) {
+    const on = radioVal(p + '-pledge') === 'other';
+    $(p + '-pledge-other-wrap').classList.toggle('hidden', !on);
+    if (!on) $(p + '-pledge-other').value = '';
+}
 const clean = o => Object.fromEntries(Object.entries(o).filter(([, x]) => x !== undefined && x !== ''));
 
 // ════════════════════════════════════════════════════════════
@@ -1151,6 +1207,7 @@ function initBackend() {
     } else {
         listenPublic();
     }
+    listenPledgeStats();
 }
 
 function listenPublic() {
@@ -1212,6 +1269,7 @@ async function buildRecords(f) {
         notes: f.notes,
         camBrand: f.camBrand, camCount: f.camCount, camCovers: f.camCovers, camCoversOther: f.camCoversOther,
         camRecording: f.camRecording, camNight: f.camNight, camShare: f.camShare,
+        pledge: pledgesOn() && pledgeType(f.type) ? f.pledge : undefined,      // private only: never copied to pins_public
         amount: DONATIONS_ENABLED && isInterest ? f.amount : undefined,
         status: DONATIONS_ENABLED && isInterest ? 'pending' : undefined
     });
@@ -1483,7 +1541,7 @@ function renderAbout() {
         <h3>How it works</h3>
         <ol>
             <li>Tap “Add Your Pin” and drop a pin on your property.</li>
-            <li>Choose <strong>Camera Host</strong> (you can host a camera), <strong>I'd contribute</strong> (you'd be willing to chip in), <strong>Host &amp; contribute</strong> (both), or <strong>I already have a camera</strong> (and tell us about it).</li>
+            <li>Choose <strong>Camera Host</strong> (you can host a camera), <strong>I'd contribute</strong> (you'd be willing to chip in), <strong>Host &amp; contribute</strong> (both), or <strong>I already have a camera</strong> (and tell us about it).${pledgesOn() ? ' If you wish, add a non-binding pledge to help us plan; no payment is taken.' : ''}</li>
             <li>The map and street ranking show where interest is strongest, so cameras can be planned where they help most.</li>
             <li>The organiser contacts you before anything is installed or any money is discussed.</li>
         </ol>
@@ -1500,9 +1558,9 @@ function renderPrivacy() {
         <h3>Who is responsible for your information?</h3>
         <p>This is an independent community project run by University Estate neighbours. The organiser (${tbd(ORGANISER.name)}) is the responsible party that holds your information. Contact: ${tbd(ORGANISER.contact)}.</p>
         <h3>What we collect and why</h3>
-        <p>Your name, phone number, email address, street address, map location and whether you use armed response. If you register a camera you already have, we also collect the camera details you enter (brand/model, number of cameras, what they cover, how they record, night vision, and whether you would share footage or join a shared network). We use it only to plan where cameras could go, and to contact you about this project.</p>
+        <p>Your name, phone number, email address, street address, map location and whether you use armed response. ${pledgesOn() ? 'If you add an optional pledge, we also record that amount; it is a non-binding indication to help us plan, no payment is taken, and it is visible only to the organiser. ' : ''}If you register a camera you already have, we also collect the camera details you enter (brand/model, number of cameras, what they cover, how they record, night vision, and whether you would share footage or join a shared network). We use it only to plan where cameras could go, and to contact you about this project.</p>
         <h3>What the public sees</h3>
-        <p>Only your first name, street name and an approximate pin (blurred by about 15 m). Your surname, contact details, house number, exact location and armed-response answers are never shown publicly. Camera details are kept private; for an existing camera the map shows only that one is registered at that approximate spot.</p>
+        <p>Only your first name, street name and an approximate pin (blurred by about 15 m). Your surname, contact details, house number, exact location and armed-response answers are never shown publicly.${pledgesOn() ? ' A pledge amount is never shown next to your name' + (SHOW_PUBLIC_PLEDGE_TOTAL ? '; only a combined total and the number of pledgers may be published.' : '.') : ''} Camera details are kept private; for an existing camera the map shows only that one is registered at that approximate spot.</p>
         <h3>Sharing</h3>
         <p>We do not share your information with third parties.</p>
         <h3>Keeping and deleting your information</h3>
@@ -1578,6 +1636,8 @@ function setHostMode(both) {
     $('host-form-icon').style.color = both ? '#c084fc' : 'var(--green)';
     $('btn-host-submit-text').textContent = both ? 'Register as host & contributor' : 'Register as Camera Host';
     $('h-amt-wrap')?.classList.toggle('hidden', !both);
+    $('h-pledge-slot').classList.toggle('hidden', !both);
+    document.querySelector('#step-host .pledge-notice')?.classList.toggle('hidden', !both || !pledgesOn());
 }
 function goToForm() {
     if (!(chosenType && pendingLoc)) return;
@@ -1629,6 +1689,7 @@ function resetForm(p) {
     const root = $('step-' + ({ h: 'host', c: 'contributor', e: 'existing' })[p]);
     root.querySelectorAll('input:not([type=radio]):not([type=checkbox]), select, textarea').forEach(el => { el.value = ''; });
     root.querySelectorAll('input[type=radio], input[type=checkbox]').forEach(el => { el.checked = false; });
+    root.querySelector(`input[name="${p}-pledge"][value="none"]`)?.click();
     toggleStreetOther(p); toggleArmedFields(p); toggleArmedOther(p);
     if (p === 'e') toggleCoversOther();
 }
@@ -1657,6 +1718,15 @@ function readForm(type) {
         if (!f.internet) return fail('Please select your internet speed');
         if (!f.backup)   return fail('Please select a backup power option');
         if (!f.placement) return fail('Please select camera placement');
+    }
+    if (pledgesOn() && pledgeType(type)) {
+        const sel = radioVal(p + '-pledge');
+        if (sel && sel !== 'none') {
+            const raw = sel === 'other' ? v(p + '-pledge-other') : sel;
+            const amt = /^\d{1,6}$/.test(raw) ? +raw : NaN;
+            if (!(amt >= PLEDGE_MIN && amt <= PLEDGE_MAX)) return fail(`Please enter a whole-rand pledge between ${money(PLEDGE_MIN)} and ${money(PLEDGE_MAX)}, or choose “Not now”`);
+            f.pledge = amt;
+        }
     }
     if (isInterestType(type) && DONATIONS_ENABLED) {
         f.amount = parseFloat(v(p + '-amt'));
@@ -1714,8 +1784,8 @@ async function submitPin(type) {
         if (type === 'host') toast('✅ Camera host registered! Thank you — we will be in touch.');
         else if (type === 'existing') toast('✅ Thank you — your existing camera has been registered. We\'ll be in touch. Also keen to host or contribute? Just add another pin.');
         else if (DONATIONS_ENABLED) openPaymentModal(pin);
-        else if (type === 'both') toast('✅ Thank you — registered as a camera host and interested contributor. We\'ll be in touch.');
-        else toast('✅ Thank you — your interest has been recorded. We\'ll be in touch.');
+        else if (type === 'both') toast('✅ Thank you — registered as a camera host and interested contributor.' + (pin.pledge ? ` Pledge of ${money(pin.pledge)} noted: no payment is needed now.` : ' We\'ll be in touch.'));
+        else toast('✅ Thank you — your interest has been recorded.' + (pin.pledge ? ` Pledge of ${money(pin.pledge)} noted: no payment is needed now.` : ' We\'ll be in touch.'));
     } catch (e) {
         if (!e.silent) toast('⚠️ ' + e.message);
     } finally { submitting = false; btn.disabled = false; }
@@ -1814,16 +1884,70 @@ function adminRows() {
     else if (adminFilter === 'interested') rows = rows.filter(p => isInterestType(p.type)); // contributor + host-and-contribute
     else if (adminFilter === 'both') rows = rows.filter(p => p.type === 'both');
     else if (adminFilter === 'existing') rows = rows.filter(p => p.type === 'existing');
+    else if (adminFilter === 'pledged') rows = rows.filter(p => p.pledge > 0);
     else if (['paid', 'pending', 'pledge'].includes(adminFilter)) rows = rows.filter(p => isInterestType(p.type) && (p.status || 'pending') === adminFilter);
     return rows;
 }
 const safeTel = p => String(p || '').replace(/[^\d]/g, '');
 
+// Pledges are private: these numbers are only built from privatePins (organiser / local test mode).
+function pledgeStats() {
+    const pl = [...privatePins.values()].filter(p => p.pledge > 0);
+    const total = pl.reduce((n, p) => n + p.pledge, 0);
+    const streets = {};
+    pl.forEach(p => { const k = p.street || 'Unknown'; streets[k] = streets[k] || { total: 0, n: 0 }; streets[k].total += p.pledge; streets[k].n++; });
+    return { count: pl.length, total, avg: pl.length ? Math.round(total / pl.length) : 0,
+             streets: Object.entries(streets).sort((a, b) => b[1].total - a[1].total || a[0].localeCompare(b[0])) };
+}
+function renderPledgeSummary() {
+    const box = $('pledge-summary');
+    box.classList.toggle('hidden', !pledgesOn());
+    if (!pledgesOn()) return;
+    const st = pledgeStats();
+    if (!st.count) { box.innerHTML = '<strong>Pledges (non-binding):</strong> none yet.'; return; }
+    box.innerHTML = `<div class="pledge-sum">
+            <div>Total pledged<strong>${esc(money(st.total))}</strong></div>
+            <div>Pledgers<strong>${st.count}</strong></div>
+            <div>Average<strong>${esc(money(st.avg))}</strong></div>
+        </div>
+        <div class="pledge-streets"><strong>By street:</strong> ${st.streets.map(([s, d]) => `${esc(s)} ${esc(money(d.total))} (${d.n})`).join(' · ')}</div>
+        <div class="hint" style="margin-top:6px;">Non-binding indications only; no money has been collected.${SHOW_PUBLIC_PLEDGE_TOTAL
+            ? ` <button type="button" class="link-btn" onclick="publishPledgeTotal()">Publish public total</button> (shows only the total and number of pledgers, and only once at least ${PUBLIC_PLEDGE_MIN_PLEDGERS} have pledged).` : ''}</div>`;
+}
+
+// ── optional public pledge total (SHOW_PUBLIC_PLEDGE_TOTAL) ──────────────────
+// Individual pledges stay in pins_private. The organiser publishes a snapshot {total, count, ts} to /stats/pledges.
+const LS_STATS = 'ue_cctv_stats_v1';
+let publicPledge = null;
+function renderPublicPledge() {
+    const ok = SHOW_PUBLIC_PLEDGE_TOTAL && pledgesOn() && publicPledge && publicPledge.count >= PUBLIC_PLEDGE_MIN_PLEDGERS && publicPledge.total > 0;
+    $('stat-pledge').classList.toggle('hidden', !ok);
+    if (ok) $('s-pledge').textContent = `${money(publicPledge.total)} · ${publicPledge.count} pledgers`;
+}
+function listenPledgeStats() {
+    if (!SHOW_PUBLIC_PLEDGE_TOTAL || !pledgesOn()) return;
+    if (LOCAL) { const o = lsRead(LS_STATS); publicPledge = o.count ? o : null; renderPublicPledge(); return; }
+    db.ref('stats/pledges').on('value', snap => { publicPledge = snap.val(); renderPublicPledge(); },
+        e => console.warn('Could not read pledge stats', e));
+}
+async function publishPledgeTotal() {
+    if (!SHOW_PUBLIC_PLEDGE_TOTAL) return;
+    const st = pledgeStats();
+    if (st.count < PUBLIC_PLEDGE_MIN_PLEDGERS) { toast(`⚠️ Needs at least ${PUBLIC_PLEDGE_MIN_PLEDGERS} pledgers before a total can be shown publicly`); return; }
+    if (!confirm(`Publish ${money(st.total)} from ${st.count} pledgers on the public map? Individual pledges stay private.`)) return;
+    try {
+        if (LOCAL) { lsWrite(LS_STATS, { total: st.total, count: st.count, ts: Date.now() }); listenPledgeStats(); }
+        else await db.ref('stats/pledges').set({ total: st.total, count: st.count, ts: firebase.database.ServerValue.TIMESTAMP });
+        toast('✅ Public pledge total published');
+    } catch (e) { toast('⚠️ Could not publish: ' + (e.code || e.message)); }
+}
+
 function renderAdmin() {
+    renderPledgeSummary();
     const rows = adminRows();
     const tbody = $('admin-tbody');
     if (!rows.length) {
-        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:20px;color:var(--muted);">No entries match this filter</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:20px;color:var(--muted);">No entries match this filter</td></tr>';
         $('admin-total').textContent = '';
         return;
     }
@@ -1852,6 +1976,7 @@ function renderAdmin() {
             <td class="wrap">${esc(p.phone || 'No phone')}<br><span style="font-size:10px;color:var(--muted);">${esc(p.email || '')}</span></td>
             <td class="wrap">${esc(p.address || p.street || '—')}</td>
             <td class="wrap">${details}${p.notes ? `<br><em style="color:var(--muted)">“${esc(p.notes)}”</em>` : ''}</td>
+            <td class="wrap">${p.pledge > 0 ? '<strong>' + esc(money(p.pledge)) + '</strong>' : '—'}</td>
             <td class="wrap">${esc(armedDisplay(p))}</td>
             <td>${consent}</td>
             <td><div class="follow-btns">
@@ -1913,6 +2038,7 @@ function exportCSV() {
         .concat(['Armed response', 'Provider', 'Internet', 'Backup power', 'Placement',
                  'Existing camera: brand/model', 'Existing camera: number', 'Existing camera: covers', 'Existing camera: recording',
                  'Existing camera: night vision', 'Existing camera: share footage / join network',
+                 'Pledge (R, non-binding)',
                  'Notes', 'Consent given', 'Consent date', 'Date added']);
     const rows = [...privatePins.values()].sort((a, b) => (a.ts || 0) - (b.ts || 0)).map(p => {
         const c = [typeInfo(p.type).csv, p.fn, p.ln, p.phone, p.email, p.address, p.street, p.lat, p.lng];
@@ -1927,6 +2053,7 @@ function exportCSV() {
             csvCell(CAM_REC_LABELS[p.camRecording] || p.camRecording || ''),
             csvCell(CAM_NIGHT_LABELS[p.camNight] || p.camNight || ''),
             csvCell(CAM_SHARE_LABELS[p.camShare] || p.camShare || ''),
+            csvCell(p.pledge > 0 ? p.pledge : ''),
             csvCell(p.notes || ''),
             csvCell(p.consent?.accepted ? 'Yes' : 'No'),
             csvCell(p.consent?.ts ? new Date(p.consent.ts).toLocaleDateString('en-ZA') : ''),
@@ -2091,6 +2218,7 @@ function applyDonationsMode() {
 //  INIT
 // ════════════════════════════════════════════════════════════
 fillSelects();
+initPledgeUi();
 applyDonationsMode();
 initBackend();
 if (window.matchMedia('(max-width:700px)').matches) setSheet(false);
