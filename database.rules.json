@@ -179,7 +179,7 @@
       ".read": "(auth != null && auth.uid === '6yfIa8J33eScEaH6yxwNqStKkyD3' && auth.token.firebase.sign_in_provider !== 'anonymous')",
       "$k": {
         ".write": "auth != null && ((!data.exists() && newData.exists()) || (auth != null && auth.uid === '6yfIa8J33eScEaH6yxwNqStKkyD3' && auth.token.firebase.sign_in_provider !== 'anonymous'))",
-        ".validate": "$k.matches(/^[ep][a-f0-9]{64}$/) && newData.isString() && newData.val().length <= 40"
+        ".validate": "$k.matches(/^[ep][a-f0-9]{64}_(host|contributor|both|existing)$/) && newData.isString() && newData.val().length <= 40"
       }
     },
     "pins": {

@@ -805,6 +805,7 @@
                 <div class="fg">
                     <label class="consent" for="e-consent"><input type="checkbox" id="e-consent"> <span>I have read the privacy notice and consent to my personal information being processed for this purpose (POPIA). *</span></label>
                 </div>
+                <p class="hint" id="e-another-pin-hint">Also keen to host or contribute? Just add another pin.</p>
                 <div style="display:flex;gap:8px;">
                     <button class="btn-back" onclick="backToType()">← Back</button>
                     <button class="btn-sub teal" id="btn-existing-submit" onclick="submitPin('existing')" style="flex:1;"><i class="fas fa-video" aria-hidden="true"></i> Register my camera</button>
@@ -1061,6 +1062,10 @@ function armedDisplay(p) {
 // 'both' (hosts a camera AND registers interest in contributing) and 'existing' (already has a camera).
 const isHostType     = t => t === 'host' || t === 'both';
 const isInterestType = t => t === 'contributor' || t === 'both';
+const KNOWN_TYPES    = new Set(['host', 'contributor', 'both', 'existing']);
+// contact_index is create-only, keyed per contact AND type so the same person can
+// register once as a host and once as an existing-camera owner (or contributor), but not twice as the same type.
+const contactIndexPath = (kind, hash, type) => 'contact_index/' + kind + hash + '_' + type;
 const TYPES = {
     host:        { color: '#00c853', icon: '📹', avatar: 'av-host',     admin: '📹 Host',                 csv: 'Camera Host',          popup: '📹 Camera Host' },
     contributor: { color: '#2196f3', icon: DONATIONS_ENABLED ? '💰' : '🤝', avatar: 'av-contrib',
@@ -1216,8 +1221,9 @@ async function buildRecords(f) {
 // Resolves only when the write has really succeeded; throws a friendly Error otherwise.
 async function savePin(rec) {
     if (LOCAL) {
-        const dup = [...privatePins.values()].find(p => p.emailHash === rec.emailHash || p.phoneHash === rec.phoneHash);
-        if (dup && !confirm('This email or phone number already looks registered. Register again anyway?')) {
+        const typ = rec.pub.type;
+        const dup = [...privatePins.values()].find(p => p.type === typ && (p.emailHash === rec.emailHash || p.phoneHash === rec.phoneHash));
+        if (dup && !confirm('This email or phone number is already registered as this type. Register again anyway?')) {
             throw Object.assign(new Error('cancelled'), { silent: true });
         }
         const pub = lsRead(LS_PUB), priv = lsRead(LS_PRIV);
@@ -1234,13 +1240,13 @@ async function savePin(rec) {
         const updates = {};
         updates['pins_public/' + rec.id]  = rec.pub;
         updates['pins_private/' + rec.id] = rec.priv;
-        updates['contact_index/e' + rec.emailHash] = rec.id;
-        updates['contact_index/p' + rec.phoneHash] = rec.id;
+        updates[contactIndexPath('e', rec.emailHash, rec.pub.type)] = rec.id;
+        updates[contactIndexPath('p', rec.phoneHash, rec.pub.type)] = rec.id;
         await db.ref().update(updates);
     } catch (e) {
         console.warn('Save failed', e);
         if (e.code === 'PERMISSION_DENIED' || /permission_denied/i.test(e.message || '')) {
-            throw new Error('We could not save this. That email or phone number may already be registered. If this is a mistake, please contact the organiser.');
+            throw new Error('We could not save this. That email or phone number may already be registered as this type. If this is a mistake, or you meant to sign up as a different type, please contact the organiser.');
         }
         if (e.code === 'auth/operation-not-allowed' || e.code === 'auth/admin-restricted-operation') {
             throw new Error('Sign-ups are temporarily unavailable. Please try again later.');
@@ -1706,7 +1712,7 @@ async function submitPin(type) {
         const pin = { ...rec.priv, id: rec.id };
         closeModal(); resetForm(p);
         if (type === 'host') toast('✅ Camera host registered! Thank you — we will be in touch.');
-        else if (type === 'existing') toast('✅ Thank you — your existing camera has been registered. We\'ll be in touch.');
+        else if (type === 'existing') toast('✅ Thank you — your existing camera has been registered. We\'ll be in touch. Also keen to host or contribute? Just add another pin.');
         else if (DONATIONS_ENABLED) openPaymentModal(pin);
         else if (type === 'both') toast('✅ Thank you — registered as a camera host and interested contributor. We\'ll be in touch.');
         else toast('✅ Thank you — your interest has been recorded. We\'ll be in touch.');
@@ -1869,8 +1875,10 @@ async function adminDelete(id) {
             privatePins.delete(id); removePublic(id);
         } else {
             const u = { ['pins_public/' + id]: null, ['pins_private/' + id]: null };
-            if (p?.emailHash) u['contact_index/e' + p.emailHash] = null;
-            if (p?.phoneHash) u['contact_index/p' + p.phoneHash] = null;
+            if (KNOWN_TYPES.has(p?.type)) {
+                if (p.emailHash) u[contactIndexPath('e', p.emailHash, p.type)] = null;
+                if (p.phoneHash) u[contactIndexPath('p', p.phoneHash, p.type)] = null;
+            }
             await db.ref().update(u);
         }
         renderAdmin();
@@ -1976,7 +1984,8 @@ async function importLegacy() {
             internet: o.internet, backup: o.backup, placement: o.placement, wifi: o.wifi, notes: o.notes,
             amount: o.amount, status: o.status
         });
-        updates['contact_index/e' + eh] = id; updates['contact_index/p' + ph] = id;
+        const typ = KNOWN_TYPES.has(o.type) ? o.type : (isHost ? 'host' : 'contributor');
+        updates[contactIndexPath('e', eh, typ)] = id; updates[contactIndexPath('p', ph, typ)] = id;
         n++;
     }
     try { await db.ref().update(updates); toast(`✅ Imported ${n} entr${n !== 1 ? 'ies' : 'y'}. Now delete the old “pins” node in the console.`); $('legacy-box').classList.add('hidden'); }
