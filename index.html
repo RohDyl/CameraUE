@@ -324,7 +324,7 @@
         <div class="logo" onclick="adminTrigger()" title="University Estate CCTV">📹</div>
         <div>
             <h1>University Estate <span>CCTV</span> Initiative</h1>
-            <p>Cape Town Community Security · Sign up to host a camera or contribute funds</p>
+            <p id="header-sub">Cape Town Community Security · Sign up to host a camera or register your interest</p>
         </div>
     </div>
     <button class="btn-add-header" onclick="openAddModal()">
@@ -339,15 +339,7 @@
     </div>
     <div class="stat">
         <div class="stat-icon si-blue"><i class="fas fa-hand-holding-heart"></i></div>
-        <div class="stat-info"><label>Contributors</label><strong id="s-contribs">0</strong></div>
-    </div>
-    <div class="stat">
-        <div class="stat-icon si-gold"><i class="fas fa-coins"></i></div>
-        <div class="stat-info"><label>Total Pledged</label><strong id="s-funds">R0</strong></div>
-    </div>
-    <div class="stat">
-        <div class="stat-icon si-green"><i class="fas fa-check-circle"></i></div>
-        <div class="stat-info"><label>Confirmed Paid</label><strong id="s-paid">R0</strong></div>
+        <div class="stat-info"><label id="stat-contribs-label">Interested</label><strong id="s-contribs">0</strong></div>
     </div>
     <div class="stat">
         <div class="stat-icon si-gold"><i class="fas fa-bolt"></i></div>
@@ -386,7 +378,7 @@
                 <div id="entries-list"></div>
             </div>
             <div id="tab-priority" class="priority-wrap hidden">
-                <p class="priority-note">Streets ranked by total contributions — used to prioritise camera placement</p>
+                <p class="priority-note" id="priority-note">Streets ranked by registered interest — used to prioritise camera placement</p>
                 <div id="priority-list">
                     <div class="empty-state"><i class="fas fa-trophy"></i>No data yet</div>
                 </div>
@@ -409,7 +401,7 @@
             <hr class="leg-sep">
             <div class="leg-item">
                 <div class="leg-dot" style="background:var(--blue)"></div>
-                <span>Contributor pin</span>
+                <span id="legend-contrib">Interested resident</span>
             </div>
             <div class="leg-item">
                 <div class="leg-ring" style="border-color:var(--blue)"></div>
@@ -449,8 +441,8 @@
                     </div>
                     <div class="type-opt type-contrib" id="opt-contrib" onclick="selectType('contributor')">
                         <i class="fas fa-hand-holding-usd"></i>
-                        <h3>Contributor</h3>
-                        <p>I want to help fund cameras in my street</p>
+                        <h3 id="opt-contrib-title">I'd contribute</h3>
+                        <p id="opt-contrib-desc">I'd be willing to contribute towards cameras in my street</p>
                     </div>
                 </div>
                 <button class="btn-sub green" id="btn-next" onclick="goToForm()" disabled="">
@@ -539,9 +531,9 @@
 
             <!-- CONTRIBUTOR FORM -->
             <div id="step-contributor" class="hidden">
-                <div class="form-title">
+                <div class="form-title" id="contrib-form-title">
                     <i class="fas fa-hand-holding-usd" style="color:var(--blue)"></i>
-                    Financial Contributor Registration
+                    <span id="contrib-form-title-text">Register your interest in contributing</span>
                 </div>
                 <div class="loc-box blue-loc">
                     <i class="fas fa-map-marker-alt"></i>
@@ -561,89 +553,18 @@
                     <p class="hint">📍 Helps us prioritise camera placement on your street</p>
                 </div>
                 <div class="fg">
-                    <label>Once-off Contribution Amount (R) *</label>
-                    <input id="c-amt" type="number" placeholder="500" min="10">
-                </div>
-                <div class="fg">
                     <label>Message (optional)</label>
                     <textarea id="c-notes" rows="2" placeholder="Any message for the organising committee…"></textarea>
                 </div>
                 <!-- ✅ FIX B: Correct button restored -->
                 <div style="display:flex;gap:8px;">
                     <button class="btn-back" onclick="backToType()">← Back</button>
-                    <button class="btn-sub blue" onclick="submitContribPin()" style="flex:1;">
-                        <i class="fas fa-coins"></i> Continue to Payment Details
+                    <button class="btn-sub blue" id="btn-contrib-submit" onclick="submitContribPin()" style="flex:1;">
+                        <i class="fas fa-hand-paper"></i> Register interest
                     </button>
                 </div>
             </div>
 
-        </div>
-    </div>
-</div>
-
-<!-- PAYMENT MODAL -->
-<div class="overlay" id="modal-payment">
-    <div class="modal">
-        <div class="modal-head">
-            <h2>🏦 EFT Payment Details</h2>
-            <button class="btn-close" onclick="closePaymentModal()">✕</button>
-        </div>
-        <div class="modal-body">
-            <div class="pay-summary">
-                <div class="ps-row"><span>Contributor</span><strong id="ps-name">—</strong></div>
-                <div class="ps-row"><span>Street</span><strong id="ps-street">—</strong></div>
-                <hr class="ps-div">
-                <div class="ps-row">
-                    <span>Once-off Amount</span>
-                    <strong id="ps-amount" style="color:var(--gold);font-size:16px;">—</strong>
-                </div>
-            </div>
-            <p style="font-size:12px;color:var(--muted);margin-bottom:10px;">
-                Please use your <strong>surname and street</strong> as the payment reference:
-            </p>
-            <div class="eft-box">
-                <div class="eft-row">
-                    <span>Account Name</span>
-                    <strong>Dylan Rohleder</strong>
-                </div>
-                <div class="eft-row">
-                    <span>Bank</span>
-                    <strong>Discovery Bank</strong>
-                </div>
-                <div class="eft-row">
-                    <span>Account No.</span>
-                    <span style="display:flex;align-items:center;">
-                        <strong id="eft-acc">13138857287</strong>
-                        <button class="btn-copy" onclick="copyText('eft-acc')">Copy</button>
-                    </span>
-                </div>
-                <div class="eft-row">
-                    <span>Branch Code</span>
-                    <strong>679000</strong>
-                </div>
-                <div class="eft-row">
-                    <span>Account Type</span>
-                    <strong>Savings Account</strong>
-                </div>
-                <div class="eft-row" style="background:rgba(255,214,0,0.07);margin:4px -14px -14px;padding:8px 14px;border-radius:0 0 10px 10px;">
-                    <span>⭐ Your Reference</span>
-                    <span style="display:flex;align-items:center;">
-                        <strong id="eft-ref" style="color:var(--gold);">—</strong>
-                        <button class="btn-copy" onclick="copyText('eft-ref')">Copy</button>
-                    </span>
-                </div>
-            </div>
-
-            <!-- ✅ FIX C: sendFollowUpEmail called BEFORE markPaid -->
-            <button class="btn-sub blue" onclick="sendFollowUpEmail('eft');markPaid()" style="width:100%;margin-top:4px;">
-                📧 Email Me These Details
-            </button>
-            <button class="btn-sub green" onclick="markPaid()" style="width:100%;margin-top:8px;">
-                ✅ I Understand — I'll Make the EFT
-            </button>
-            <button class="btn-back" onclick="pledgeOnly()" style="width:100%;margin-top:8px;text-align:center;">
-                🤝 Pledge Only — Contact Me Later
-            </button>
         </div>
     </div>
 </div>
@@ -659,9 +580,10 @@
             <div class="admin-bar">
                 <button class="admin-filter active" onclick="filterAdmin('all',this)">All</button>
                 <button class="admin-filter" onclick="filterAdmin('hosts',this)">📹 Hosts</button>
-                <button class="admin-filter" onclick="filterAdmin('paid',this)">✅ Paid</button>
-                <button class="admin-filter" onclick="filterAdmin('pending',this)">⏳ Pending</button>
-                <button class="admin-filter" onclick="filterAdmin('pledge',this)">🤝 Pledge</button>
+                <button class="admin-filter canvas-only" onclick="filterAdmin('interested',this)">Interested</button>
+                <button class="admin-filter donations-only" onclick="filterAdmin('paid',this)">✅ Paid</button>
+                <button class="admin-filter donations-only" onclick="filterAdmin('pending',this)">⏳ Pending</button>
+                <button class="admin-filter donations-only" onclick="filterAdmin('pledge',this)">🤝 Pledge</button>
                 <button class="btn-export" onclick="exportCSV()">⬇ Export CSV</button>
             </div>
             <div style="overflow-x:auto;">
@@ -696,7 +618,22 @@
 
 const ORGANISER_WHATSAPP   = '27829222648';
 const ORGANISER_EMAIL      = 'dylan.rohleder@gmail.com';
-const BANK_ACCOUNT_NUMBER  = '13138857287';
+
+// Canvas mode: set to true to restore contribution amounts, the EFT panel
+// and paid/pledged totals. Also uncomment BANK_DETAILS below.
+const DONATIONS_ENABLED = false;
+
+// Uncomment this object when setting DONATIONS_ENABLED to true.
+// It is not inserted into the page unless donations are enabled.
+/*
+const BANK_DETAILS = {
+    accountName:   'Dylan Rohleder',
+    bank:          'Discovery Bank',
+    accountNumber: '13138857287',
+    branchCode:    '679000',
+    accountType:   'Savings Account'
+};
+*/
 
 const EMAILJS_PUBLIC_KEY  = '-lGj2Ou-ZHA8Hqdf6';
 const EMAILJS_SERVICE_ID  = 'service_qjoyyal';
@@ -889,7 +826,10 @@ function submitContribPin() {
 
     if (!fn)           { toast('⚠️ Please enter your name');             return; }
     if (!addr)         { toast('⚠️ Please enter your street address');   return; }
-    if (!amt || amt<1) { toast('⚠️ Please enter a contribution amount'); return; }
+    if (DONATIONS_ENABLED && (!amt || amt<1)) {
+        toast('⚠️ Please enter a contribution amount');
+        return;
+    }
 
     const pin = {
         id:        Date.now().toString(),
@@ -897,17 +837,22 @@ function submitContribPin() {
         lat:       pendingLoc.lat,
         lng:       pendingLoc.lng,
         timestamp: new Date().toISOString(),
-        status:    'pending',
+        status:    DONATIONS_ENABLED ? 'pending' : 'interest',
         fn, ln: v('c-ln'), phone: v('c-ph'), email: v('c-em'),
         address: addr, street: streetFrom(addr),
-        amount: amt, frequency: 'once',
-        payment: 'eft', notes: v('c-notes')
+        notes: v('c-notes')
     };
+    if (DONATIONS_ENABLED) {
+        pin.amount    = amt;
+        pin.frequency = 'once';
+        pin.payment   = 'eft';
+    }
 
     savePin(pin);
     closeModal();
     clearContribForm();
-    openPaymentModal(pin);
+    if (DONATIONS_ENABLED) openPaymentModal(pin);
+    else toast('✅ Thank you — your interest has been recorded. We\'ll be in touch.');
 }
 
 // ── HELPERS ──────────────────────────────────────────────────
@@ -925,8 +870,10 @@ function clearHostForm() {
 }
 
 function clearContribForm() {
-    ['c-fn','c-ln','c-ph','c-em','c-addr','c-amt','c-notes'].forEach(id =>
-        document.getElementById(id).value = '');
+    ['c-fn','c-ln','c-ph','c-em','c-addr','c-amt','c-notes'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+    });
 }
 
 // ── SAVE & LOAD ──────────────────────────────────────────────
@@ -1003,7 +950,7 @@ function renderPin(pin) {
 // ── BUILD POPUP ──────────────────────────────────────────────
 function buildPopup(pin) {
     const col   = pin.type === 'host' ? '#00c853' : '#2196f3';
-    const label = pin.type === 'host' ? '📹 Camera Host' : '💰 Contributor';
+    const label = pin.type === 'host' ? '📹 Camera Host' : (DONATIONS_ENABLED ? '💰 Contributor' : '🤝 Interested');
     const name  = `${pin.fn || ''} ${pin.ln ? pin.ln.charAt(0) + '.' : ''}`.trim();
 
     let rows = `<div class="pu-row"><i class="fas fa-home"></i><span>${pin.address || '—'}</span></div>`;
@@ -1022,6 +969,15 @@ function buildPopup(pin) {
         <div class="pu-row" style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.08);">
             <i class="fas fa-circle" style="color:#00c853;font-size:8px;margin-top:3px;"></i>
             <span style="color:#556677;font-size:10px;">30m camera coverage ring on map</span>
+        </div>`;
+    } else if (!DONATIONS_ENABLED) {
+        rows += `
+        <div class="pu-row"><i class="fas fa-hand-paper"></i>
+            <span><strong>Registered interest in contributing</strong></span></div>
+        ${pin.notes ? `<div class="pu-row" style="font-style:italic;color:#8899aa;">"${pin.notes}"</div>` : ''}
+        <div class="pu-row" style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.08);">
+            <i class="fas fa-circle" style="color:#2196f3;font-size:8px;margin-top:3px;"></i>
+            <span style="color:#556677;font-size:10px;">30m area ring on map</span>
         </div>`;
     } else {
         const stCol = { paid:'#00c853', pending:'#ffd600', pledge:'#8899aa' };
@@ -1063,11 +1019,13 @@ function updateStats() {
     const backup   = hosts.filter(p => p.backup && p.backup !== 'none').length;
     const fast     = hosts.filter(p => ['10-25','25-50','50+'].includes(p.internet)).length;
     const streets  = new Set(pins.map(p => p.street).filter(Boolean)).size;
-    const set = (id, val) => document.getElementById(id).textContent = val;
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
     set('s-hosts',   hosts.length);
     set('s-contribs',contribs.length);
-    set('s-funds',   'R' + pledged.toLocaleString());
-    set('s-paid',    'R' + paid.toLocaleString());
+    if (DONATIONS_ENABLED) {
+        set('s-funds',   'R' + pledged.toLocaleString());
+        set('s-paid',    'R' + paid.toLocaleString());
+    }
     set('s-backup',  backup);
     set('s-fast',    fast);
     set('s-streets', streets);
@@ -1089,6 +1047,8 @@ function renderEntriesList() {
                 if (['10-25','25-50','50+'].includes(pin.internet)) badges += `<span class="badge bg-green">Fast Internet</span>`;
                 if (pin.backup && pin.backup !== 'none')            badges += `<span class="badge bg-gold">Backup Power</span>`;
                 if (pin.placement === 'corner')                     badges += `<span class="badge bg-blue">Corner Plot ⭐</span>`;
+            } else if (!DONATIONS_ENABLED) {
+                badges += `<span class="badge bg-blue">Interested</span>`;
             } else {
                 const stClass = { paid:'bg-green', pending:'bg-gold', pledge:'bg-red' };
                 const stLabel = { paid:'✅ Paid', pending:'⏳ Pending', pledge:'🤝 Pledge' };
@@ -1104,7 +1064,7 @@ function renderEntriesList() {
                         <div class="ec-name">${pin.fn||''} ${pin.ln ? pin.ln.charAt(0)+'.' : ''}</div>
                         <div class="ec-street">${pin.street || pin.address?.split(',')[0] || '—'}</div>
                     </div>
-                    <div style="margin-left:auto;font-size:14px;">${isHost ? '📹' : '💰'}</div>
+                    <div style="margin-left:auto;font-size:14px;">${isHost ? '📹' : (DONATIONS_ENABLED ? '💰' : '🤝')}</div>
                 </div>
                 <div class="badges">${badges}</div>
             </div>`;
@@ -1114,8 +1074,10 @@ function renderEntriesList() {
 function renderPriorityList() {
     const el       = document.getElementById('priority-list');
     const contribs = pins.filter(p => p.type === 'contributor');
-    if (!contribs.length) {
-        el.innerHTML = '<div class="empty-state"><i class="fas fa-trophy"></i>No contributions yet</div>';
+    if (!contribs.length && !pins.some(p => p.type === 'host')) {
+        el.innerHTML = DONATIONS_ENABLED
+            ? '<div class="empty-state"><i class="fas fa-trophy"></i>No contributions yet</div>'
+            : '<div class="empty-state"><i class="fas fa-trophy"></i>No interest registered yet</div>';
         return;
     }
     const data = {};
@@ -1131,25 +1093,36 @@ function renderPriorityList() {
         if (!data[s]) data[s] = { total:0, count:0, hosts:0, paid:0 };
         data[s].hosts += 1;
     });
-    const sorted = Object.entries(data).sort((a,b) => b[1].total - a[1].total);
-    const maxAmt = sorted[0]?.[1].total || 1;
+    const sorted = Object.entries(data).sort((a,b) => DONATIONS_ENABLED
+        ? (b[1].total - a[1].total) || (b[1].count - a[1].count) || (b[1].hosts - a[1].hosts)
+        : (b[1].count - a[1].count) || (b[1].hosts - a[1].hosts)
+    );
+    const maxAmt  = sorted[0]?.[1].total || 1;
+    const maxInterest = Math.max(1, ...sorted.map(([,d]) => d.count + d.hosts));
     const rClass = ['r1','r2','r3'];
-    el.innerHTML = sorted.map(([street, d], i) => `
+    el.innerHTML = sorted.map(([street, d], i) => {
+        const barPct = DONATIONS_ENABLED
+            ? (d.total / maxAmt * 100).toFixed(0)
+            : ((d.count + d.hosts) / maxInterest * 100).toFixed(0);
+        const right = DONATIONS_ENABLED
+            ? `R${d.total.toLocaleString()}`
+            : `${d.count + d.hosts}`;
+        const meta = DONATIONS_ENABLED
+            ? `${d.count} contributor${d.count!==1?'s':''}${d.hosts ? ` · ${d.hosts} host${d.hosts!==1?'s':''}` : ''}${d.paid ? ` · <span style="color:var(--green)">R${d.paid} confirmed</span>` : ''}`
+            : `${d.count} interested${d.hosts ? ` · ${d.hosts} host${d.hosts!==1?'s':''}` : ''}`;
+        return `
         <div class="priority-item">
             <div class="p-rank ${rClass[i]||'rx'}">${i+1}</div>
             <div class="p-info">
                 <div class="p-street">${street}</div>
-                <div class="p-meta">
-                    ${d.count} contributor${d.count!==1?'s':''}
-                    ${d.hosts ? ` · ${d.hosts} host${d.hosts!==1?'s':''}` : ''}
-                    ${d.paid  ? ` · <span style="color:var(--green)">R${d.paid} confirmed</span>` : ''}
-                </div>
+                <div class="p-meta">${meta}</div>
                 <div class="p-bar">
-                    <div class="p-fill" style="width:${(d.total/maxAmt*100).toFixed(0)}%"></div>
+                    <div class="p-fill" style="width:${barPct}%"></div>
                 </div>
             </div>
-            <div class="p-amount">R${d.total.toLocaleString()}</div>
-        </div>`).join('');
+            <div class="p-amount">${right}</div>
+        </div>`;
+    }).join('');
 }
 
 function focusPin(id) {
@@ -1161,18 +1134,22 @@ function focusPin(id) {
 
 // ── PAYMENT MODAL ────────────────────────────────────────────
 function openPaymentModal(pin) {
+    if (!DONATIONS_ENABLED) return;
+    const modal = document.getElementById('modal-payment');
+    if (!modal) return;
+    injectBankDetails();
     currentPayPin = pin;
     const ref = `${pin.ln || pin.fn || 'Resident'} ${pin.street || pin.address || ''}`.trim();
     document.getElementById('ps-name').textContent   = `${pin.fn||''} ${pin.ln||''}`.trim();
     document.getElementById('ps-street').textContent = pin.street || pin.address;
-    document.getElementById('ps-amount').textContent = `R${pin.amount.toLocaleString()}`;
-    document.getElementById('eft-ref').textContent   = ref;
-    document.getElementById('eft-acc').textContent   = BANK_ACCOUNT_NUMBER;
-    document.getElementById('modal-payment').classList.add('active');
+    document.getElementById('ps-amount').textContent = `R${(pin.amount||0).toLocaleString()}`;
+    const refEl = document.getElementById('eft-ref');
+    if (refEl) refEl.textContent = ref;
+    modal.classList.add('active');
 }
 
 function closePaymentModal() {
-    document.getElementById('modal-payment').classList.remove('active');
+    document.getElementById('modal-payment')?.classList.remove('active');
     currentPayPin = null;
 }
 
@@ -1211,7 +1188,7 @@ function updatePinStatus(id, status) {
 
 // ── EMAILJS ──────────────────────────────────────────────────
 function sendFollowUpEmail(method) {
-    if (!USE_EMAILJS || !currentPayPin) return;
+    if (!DONATIONS_ENABLED || !USE_EMAILJS || !currentPayPin) return;
     if (window.emailjs) {
         _doSendEmails(method);
     }
@@ -1243,11 +1220,16 @@ function _doSendEmails(method) {
 function buildWhatsAppLink(pin) {
     const num = (pin.phone||'').replace(/\D/g,'').replace(/^0/,'27') || ORGANISER_WHATSAPP;
     const ref = `${pin.ln||pin.fn||'Resident'} ${pin.street||''}`.trim();
-    const msg = encodeURIComponent(
-        `Hi ${pin.fn}! Thank you for your pledge of R${pin.amount} towards University Estate CCTV cameras. ` +
-        `Please make an EFT to the UE Camera Fund account using reference *${ref}*. ` +
-        `Reply here if you need the banking details. Thank you! 🏘️📹`
-    );
+    const msg = DONATIONS_ENABLED
+        ? encodeURIComponent(
+            `Hi ${pin.fn}! Thank you for your pledge of R${pin.amount} towards University Estate CCTV cameras. ` +
+            `Please make an EFT to the UE Camera Fund account using reference *${ref}*. ` +
+            `Reply here if you need the banking details. Thank you! 🏘️📹`
+          )
+        : encodeURIComponent(
+            `Hi ${pin.fn}! Thank you for registering your interest in the University Estate CCTV initiative. ` +
+            `We'll be in touch soon. 🏘️📹`
+          );
     return `https://wa.me/${num}?text=${msg}`;
 }
 
@@ -1326,6 +1308,47 @@ function renderAdminTable(filter) {
         return;
     }
 
+    if (!DONATIONS_ENABLED) {
+        const data = pins.filter(p =>
+            filter === 'interested' ? p.type === 'contributor'
+            : filter === 'all' ? true
+            : p.type === 'contributor'
+        );
+        document.querySelector('.admin-table thead tr').innerHTML = `
+            <th>Type</th><th>Name</th><th>Street</th><th>Actions</th>`;
+        if (!data.length) {
+            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--muted);">No entries match this filter</td></tr>`;
+            document.getElementById('admin-total').textContent = '';
+            return;
+        }
+        tbody.innerHTML = data.map(pin => {
+            const isHost  = pin.type === 'host';
+            const waLink  = pin.phone
+                ? `https://wa.me/${pin.phone.replace(/\D/g,'').replace(/^0/,'27')}?text=${encodeURIComponent(`Hi ${pin.fn}! Thank you for registering your interest in the University Estate CCTV initiative. We'll be in touch soon.`)}`
+                : '#';
+            const emlLink = pin.email
+                ? `mailto:${pin.email}?subject=University Estate CCTV&body=Hi ${pin.fn},%0A%0AThank you for registering your interest. We will be in touch soon.%0A%0AThank you!`
+                : '#';
+            return `<tr>
+                <td>${isHost ? '📹 Host' : '🤝 Interested'}</td>
+                <td><strong>${pin.fn||''} ${pin.ln||''}</strong><br>
+                    <span style="font-size:10px;color:var(--muted);">${pin.phone||'No phone'}</span></td>
+                <td>${pin.street||'—'}</td>
+                <td><div class="follow-btns">
+                    <a class="fbtn wa" href="${waLink}" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    <a class="fbtn em" href="${emlLink}" title="Email"><i class="fas fa-envelope"></i></a>
+                    <button class="fbtn del" onclick="adminDelete('${pin.id}')" title="Delete"><i class="fas fa-trash"></i></button>
+                </div></td>
+            </tr>`;
+        }).join('');
+        const nInt = data.filter(p => p.type === 'contributor').length;
+        const nHost = data.filter(p => p.type === 'host').length;
+        document.getElementById('admin-total').innerHTML =
+            `${data.length} entr${data.length!==1?'ies':'y'}` +
+            (filter === 'all' ? ` &nbsp;·&nbsp; ${nHost} host${nHost!==1?'s':''} &nbsp;·&nbsp; ${nInt} interested` : '');
+        return;
+    }
+
     document.querySelector('.admin-table thead tr').innerHTML = `
         <th>Name</th><th>Street</th><th>Amount</th>
         <th>Method</th><th>Status</th><th>Actions</th>`;
@@ -1376,6 +1399,7 @@ function renderAdminTable(filter) {
 }
 
 function adminMarkPaid(id) {
+    if (!DONATIONS_ENABLED) return;
     updatePinStatus(id, 'paid');
     renderAdminTable(adminFilter_);
     toast('✅ Marked as paid');
@@ -1397,15 +1421,22 @@ function adminDelete(id) {
 }
 
 function exportCSV() {
-    const hdr  = ['Type','Name','Phone','Email','Address','Street','Amount (R)','Status','Date'];
-    const rows = pins.map(p => [
-        p.type === 'host' ? 'Camera Host' : 'Contributor',
-        `${p.fn||''} ${p.ln||''}`.trim(),
-        p.phone || '', p.email || '', p.address || '', p.street || '',
-        p.type === 'contributor' ? (p.amount||0) : '—',
-        p.type === 'contributor' ? (p.status||'pending') : '—',
-        new Date(p.timestamp).toLocaleDateString('en-ZA')
-    ].map(val => `"${String(val).replace(/"/g,'""')}"`).join(','));
+    const hdr  = DONATIONS_ENABLED
+        ? ['Type','Name','Phone','Email','Address','Street','Amount (R)','Status','Date']
+        : ['Type','Name','Phone','Email','Address','Street','Date'];
+    const rows = pins.map(p => {
+        const base = [
+            p.type === 'host' ? 'Camera Host' : (DONATIONS_ENABLED ? 'Contributor' : 'Interested'),
+            `${p.fn||''} ${p.ln||''}`.trim(),
+            p.phone || '', p.email || '', p.address || '', p.street || ''
+        ];
+        if (DONATIONS_ENABLED) {
+            base.push(p.type === 'contributor' ? (p.amount||0) : '—');
+            base.push(p.type === 'contributor' ? (p.status||'pending') : '—');
+        }
+        base.push(new Date(p.timestamp).toLocaleDateString('en-ZA'));
+        return base.map(val => `"${String(val).replace(/"/g,'""')}"`).join(',');
+    });
     const blob = new Blob([[hdr.join(','), ...rows].join('\n')], { type:'text/csv;charset=utf-8;' });
     const url  = URL.createObjectURL(blob);
     Object.assign(document.createElement('a'), {
@@ -1424,8 +1455,151 @@ function toast(msg) {
 }
 
 // ── BACKDROP CLOSE ───────────────────────────────────────────
+function escapeHtml(s) {
+    return String(s ?? '').replace(/[&<>"']/g, c => ({
+        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[c]));
+}
+
+function ensurePaymentModal() {
+    if (!DONATIONS_ENABLED || document.getElementById('modal-payment')) return;
+    const wrap = document.createElement('div');
+    wrap.className = 'overlay';
+    wrap.id = 'modal-payment';
+    wrap.innerHTML = `
+        <div class="modal">
+            <div class="modal-head">
+                <h2>🏦 EFT Payment Details</h2>
+                <button class="btn-close" onclick="closePaymentModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="pay-summary">
+                    <div class="ps-row"><span>Contributor</span><strong id="ps-name">—</strong></div>
+                    <div class="ps-row"><span>Street</span><strong id="ps-street">—</strong></div>
+                    <hr class="ps-div">
+                    <div class="ps-row">
+                        <span>Once-off Amount</span>
+                        <strong id="ps-amount" style="color:var(--gold);font-size:16px;">—</strong>
+                    </div>
+                </div>
+                <p style="font-size:12px;color:var(--muted);margin-bottom:10px;">
+                    Please use your <strong>surname and street</strong> as the payment reference:
+                </p>
+                <div class="eft-box" id="eft-box"></div>
+                <button class="btn-sub blue" onclick="sendFollowUpEmail('eft');markPaid()" style="width:100%;margin-top:4px;">
+                    📧 Email Me These Details
+                </button>
+                <button class="btn-sub green" onclick="markPaid()" style="width:100%;margin-top:8px;">
+                    ✅ I Understand — I'll Make the EFT
+                </button>
+                <button class="btn-back" onclick="pledgeOnly()" style="width:100%;margin-top:8px;text-align:center;">
+                    🤝 Pledge Only — Contact Me Later
+                </button>
+            </div>
+        </div>`;
+    document.body.appendChild(wrap);
+    wrap.addEventListener('click', function(e) {
+        if (e.target === this) closePaymentModal();
+    });
+}
+
+function injectBankDetails() {
+    if (!DONATIONS_ENABLED || typeof BANK_DETAILS === 'undefined' || !BANK_DETAILS) return;
+    ensurePaymentModal();
+    const box = document.getElementById('eft-box');
+    if (!box || box.dataset.injected) return;
+    const d = BANK_DETAILS;
+    box.innerHTML = `
+        <div class="eft-row"><span>Account Name</span><strong>${escapeHtml(d.accountName)}</strong></div>
+        <div class="eft-row"><span>Bank</span><strong>${escapeHtml(d.bank)}</strong></div>
+        <div class="eft-row">
+            <span>Account No.</span>
+            <span style="display:flex;align-items:center;">
+                <strong id="eft-acc">${escapeHtml(d.accountNumber)}</strong>
+                <button class="btn-copy" onclick="copyText('eft-acc')">Copy</button>
+            </span>
+        </div>
+        <div class="eft-row"><span>Branch Code</span><strong>${escapeHtml(d.branchCode)}</strong></div>
+        <div class="eft-row"><span>Account Type</span><strong>${escapeHtml(d.accountType)}</strong></div>
+        <div class="eft-row" style="background:rgba(255,214,0,0.07);margin:4px -14px -14px;padding:8px 14px;border-radius:0 0 10px 10px;">
+            <span>⭐ Your Reference</span>
+            <span style="display:flex;align-items:center;">
+                <strong id="eft-ref" style="color:var(--gold);">—</strong>
+                <button class="btn-copy" onclick="copyText('eft-ref')">Copy</button>
+            </span>
+        </div>`;
+    box.dataset.injected = '1';
+}
+
+function applyDonationsMode() {
+    if (!DONATIONS_ENABLED) {
+        document.getElementById('modal-payment')?.remove();
+        document.getElementById('stat-funds')?.remove();
+        document.getElementById('stat-paid')?.remove();
+        document.getElementById('c-amount-wrap')?.remove();
+        document.querySelectorAll('.donations-only').forEach(el => el.remove());
+        return;
+    }
+
+    document.querySelectorAll('.canvas-only').forEach(el => el.remove());
+
+    const sub = document.getElementById('header-sub');
+    if (sub) sub.textContent = 'Cape Town Community Security · Sign up to host a camera or contribute funds';
+
+    const title = document.getElementById('opt-contrib-title');
+    if (title) title.textContent = 'Contributor';
+    const desc = document.getElementById('opt-contrib-desc');
+    if (desc) desc.textContent = 'I want to help fund cameras in my street';
+
+    const formTitle = document.getElementById('contrib-form-title-text');
+    if (formTitle) formTitle.textContent = 'Financial Contributor Registration';
+
+    const btn = document.getElementById('btn-contrib-submit');
+    if (btn) btn.innerHTML = '<i class="fas fa-coins"></i> Continue to Payment Details';
+
+    const note = document.getElementById('priority-note');
+    if (note) note.textContent = 'Streets ranked by total contributions — used to prioritise camera placement';
+
+    const legend = document.getElementById('legend-contrib');
+    if (legend) legend.textContent = 'Contributor pin';
+
+    const contribLabel = document.getElementById('stat-contribs-label');
+    if (contribLabel) contribLabel.textContent = 'Contributors';
+
+    if (!document.getElementById('stat-funds')) {
+        const contribStat = document.getElementById('s-contribs')?.closest('.stat');
+        if (contribStat) {
+            contribStat.insertAdjacentHTML('afterend', `
+    <div class="stat" id="stat-funds">
+        <div class="stat-icon si-gold"><i class="fas fa-coins"></i></div>
+        <div class="stat-info"><label>Total Pledged</label><strong id="s-funds">R0</strong></div>
+    </div>
+    <div class="stat" id="stat-paid">
+        <div class="stat-icon si-green"><i class="fas fa-check-circle"></i></div>
+        <div class="stat-info"><label>Confirmed Paid</label><strong id="s-paid">R0</strong></div>
+    </div>`);
+        }
+    }
+
+    if (!document.getElementById('c-amount-wrap')) {
+        const notes = document.getElementById('c-notes')?.closest('.fg');
+        if (notes) {
+            notes.insertAdjacentHTML('beforebegin', `
+                <div class="fg" id="c-amount-wrap">
+                    <label>Once-off Contribution Amount (R) *</label>
+                    <input id="c-amt" type="number" placeholder="500" min="10">
+                </div>`);
+        }
+    }
+
+    ensurePaymentModal();
+    injectBankDetails();
+}
+
 ['modal-add','modal-payment','modal-admin'].forEach(id => {
-    document.getElementById(id).addEventListener('click', function(e) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('click', function(e) {
         if (e.target === this) {
             if (id === 'modal-payment') closePaymentModal();
             else this.classList.remove('active');
@@ -1434,6 +1608,7 @@ function toast(msg) {
 });
 
 // ── INIT ─────────────────────────────────────────────────────
+applyDonationsMode();
 if (window.emailjs) emailjs.init(EMAILJS_PUBLIC_KEY);
 loadPins();
 </script>
