@@ -75,6 +75,12 @@
         .existing-summary { display:none; padding:0 18px 8px; font-size:11px; color:var(--muted); line-height:1.45; }
         .existing-summary.show { display:block; }
         .existing-summary strong { color:var(--text); font-weight:600; }
+        .overlay.peek { display:none !important; }
+        .geo-note { font-size:11px; line-height:1.45; color:#bfe9d0; background:rgba(0,200,83,0.09); border:1px solid rgba(0,200,83,0.3);
+                    border-radius:8px; padding:8px 10px; margin:-4px 0 12px; }
+        .geo-note .geo-actions { display:flex; flex-wrap:wrap; gap:6px 10px; margin-top:5px; }
+        .geo-note .link-btn { font-size:11px; }
+        .geo-note .geo-attr { display:block; margin-top:4px; font-size:9px; color:var(--muted); }
         .pledge-box { border:1px solid rgba(255,214,0,0.3); background:rgba(255,214,0,0.06); border-radius:10px; padding:11px 12px; margin-bottom:12px; }
         .pledge-box .pledge-title { font-size:12px; font-weight:600; margin-bottom:3px; }
         .pledge-box .hint { margin:8px 0 0; line-height:1.45; }
@@ -609,6 +615,7 @@
                     <label for="h-street-other">Street name *</label>
                     <input id="h-street-other" maxlength="60" placeholder="Street name" autocomplete="off">
                 </div>
+                <div class="geo-note hidden" id="h-geo-note" role="status" aria-live="polite"></div>
                 <p class="hint" style="margin:-6px 0 12px;">🔒 Your house number and contact details stay private. The public map shows only your first name, street name and an approximate pin.</p>
                 <div class="fg">
                     <label for="h-net">Internet Upload Speed *</label>
@@ -674,7 +681,7 @@
                     <label for="h-notes">Notes (optional)</label>
                     <textarea id="h-notes" rows="2" maxlength="500" placeholder="Anything else about your property or location… (kept private)"></textarea>
                 </div>
-                <div class="notice-box">This is an independent community project run by University Estate neighbours. We collect your name, contact details, address and map location to plan camera placement and to contact you about the project. Your details are not shared with third parties and are never shown publicly in full. <span class="pledge-notice hidden"> If you add an optional pledge, we also record that amount and keep it private.</span> You can ask the organiser to delete your details at any time. <button type="button" class="link-btn" onclick="openModal('modal-privacy', true)">Read the full privacy notice</button>.</div>
+                <div class="notice-box">This is an independent community project run by University Estate neighbours. We collect your name, contact details, address and map location to plan camera placement and to contact you about the project. Apart from looking up your street and house number with OpenStreetMap to place your pin, your details are not shared with third parties and are never shown publicly in full. <span class="pledge-notice hidden"> If you add an optional pledge, we also record that amount and keep it private.</span> You can ask the organiser to delete your details at any time. <button type="button" class="link-btn" onclick="openModal('modal-privacy', true)">Read the full privacy notice</button>.</div>
                 <div class="fg">
                     <label class="consent" for="h-consent"><input type="checkbox" id="h-consent"> <span>I have read the privacy notice and consent to my personal information being processed for this purpose (POPIA). *</span></label>
                 </div>
@@ -704,6 +711,7 @@
                     <label for="c-street-other">Street name *</label>
                     <input id="c-street-other" maxlength="60" placeholder="Street name" autocomplete="off">
                 </div>
+                <div class="geo-note hidden" id="c-geo-note" role="status" aria-live="polite"></div>
                 <p class="hint" style="margin:-6px 0 12px;">🔒 Your house number and contact details stay private. The public map shows only your first name, street name and an approximate pin.</p>
                 <div class="fg" id="c-armed-wrap">
                     <label id="c-armed-label">Are you signed up with an armed response company? *</label>
@@ -724,7 +732,7 @@
                     <label for="c-notes">Message (optional)</label>
                     <textarea id="c-notes" rows="2" maxlength="500" placeholder="Any message for the organiser… (kept private)"></textarea>
                 </div>
-                <div class="notice-box">This is an independent community project run by University Estate neighbours. We collect your name, contact details, address and map location to plan camera placement and to contact you about the project. Your details are not shared with third parties and are never shown publicly in full. <span class="pledge-notice hidden"> If you add an optional pledge, we also record that amount and keep it private.</span> You can ask the organiser to delete your details at any time. <button type="button" class="link-btn" onclick="openModal('modal-privacy', true)">Read the full privacy notice</button>.</div>
+                <div class="notice-box">This is an independent community project run by University Estate neighbours. We collect your name, contact details, address and map location to plan camera placement and to contact you about the project. Apart from looking up your street and house number with OpenStreetMap to place your pin, your details are not shared with third parties and are never shown publicly in full. <span class="pledge-notice hidden"> If you add an optional pledge, we also record that amount and keep it private.</span> You can ask the organiser to delete your details at any time. <button type="button" class="link-btn" onclick="openModal('modal-privacy', true)">Read the full privacy notice</button>.</div>
                 <div class="fg">
                     <label class="consent" for="c-consent"><input type="checkbox" id="c-consent"> <span>I have read the privacy notice and consent to my personal information being processed for this purpose (POPIA). *</span></label>
                 </div>
@@ -755,6 +763,7 @@
                     <label for="e-street-other">Street name *</label>
                     <input id="e-street-other" maxlength="60" placeholder="Street name" autocomplete="off">
                 </div>
+                <div class="geo-note hidden" id="e-geo-note" role="status" aria-live="polite"></div>
                 <p class="hint" style="margin:-6px 0 12px;">🔒 Your house number, contact details and camera details stay private. The public map shows only your first name, street name, an approximate pin and that an existing camera is registered there.</p>
 
                 <div class="form-sub">About your camera</div>
@@ -817,7 +826,7 @@
                     <label for="e-notes">Notes (optional)</label>
                     <textarea id="e-notes" rows="2" maxlength="500" placeholder="Anything else about your camera or property… (kept private)"></textarea>
                 </div>
-                <div class="notice-box">This is an independent community project run by University Estate neighbours. We collect your name, contact details, address and map location to plan camera placement and to contact you about the project. Because you are registering an existing camera, we also collect the camera details you enter here and keep them private. Your details are not shared with third parties and are never shown publicly in full. You can ask the organiser to delete your details at any time. <button type="button" class="link-btn" onclick="openModal('modal-privacy', true)">Read the full privacy notice</button>.</div>
+                <div class="notice-box">This is an independent community project run by University Estate neighbours. We collect your name, contact details, address and map location to plan camera placement and to contact you about the project. Because you are registering an existing camera, we also collect the camera details you enter here and keep them private. Apart from looking up your street and house number with OpenStreetMap to place your pin, your details are not shared with third parties and are never shown publicly in full. You can ask the organiser to delete your details at any time. <button type="button" class="link-btn" onclick="openModal('modal-privacy', true)">Read the full privacy notice</button>.</div>
                 <div class="fg">
                     <label class="consent" for="e-consent"><input type="checkbox" id="e-consent"> <span>I have read the privacy notice and consent to my personal information being processed for this purpose (POPIA). *</span></label>
                 </div>
@@ -949,7 +958,7 @@ const ABOUT = {
     learnMoreUrl:  ''    // optional link to more information (leave empty to hide)
 };
 
-const PRIVACY_VERSION = '2026-11-3';
+const PRIVACY_VERSION = '2026-11-4';
 
 // Non-binding pledges (separate from DONATIONS_ENABLED: no bank details, no EFT panel, no payments).
 // Turned off automatically if DONATIONS_ENABLED is true, because that flow asks for a real amount instead.
@@ -987,6 +996,11 @@ const UE_STREETS = [
 
 const UE_CENTER = [-33.93776, 18.45283];
 const MAP_BOUNDS = L.latLngBounds([-33.9455, 18.4430], [-33.9310, 18.4630]);
+
+// Street centre-lines for the streets above (simplified from OpenStreetMap, ways inside the bounds).
+// Each street = list of ways; each way = flat [lat, lng, lat, lng, ...]. Used when the address lookup
+// has no exact house number: the pin is placed on the nearest point of the chosen street.
+const STREET_LINES = {"Coronation Road":[[-33.93454,18.44221,-33.93446,18.44367,-33.93453,18.44442],[-33.93518,18.44912,-33.93522,18.44924,-33.93568,18.44972],[-33.93498,18.44869,-33.93503,18.44904,-33.9351,18.4491,-33.93518,18.44912],[-33.93578,18.44978,-33.93568,18.44972],[-33.93568,18.44972,-33.9357,18.44987],[-33.93459,18.44501,-33.93476,18.44645],[-33.93476,18.44645,-33.93484,18.44688,-33.93498,18.44869],[-33.93453,18.44442,-33.93459,18.44501]],"Garrick Road":[[-33.93982,18.44982,-33.93756,18.45013]],"Westfort Road":[[-33.93907,18.44911,-33.93922,18.45055],[-33.93922,18.45055,-33.93926,18.45101]],"Upper Roodebloem Road":[[-33.93704,18.45108,-33.9372,18.45114],[-33.93656,18.45005,-33.93647,18.44987,-33.93628,18.44972,-33.93606,18.44969,-33.93581,18.44976,-33.93568,18.44991,-33.93554,18.45019,-33.93552,18.45043,-33.93557,18.45058],[-33.93786,18.45102,-33.93864,18.45087,-33.93882,18.45088],[-33.93926,18.45101,-33.93959,18.45126,-33.93982,18.45157,-33.93998,18.45197,-33.94001,18.45218,-33.93999,18.45236],[-33.93666,18.45036,-33.93674,18.45065],[-33.93656,18.45005,-33.93659,18.45013],[-33.93674,18.45065,-33.9368,18.45083,-33.93687,18.45094],[-33.93584,18.45141,-33.93571,18.45119],[-33.93557,18.45058,-33.93557,18.45034,-33.9356,18.45015,-33.93573,18.4499,-33.93585,18.4498,-33.93604,18.44974,-33.93622,18.44976,-33.93638,18.44984,-33.93656,18.45005],[-33.93571,18.45119,-33.93569,18.45145],[-33.93571,18.45119,-33.93557,18.45058],[-33.9372,18.45114,-33.93786,18.45102],[-33.93659,18.45013,-33.93666,18.45036],[-33.93687,18.45094,-33.93704,18.45108],[-33.93882,18.45088,-33.93902,18.45092,-33.93926,18.45101]],"Beatty Road":[[-33.93882,18.45088,-33.93822,18.45154,-33.93818,18.45162],[-33.93818,18.45162,-33.93816,18.45168,-33.93748,18.45201]],"Cloete Road":[[-33.93902,18.45092,-33.93902,18.45104,-33.93982,18.45267],[-33.93982,18.45267,-33.93996,18.45301]],"Ritchie Street":[[-33.93772,18.45274,-33.93779,18.45295,-33.9396,18.45661],[-33.9372,18.45114,-33.93721,18.45123,-33.93748,18.45201],[-33.93748,18.45201,-33.93772,18.45274]],"Selbourne Road":[[-33.93912,18.45696,-33.93907,18.45694,-33.9389,18.45673,-33.93722,18.45333,-33.93662,18.45152,-33.93662,18.45143,-33.93666,18.45131,-33.93671,18.45127,-33.93695,18.45121],[-33.93695,18.45121,-33.93704,18.45108]],"Rhodes Avenue":[[-33.93717,18.44886,-33.93756,18.45013],[-33.93843,18.45197,-33.93889,18.45294,-33.93917,18.45363],[-33.93954,18.45522,-33.93967,18.45556,-33.93989,18.45595,-33.93988,18.45637,-33.9396,18.45661],[-33.93774,18.45067,-33.93786,18.45102],[-33.93756,18.45013,-33.93774,18.45067],[-33.93917,18.45363,-33.9393,18.45402,-33.93954,18.45522],[-33.93786,18.45102,-33.93797,18.45131,-33.93818,18.45162],[-33.93818,18.45162,-33.93843,18.45197]],"Haig Road":[[-33.93934,18.45171,-33.93858,18.45225],[-33.93825,18.45247,-33.93772,18.45274]],"Lorraine Avenue":[[-33.93973,18.45415,-33.93818,18.45526]],"Baris Road":[[-33.93995,18.45304,-33.93988,18.45312],[-33.93917,18.45363,-33.9384,18.45418],[-33.93996,18.45301,-33.93995,18.45304],[-33.93988,18.45312,-33.93917,18.45363]],"Fryde Road":[[-33.93967,18.45238,-33.93807,18.45351]],"Philip Kgosana Drive":[[-33.93722,18.43645,-33.93763,18.43715,-33.93773,18.43742,-33.93795,18.43956,-33.938,18.43981,-33.93814,18.44015,-33.93853,18.44079,-33.93863,18.44106,-33.93866,18.44125,-33.93866,18.44153,-33.93861,18.44179,-33.9383,18.44252,-33.9382,18.44291,-33.93804,18.44429,-33.9381,18.4448,-33.93879,18.44708,-33.93897,18.44755,-33.93923,18.44798,-33.93946,18.44827,-33.9399,18.44864,-33.94008,18.44884,-33.94027,18.44924,-33.94033,18.4495,-33.94033,18.44984,-33.94013,18.45077,-33.9401,18.45108,-33.94011,18.45145],[-33.94045,18.45602,-33.94017,18.45507,-33.94012,18.45473,-33.94011,18.45438,-33.94013,18.45403],[-33.9412,18.45753,-33.94096,18.45726,-33.94076,18.45694,-33.94045,18.45602],[-33.93997,18.45407,-33.93996,18.4547],[-33.94005,18.44856,-33.93952,18.44802,-33.93926,18.44769,-33.93908,18.44733,-33.93831,18.44496,-33.93824,18.44465,-33.93821,18.44438,-33.93823,18.44387,-33.93835,18.44296,-33.93847,18.44258,-33.93873,18.44209],[-33.94011,18.45145,-33.94018,18.45209,-33.9402,18.4525],[-33.9402,18.4525,-33.93997,18.45407],[-33.94013,18.45403,-33.94035,18.45274,-33.94038,18.45242,-33.94037,18.45216],[-33.94037,18.45216,-33.94031,18.4514,-33.94031,18.45081,-33.94051,18.44985,-33.94052,18.4495,-33.94039,18.44903,-33.94005,18.44856]],"Kylemore Road":[[-33.93996,18.44898,-33.93956,18.44904],[-33.93956,18.44904,-33.93731,18.44935]],"Rhodes Road":[[-33.9396,18.45661,-33.93919,18.45695,-33.93912,18.45696]],"Tooting Lane":[[-33.93687,18.45124,-33.93752,18.45314,-33.93934,18.45682]],"Hackney Lane":[[-33.9376,18.45238,-33.93843,18.45197]]};
 
 // Armed-response providers that serve Cape Town's southern suburbs / near University Estate.
 // Anyone else can use "Other".
@@ -1528,6 +1542,7 @@ document.querySelectorAll('.overlay').forEach(o => o.addEventListener('click', e
 }));
 document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
+        if (geoAdjusting) { endAdjust(false); return; }
         if ($('modal-add').classList.contains('active')) closeModal(); else closeModals();
         cancelPlacing();
     }
@@ -1562,7 +1577,7 @@ function renderPrivacy() {
         <h3>What the public sees</h3>
         <p>Only your first name, street name and an approximate pin (blurred by about 15 m). Your surname, contact details, house number, exact location and armed-response answers are never shown publicly.${pledgesOn() ? ' A pledge amount is never shown next to your name' + (SHOW_PUBLIC_PLEDGE_TOTAL ? '; only a combined total and the number of pledgers may be published.' : '.') : ''} Camera details are kept private; for an existing camera the map shows only that one is registered at that approximate spot.</p>
         <h3>Sharing</h3>
-        <p>We do not share your information with third parties.</p>
+        <p>We do not share your information with third parties. The one exception: to place your pin, the house number and street you enter are sent to OpenStreetMap's Nominatim address-lookup service (nothing else is sent, and we do not store the lookup).</p>
         <h3>Keeping and deleting your information</h3>
         <p>We keep it while the project is active. You can ask the organiser at any time to access, correct or delete your information, and we will do so.</p>
         <h3>Your consent</h3>
@@ -1573,8 +1588,16 @@ function renderPrivacy() {
 // ════════════════════════════════════════════════════════════
 //  PLACING A PIN  →  FORM
 // ════════════════════════════════════════════════════════════
+let pinTouched = false;          // true once the person has tapped the map or dragged the pin themselves
 function beginPlacing(latlng) {
+    if (geoAdjusting) {             // "Adjust on map" while the form is open: only move the pin, keep the form
+        if (!latlng) return;
+        if (!MAP_BOUNDS.contains(latlng)) { toast('⚠️ Please place your pin inside University Estate.'); return; }
+        pendingLoc = latlng; tempMarker?.setLatLng(latlng); markPinMoved();
+        return;
+    }
     closeModals(true);
+    pinTouched = !!latlng;
     latlng = latlng || map.getCenter();
     if (!MAP_BOUNDS.contains(latlng)) { toast('⚠️ Please place your pin inside University Estate.'); return; }
     pendingLoc = latlng;
@@ -1582,7 +1605,7 @@ function beginPlacing(latlng) {
         tempMarker = L.marker(latlng, { draggable: true, icon: makeIcon('new'), zIndexOffset: 1000, keyboard: true, title: 'Your pin — drag to move' }).addTo(map);
         tempMarker.on('dragend', () => {
             const p = tempMarker.getLatLng();
-            if (MAP_BOUNDS.contains(p)) pendingLoc = p;
+            if (MAP_BOUNDS.contains(p)) { pendingLoc = p; markPinMoved(); }
             else { tempMarker.setLatLng(pendingLoc); toast('⚠️ Please keep the pin inside University Estate.'); }
         });
     } else tempMarker.setLatLng(latlng);
@@ -1590,23 +1613,202 @@ function beginPlacing(latlng) {
     $('btn-add').disabled = false;
 }
 function cancelPlacing() {
+    if (geoAdjusting) { endAdjust(false); return; }
     $('confirm-bar').classList.remove('show');
     if (tempMarker) { map.removeLayer(tempMarker); tempMarker = null; }
     if (!$('modal-add').classList.contains('active')) pendingLoc = null;
 }
 function confirmPlacing() {
+    if (geoAdjusting) { endAdjust(true); return; }
     if (!pendingLoc) return;
     $('confirm-bar').classList.remove('show');
+    geoReset();
     openAddModal();
 }
+
+// ════════════════════════════════════════════════════════════
+//  ADDRESS → PIN  (OpenStreetMap Nominatim, falling back to the street line)
+// ════════════════════════════════════════════════════════════
+// Only the street + house number are sent, only after the person finishes typing (change/blur, 800 ms debounce),
+// at most one request per second, results cached in memory. Any error is silent: the manual pin stays.
+const GEO_URL = 'https://nominatim.openstreetmap.org/search';
+const GEO_SNAP_M = 40;           // only move the pin if it is further than this from the address
+const GEO_DEBOUNCE_MS = 800, GEO_MIN_GAP_MS = 1100, GEO_TIMEOUT_MS = 6000;
+const geoCache = new Map();      // "<no>|<street>" → { lat, lng } | null  (in memory only, never persisted)
+let geoTimer = null, geoSeq = 0, geoLastReq = 0;
+let geoAdjusting = false, geoAdjustStart = null;
+const geo = { prefix: null, key: null, prev: null, moved: false, undone: null };
+
+function geoReset() {
+    clearTimeout(geoTimer); geoSeq++;
+    Object.assign(geo, { prefix: null, key: null, prev: null, moved: false, undone: null });
+    ['h', 'c', 'e'].forEach(p => { const n = $(p + '-geo-note'); if (n) { n.classList.add('hidden'); n.innerHTML = ''; } });
+}
+const toRad = d => d * Math.PI / 180;
+function distM(a, b) {
+    const dx = (b.lng - a.lng) * 92300, dy = (b.lat - a.lat) * 111320;
+    return Math.hypot(dx, dy);
+}
+// Nearest point on a street's centre-line to a spot ({lat,lng}), in metres/local-flat maths.
+function nearestOnStreet(street, at) {
+    const ways = STREET_LINES[street];
+    if (!ways) return null;
+    let best = null;
+    for (const w of ways) {
+        for (let i = 0; i + 3 < w.length; i += 2) {
+            const a = { lat: w[i], lng: w[i + 1] }, b = { lat: w[i + 2], lng: w[i + 3] };
+            const bx = (b.lng - a.lng) * 92300, by = (b.lat - a.lat) * 111320;
+            const px = (at.lng - a.lng) * 92300, py = (at.lat - a.lat) * 111320;
+            const L2 = bx * bx + by * by;
+            const t = L2 ? Math.max(0, Math.min(1, (px * bx + py * by) / L2)) : 0;
+            const pt = { lat: a.lat + t * (b.lat - a.lat), lng: a.lng + t * (b.lng - a.lng) };
+            const d = distM(at, pt);
+            if (!best || d < best.d) best = { ...pt, d };
+        }
+    }
+    return best;
+}
+function geoSleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+// Resolves { lat, lng } for an exact house, null when the service has no exact match, undefined on error.
+async function geocodeHouse(num, street) {
+    const key = num + '|' + street;
+    if (geoCache.has(key)) return geoCache.get(key);
+    const wait = geoLastReq + GEO_MIN_GAP_MS - Date.now();
+    if (wait > 0) await geoSleep(wait);
+    geoLastReq = Date.now();
+    const sw = MAP_BOUNDS.getSouthWest(), ne = MAP_BOUNDS.getNorthEast();
+    const qs = new URLSearchParams({
+        format: 'jsonv2', addressdetails: '1', limit: '1', countrycodes: 'za', bounded: '1',
+        viewbox: [sw.lng, ne.lat, ne.lng, sw.lat].join(','),
+        street: num + ' ' + street, city: 'Cape Town', 'accept-language': 'en'
+    });
+    const ctl = new AbortController();
+    const to = setTimeout(() => ctl.abort(), GEO_TIMEOUT_MS);
+    try {
+        const res = await fetch(GEO_URL + '?' + qs, { signal: ctl.signal, headers: { Accept: 'application/json' } });
+        if (!res.ok) return undefined;
+        const arr = await res.json();
+        const r = Array.isArray(arr) ? arr[0] : null;
+        let out = null;
+        if (r) {
+            const lat = parseFloat(r.lat), lng = parseFloat(r.lon), a = r.address || {};
+            const sameRoad = a.road && a.road.toLowerCase() === street.toLowerCase();
+            const sameNo = a.house_number && parseInt(a.house_number, 10) === parseInt(num, 10);
+            // Only trust an exact house on the right road, inside the map area.
+            if (isFinite(lat) && isFinite(lng) && sameRoad && sameNo && MAP_BOUNDS.contains([lat, lng])) out = { lat, lng };
+        }
+        geoCache.set(key, out);
+        return out;
+    } catch (e) { return undefined; }
+    finally { clearTimeout(to); }
+}
+
+function geoFields(p) {
+    const street = v(p + '-street'), num = v(p + '-num');
+    return { street, num, ok: !!street && street !== '__other' && !!STREET_LINES[street] && /\d/.test(num) && num.length <= 12 };
+}
+function onAddressChange(p) {
+    clearTimeout(geoTimer);
+    const f = geoFields(p);
+    if (f.num + '|' + f.street !== geo.key) { geo.moved = false; geo.undone = null; }   // address changed again: a fresh snap is allowed
+    if (!f.ok || !pendingLoc) return;
+    geoTimer = setTimeout(() => runGeocode(p), GEO_DEBOUNCE_MS);
+}
+function geoNote(p, kind) {
+    const n = $(p + '-geo-note');
+    const attr = '<span class="geo-attr">Address lookup: © OpenStreetMap contributors (Nominatim)</span>';
+    const adj = `<button type="button" class="link-btn" data-geo="adjust" data-p="${p}">Adjust on map</button>`;
+    const und = `<button type="button" class="link-btn" data-geo="undo" data-p="${p}">Undo</button>`;
+    const msg = {
+        house:  'Moved the pin to match your address; drag to fine-tune.',
+        street: 'Placed on your street. Drag the pin to your house.',
+        undone: 'Pin put back where you had it.',
+        moved:  'Pin updated.'
+    }[kind];
+    n.innerHTML = `📍 ${msg}<div class="geo-actions">${kind === 'house' || kind === 'street' ? und : ''}${adj}</div>${attr}`;
+    n.classList.remove('hidden');
+}
+function setPin(latlng) {
+    pendingLoc = L.latLng(latlng.lat, latlng.lng);
+    tempMarker?.setLatLng(pendingLoc);
+    map.setView(pendingLoc, Math.max(map.getZoom(), 18), { animate: true });
+}
+async function runGeocode(p) {
+    const f = geoFields(p);
+    if (!f.ok || !pendingLoc) return;
+    const key = f.num + '|' + f.street;
+    if (geo.moved || geo.undone === key) return;          // respect a deliberate move / an Undo for this exact address
+    const seq = ++geoSeq;
+    const house = await geocodeHouse(f.num, f.street);
+    if (house === undefined) return;                       // offline / error / rate-limited: keep the person's own pin, say nothing
+    if (seq !== geoSeq || !pendingLoc || geoFields(p).street !== f.street || geoFields(p).num !== f.num) return;   // stale
+    if (geo.moved) return;
+    let target = null, kind = null;
+    if (house) { target = house; kind = 'house'; }
+    else {
+        const near = nearestOnStreet(f.street, pendingLoc);
+        if (near && MAP_BOUNDS.contains([near.lat, near.lng])) { target = near; kind = 'street'; }
+    }
+    if (!target) return;
+    const far = distM(pendingLoc, target) > GEO_SNAP_M;
+    if (!far && pinTouched) return;                        // already close: leave the person's own pin alone
+    if (!far && kind === 'street') return;
+    if (!far && !pinTouched && distM(pendingLoc, target) < 5) return;
+    geo.prev = { lat: pendingLoc.lat, lng: pendingLoc.lng }; geo.prefix = p; geo.key = key;
+    setPin(target);
+    geoNote(p, kind);
+}
+function geoUndo(p) {
+    if (!geo.prev) return;
+    setPin(geo.prev);
+    geo.undone = geo.key; geo.prev = null;
+    geoNote(p, 'undone');
+}
+function markPinMoved() {
+    pinTouched = true;
+    if ($('modal-add').classList.contains('active')) {
+        geo.moved = true;                                  // no automatic override until the address changes again
+        clearTimeout(geoTimer);
+        const p = geo.prefix;
+        if (p && !$(p + '-geo-note').classList.contains('hidden')) geoNote(p, 'moved');
+    }
+}
+function adjustPin(p) {
+    if (!pendingLoc) return;
+    geoAdjusting = true; geoAdjustStart = { lat: pendingLoc.lat, lng: pendingLoc.lng };
+    $('modal-add').classList.add('peek');
+    $('confirm-bar').classList.add('show');
+    map.setView(pendingLoc, Math.max(map.getZoom(), 18), { animate: true });
+}
+function endAdjust(keep) {
+    geoAdjusting = false;
+    $('modal-add').classList.remove('peek');
+    $('confirm-bar').classList.remove('show');
+    if (!keep && geoAdjustStart && pendingLoc) {           // Cancel: put the pin back where it was
+        pendingLoc = L.latLng(geoAdjustStart.lat, geoAdjustStart.lng); tempMarker?.setLatLng(pendingLoc);
+    }
+    geoAdjustStart = null;
+}
+document.addEventListener('change', e => {
+    const m = e.target.id && /^([hce])-(num|street|street-other)$/.exec(e.target.id);
+    if (m && $('modal-add').classList.contains('active')) onAddressChange(m[1]);
+});
+document.addEventListener('click', e => {
+    const b = e.target.closest?.('[data-geo]');
+    if (!b) return;
+    if (b.dataset.geo === 'undo') geoUndo(b.dataset.p);
+    if (b.dataset.geo === 'adjust') adjustPin(b.dataset.p);
+});
 let popupClosedAt = 0;
 map.on('popupclose', () => { popupClosedAt = Date.now(); });
 map.on('click', e => { if (Date.now() - popupClosedAt < 400) return; beginPlacing(e.latlng); });
 
 function openAddModal() { resetAddModal(); openModal('modal-add'); }
 function closeModal() {
+    geoAdjusting = false; $('modal-add').classList.remove('peek');
     $('modal-add').classList.remove('active');
     cancelPlacing();
+    geoReset();
     pendingLoc = null; chosenType = null;
 }
 function resetAddModal() {
